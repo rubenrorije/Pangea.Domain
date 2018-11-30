@@ -18,7 +18,7 @@ namespace Pangea.Domain.Checksums
         /// <returns>Is the given number valid</returns>
         public static bool Validate(this IChecksumCalculator calculator, string includingChecksumAsFinalDigit)
         {
-            int indexOfCheckDigit = includingChecksumAsFinalDigit.Length - 2;
+            int indexOfCheckDigit = includingChecksumAsFinalDigit.Length - 1;
             return calculator.Validate(includingChecksumAsFinalDigit.Substring(0, indexOfCheckDigit), includingChecksumAsFinalDigit.Substring(indexOfCheckDigit));
         }
 

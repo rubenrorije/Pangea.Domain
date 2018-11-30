@@ -20,6 +20,7 @@ namespace Pangea.Domain
         /// <param name="cardNumber"></param>
         public CreditCard(string cardNumber)
         {
+            var trimmed = cardNumber?.Replace(" ", "");
             if (!string.IsNullOrEmpty(cardNumber))
             {
                 if (cardNumber.Length < 8) throw new ArgumentOutOfRangeException("A credit card must be at least 8 characters");
@@ -27,9 +28,9 @@ namespace Pangea.Domain
                 if (cardNumber.Any(chr => !Char.IsDigit(chr) && chr != ' ')) throw new ArgumentOutOfRangeException("A credit card can only contain digits or spaces");
 
                 var algorithm = new LuhnChecksumCalculator();
-                if (!algorithm.Validate(cardNumber)) throw new ArgumentOutOfRangeException("The creditcard is invalid because the checksum is incorrect");
+                if (!algorithm.Validate(trimmed)) throw new ArgumentOutOfRangeException("The creditcard is invalid because the checksum is incorrect");
             }
-            _value = cardNumber?.Replace(" ", "");
+            _value = trimmed;
         }
 
         /// <inheritdoc/>
