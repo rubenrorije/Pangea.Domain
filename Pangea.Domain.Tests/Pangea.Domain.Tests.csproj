@@ -75,18 +75,18 @@
     <Compile Include="ExchangeRateAtTests.cs" />
     <Compile Include="ExchangeRateTests.cs" />
     <Compile Include="IbanTests.cs" />
-    <Compile Include="NamespaceTests.cs" />
-    <Compile Include="OperatorTests.cs" />
+    <Compile Include="CrossCutting\NamespaceTests.cs" />
+    <Compile Include="CrossCutting\OperatorTests.cs" />
     <Compile Include="PercentageTests.cs" />
-    <Compile Include="RegisterCurrencies.cs" />
+    <Compile Include="Util\RegisterCurrencies.cs" />
     <Compile Include="SimpleCountryCodeProviderTests.cs" />
     <Compile Include="CountryCodeGenerator.cs" />
     <Compile Include="DefaultCountryCodeProviderTests.cs" />
-    <Compile Include="FormattableTests.cs" />
+    <Compile Include="CrossCutting\FormattableTests.cs" />
     <Compile Include="PhoneNumberTests.cs" />
-    <Compile Include="StructTests.cs" />
-    <Compile Include="XmlHelper.cs" />
-    <Compile Include="XmlSerializableTests.cs" />
+    <Compile Include="CrossCutting\StructTests.cs" />
+    <Compile Include="Util\XmlHelper.cs" />
+    <Compile Include="CrossCutting\XmlSerializableTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FileSizeTests.cs" />
   </ItemGroup>

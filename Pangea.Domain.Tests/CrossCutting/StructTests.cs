@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pangea.Domain.Tests
+namespace Pangea.Domain.Tests.CrossCutting
 {
     [TestClass]
     public class StructTests

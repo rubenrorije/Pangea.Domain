@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace Pangea.Domain.Tests
+namespace Pangea.Domain.Tests.Util
 {
     public static class XmlHelper
     {

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace Pangea.Domain.Tests
+namespace Pangea.Domain.Tests.CrossCutting
 {
     [TestClass]
     public class XmlSerializableTests
