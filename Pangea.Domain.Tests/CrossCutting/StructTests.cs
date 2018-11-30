@@ -45,5 +45,16 @@ namespace Pangea.Domain.Tests.CrossCutting
             }
 
         }
+
+
+        [TestMethod]
+        public void ToString_Must_Be_Overridden_For_All_Structs()
+        {
+            foreach (var t in DomainClasses)
+            {
+                var toStringMethod = t.GetMethod(nameof(ToString), new Type[] { });
+                toStringMethod.DeclaringType.Should().Be(t, $"ToString() function must be overridden in {t.Name}");
+            }
+        }
     }
 }

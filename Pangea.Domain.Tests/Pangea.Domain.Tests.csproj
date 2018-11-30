@@ -74,6 +74,7 @@
     <Compile Include="EmojiFlagTests.cs" />
     <Compile Include="ExchangeRateAtTests.cs" />
     <Compile Include="ExchangeRateTests.cs" />
+    <Compile Include="GpsLocationTests.cs" />
     <Compile Include="IbanTests.cs" />
     <Compile Include="CrossCutting\NamespaceTests.cs" />
     <Compile Include="CrossCutting\OperatorTests.cs" />

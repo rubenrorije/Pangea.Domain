@@ -53,5 +53,6 @@ namespace Pangea.Domain.Tests.CrossCutting
 
             invalid.Should().HaveCount(0, $"{string.Join(", ", invalid.Select(o => o.Type))} should have the same result for the \"G\" and the <null> format");
         }
+
     }
 }

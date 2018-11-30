@@ -229,6 +229,12 @@ namespace Pangea.Domain
                 End == other.End;
         }
 
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return ToString(null, null);
+        }
+
         /// <inheritdoc/>
         public string ToString(string format)
         {

@@ -15,7 +15,7 @@ namespace Pangea.Domain.Tests
         [TestMethod]
         public void Create_Empty_Iban()
         {
-            var sut = new Iban();
+            new Iban();
         }
 
         [TestMethod]
