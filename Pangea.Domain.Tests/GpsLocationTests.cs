@@ -307,6 +307,42 @@ namespace Pangea.Domain.Tests
             sut.Longitude.Should().BeInRange(12.4, 12.5);
         }
 
+        [TestMethod]
+        public void TryParse_Does_Not_Throw_Exception()
+        {
+            GpsLocation.TryParse("abc", out var _).Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void TryParse_With_A_Location_That_Is_Out_Of_The_Range_Of_Expected_Values_Does_Not_Throw_An_Exception()
+        {
+            GpsLocation.TryParse("400 400", out var _).Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void TryParse_When_The_Format_Does_Not_Match_The_Decimal_Separator_Dot_Returns_False()
+        {
+            GpsLocation.TryParse("-41.95;12.45", CultureInfo.GetCultureInfo(1043), out var _).Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void TryParse_When_The_Format_Matches_The_Decimal_Separator_Dot_Returns_True()
+        {
+            GpsLocation.TryParse("-41.95;12.45", CultureInfo.InvariantCulture, out var _).Should().BeTrue();
+        }
+
+
+        [TestMethod]
+        public void TryParse_When_The_Format_Does_Not_Match_The_Decimal_Separator_Comma_Returns_False()
+        {
+            GpsLocation.TryParse("-41,95;12,45", CultureInfo.InvariantCulture, out var _).Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void TryParse_When_The_Format_Matches_The_Decimal_Separator_Comma_Returns_True()
+        {
+            GpsLocation.TryParse("-41,95;12,45", CultureInfo.GetCultureInfo(1043), out var _).Should().BeTrue();
+        }
 
         private static GpsLocation Create(Tuple<double, double> tuple)
         {

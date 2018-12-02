@@ -58,13 +58,31 @@ namespace Pangea.Domain
         /// <param name="longitude">between -180° and 180° representing the west-east position on the earth. (≈X)</param>
         public GpsLocation(double latitude, double longitude)
         {
-            if (latitude < -90) throw new ArgumentOutOfRangeException(nameof(latitude));
-            if (latitude > 90) throw new ArgumentOutOfRangeException(nameof(latitude));
-            if (longitude < -180) throw new ArgumentOutOfRangeException(nameof(longitude));
-            if (longitude > 180) throw new ArgumentOutOfRangeException(nameof(longitude));
+            if (!ValidateLatitude(latitude)) throw new ArgumentOutOfRangeException(nameof(latitude));
+            if (!ValidateLongitude(longitude)) throw new ArgumentOutOfRangeException(nameof(longitude));
 
             Latitude = latitude;
             Longitude = longitude;
+        }
+
+        /// <summary>
+        /// Validate whether the latitude is within the expected range
+        /// </summary>
+        /// <param name="latitude">the latitude to check</param>
+        /// <returns>In range?</returns>
+        internal static bool ValidateLatitude(double latitude)
+        {
+            return latitude >= -90 && latitude <= 90;
+        }
+
+        /// <summary>
+        /// Validate whether the longitude is within the expected range
+        /// </summary>
+        /// <param name="longitude">the longitude to check</param>
+        /// <returns>In range?</returns>
+        internal static bool ValidateLongitude(double longitude)
+        {
+            return longitude >= -180 && longitude <= 180;
         }
 
         /// <inheritdoc/>
@@ -198,7 +216,12 @@ namespace Pangea.Domain
         {
             if (text == null) throw new ArgumentNullException(nameof(text));
             if (text == string.Empty) throw new ArgumentOutOfRangeException(nameof(text));
-            return GpsLocationParser.Parse(text, format);
+
+            if (!GpsLocationParser.TryParse(text, format, out GpsLocation result))
+            {
+                throw new ArgumentOutOfRangeException(nameof(text));
+            }
+            return result;
         }
 
         /// <summary>
@@ -224,6 +247,41 @@ namespace Pangea.Domain
                 Latitude.ToString(format, formatProvider) +
                 " " +
                 Longitude.ToString(format, formatProvider);
+        }
+
+        /// <summary>
+        /// Try to create a GPS location from the given text
+        /// </summary>
+        /// <param name="text">the text to parse</param>
+        /// <param name="result">the parsed location</param>
+        /// <returns>whether the parsing was successful</returns>
+        public static bool TryParse(string text, out GpsLocation result)
+        {
+            return TryParse(text, CultureInfo.InvariantCulture.NumberFormat, out result);
+        }
+
+        /// <summary>
+        /// Try to create a GPS location from the given text
+        /// </summary>
+        /// <param name="text">the text to parse</param>
+        /// <param name="result">the parsed location</param>
+        /// <param name="culture">the culture to use to determine the decimal separator</param>
+        /// <returns>whether the parsing was successful</returns>
+        public static bool TryParse(string text, CultureInfo culture, out GpsLocation result)
+        {
+            return TryParse(text, culture.NumberFormat, out result);
+        }
+
+        /// <summary>
+        /// Try to create a GPS location from the given text
+        /// </summary>
+        /// <param name="text">the text to parse</param>
+        /// <param name="result">the parsed location</param>
+        /// <param name="format">the format to use</param>
+        /// <returns>whether the parsing was successful</returns>
+        public static bool TryParse(string text, NumberFormatInfo format, out GpsLocation result)
+        {
+            return GpsLocationParser.TryParse(text, format, out result);
         }
     }
 }

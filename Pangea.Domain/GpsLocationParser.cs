@@ -31,8 +31,9 @@ namespace Pangea.Domain
             Format = format;
         }
 
-        private GpsLocation Execute()
+        private Tuple<bool, GpsLocation> Execute()
         {
+            var invalid = Tuple.Create(false, new GpsLocation());
             var latitude = 0.0;
             var longitude = 0.0;
 
@@ -45,28 +46,54 @@ namespace Pangea.Domain
                 (var latDeg, var latDegRest) = SplitOnDegreeSymbol(lat);
                 (var lonDeg, var lonDegRest) = SplitOnDegreeSymbol(lon);
 
-                latitude += double.Parse(latDeg, Format);
-                longitude += double.Parse(lonDeg, Format);
-
                 if (HasMinuteSymbol)
                 {
+                    if (!TryParsePositiveInteger(latDeg, out var dLatDeg)) return invalid;
+                    if (!TryParsePositiveInteger(lonDeg, out var dLonDeg)) return invalid;
+
+                    latitude += dLatDeg;
+                    longitude += dLonDeg;
+
                     (var latMin, var latMinRest) = SplitOnMinuteSymbol(latDegRest);
                     (var lonMin, var lonMinRest) = SplitOnMinuteSymbol(lonDegRest);
 
-                    latitude += double.Parse(latMin, Format) / 60.0;
-                    longitude += double.Parse(lonMin, Format) / 60.0;
-
                     if (HasSecondSymbol)
                     {
+                        if (!TryParsePositiveInteger(latMin, out var dLatMin)) return invalid;
+                        if (!TryParsePositiveInteger(lonMin, out var dLonMin)) return invalid;
+
+                        latitude += (dLatMin / 60.0);
+                        longitude += (dLonMin / 60.0);
+
                         // degrees, minutes, seconds
                         // 40° 26′ 46″ N 79° 58′ 56″ W
                         var latSec = SplitOnSecondSymbol(latMinRest);
                         var lonSec = SplitOnSecondSymbol(lonMinRest);
 
-                        latitude += double.Parse(latSec, Format) / 3600.0;
-                        longitude += double.Parse(lonSec, Format) / 3600.0;
+                        if (!TryParsePositiveFloat(latSec, out var dLatSec)) return invalid;
+                        if (!TryParsePositiveFloat(lonSec, out var dLonSec)) return invalid;
+
+                        latitude += (dLatSec / 3600.0);
+                        longitude += (dLonSec / 3600.0);
+                    }
+                    else
+                    {
+                        if (!TryParsePositiveFloat(latMin, out var dLatMin)) return invalid;
+                        if (!TryParsePositiveFloat(lonMin, out var dLonMin)) return invalid;
+
+                        latitude += (dLatMin / 60.0);
+                        longitude += (dLonMin / 60.0);
                     }
                 }
+                else
+                {
+                    if (!TryParsePositiveFloat(latDeg, out var dLatDeg)) return invalid;
+                    if (!TryParsePositiveFloat(lonDeg, out var dLonDeg)) return invalid;
+
+                    latitude += dLatDeg;
+                    longitude += dLonDeg;
+                }
+
                 latitude *= latPos;
                 longitude *= lonPos;
             }
@@ -80,19 +107,60 @@ namespace Pangea.Domain
                     var latPos = IsPositive(lat);
                     var lonPos = IsPositive(lon);
 
-                    latitude = double.Parse(lat, Format) * latPos;
-                    longitude = double.Parse(lon, Format) * lonPos;
+                    if (!TryParsePositiveFloat(lat, out latitude)) return invalid;
+                    if (!TryParsePositiveFloat(lon, out longitude)) return invalid;
+                    latitude *= latPos;
+                    longitude *= lonPos;
                 }
                 else
                 {
                     // decimal format with direction
                     // -40.55 79.95
                     (var lat, var lon) = SplitOnSeparatorSymbol(Text);
-                    latitude = double.Parse(lat, Format);
-                    longitude = double.Parse(lon, Format);
+                    if (!TryParseFloat(lat, out latitude)) return invalid;
+                    if (!TryParseFloat(lon, out longitude)) return invalid;
                 }
             }
-            return new GpsLocation(latitude, longitude);
+
+            if (!GpsLocation.ValidateLatitude(latitude)) return invalid;
+            if (!GpsLocation.ValidateLongitude(longitude)) return invalid;
+
+            return Tuple.Create(true, new GpsLocation(latitude, longitude));
+        }
+
+        private bool TryParseFloat(string text, out double result)
+        {
+            var style = NumberStyles.Float & ~NumberStyles.AllowExponent & ~NumberStyles.AllowThousands;
+            return TryParse(text, style, out result);
+        }
+
+        private bool TryParsePositiveFloat(string text, out double result)
+        {
+            var style =
+                NumberStyles.Float &
+                ~NumberStyles.AllowExponent &
+                ~NumberStyles.AllowThousands &
+                ~NumberStyles.AllowLeadingSign &
+                ~NumberStyles.AllowTrailingSign;
+
+            return TryParse(text, style, out result);
+        }
+
+        private bool TryParseInteger(string text, out double result)
+        {
+            var style = NumberStyles.Integer;
+            return TryParse(text, style, out result);
+        }
+
+        private bool TryParsePositiveInteger(string text, out double result)
+        {
+            var style = NumberStyles.Integer & ~NumberStyles.AllowLeadingSign;
+            return TryParse(text, style, out result);
+        }
+
+        private bool TryParse(string text, NumberStyles style, out double result)
+        {
+            return double.TryParse(text, style, Format, out result);
         }
 
         /// <summary>
@@ -100,10 +168,13 @@ namespace Pangea.Domain
         /// </summary>
         /// <param name="text">the text to parse</param>
         /// <param name="format">the format to use, to determine the decimal separator</param>
-        internal static GpsLocation Parse(string text, NumberFormatInfo format)
+        /// <param name="result">the parsed GPS location</param>
+        internal static bool TryParse(string text, NumberFormatInfo format, out GpsLocation result)
         {
             var parser = new GpsLocationParser(text, format);
-            return parser.Execute();
+            var parsed = parser.Execute();
+            result = parsed.Item2;
+            return parsed.Item1;
         }
 
         private Tuple<string, string> SplitOnSeparatorSymbol(string text)
@@ -147,7 +218,7 @@ namespace Pangea.Domain
         private static Tuple<string, string> SplitOn(string text, bool includeDelimiter, params char[] delimiters)
         {
             var index = delimiters.Max(del => text.IndexOf(del));
-
+            if (index < 0) return new Tuple<string, string>(text, null);
             return Tuple.Create(text.Substring(0, index + (includeDelimiter ? 1 : 0)).Trim(), text.Substring(index + 1).Trim());
         }
 
