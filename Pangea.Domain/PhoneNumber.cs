@@ -54,12 +54,21 @@ namespace Pangea.Domain
             else
             {
                 var result = _internationalExpression.Match(text);
-                if (!result.Success) throw new FormatException($"Invalid phone number '{text}'");
+                if (!result.Success) throw new FormatException($"Invalid phone number");
                 var numbers = result.Groups["numbers"].Value;
                 Text = numbers;
                 Trimmed = Text.Replace(" ", "");
                 CountryCode = CountryCodes.Instance?.GetCountryCallingCodeFrom(numbers);
             }
+        }
+
+        private PhoneNumber(Match match)
+        {
+            if (!match.Success) throw new FormatException($"Invalid phone number");
+            var numbers = match.Groups["numbers"].Value;
+            Text = numbers;
+            Trimmed = Text.Replace(" ", "");
+            CountryCode = CountryCodes.Instance?.GetCountryCallingCodeFrom(numbers);
         }
 
 #pragma warning disable AV1500 // Member or local function contains more than 7 statements
@@ -83,12 +92,22 @@ namespace Pangea.Domain
             else
             {
                 var result = _localExpression.Match(text);
-                if (!result.Success) throw new FormatException($"Invalid phone number '{text}'");
+                if (!result.Success) throw new FormatException($"Invalid phone number");
                 var numbers = result.Groups["numbers"].Value;
                 Text = countryCode + numbers;
                 Trimmed = Text?.Replace(" ", "");
                 CountryCode = countryCode;
             }
+        }
+
+        private PhoneNumber(int countryCode, Match match)
+        {
+            if (!match.Success) throw new FormatException($"Invalid phone number");
+            var numbers = match.Groups["numbers"].Value;
+            Text = countryCode.ToString() + numbers;
+            Trimmed = Text?.Replace(" ", "");
+            CountryCode = countryCode;
+
         }
 
         /// <summary>
@@ -231,6 +250,73 @@ namespace Pangea.Domain
             if (writer == null) throw new ArgumentNullException(nameof(writer));
             if (string.IsNullOrEmpty(Text)) writer.WriteElementString("value", string.Empty);
             else writer.WriteElementString("value", "+" + Text);
+        }
+
+
+        /// <summary>
+        /// Try to parse the text to an international phone number. When this succeeds the result will contain the 
+        /// parsed phonenumber and the return value will be true. Otherwise the resulting phonenumber will
+        /// be empty and the return value will be false.
+        /// </summary>
+        /// <param name="text">the text to parse</param>
+        /// <param name="result">the parsed phone number</param>
+        /// <returns>was the parsing succesful?</returns>
+        public static bool TryParse(string text, out PhoneNumber result)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                result = default(PhoneNumber);
+                return true;
+            }
+            else
+            {
+                var match = _internationalExpression.Match(text);
+                if (match.Success)
+                {
+                    result = new PhoneNumber(match);
+                    return true;
+                }
+                else
+                {
+                    result = default(PhoneNumber);
+                    return false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Try to parse the text to a local phone number for the given country code. 
+        /// </summary>
+        /// <param name="countryCallingCode">The calling code for the country</param>
+        /// <param name="text">the text of the phone number that should be parsed.</param>
+        /// <param name="result">the parsed phone number</param>
+        /// <returns>Was the parsing successful?</returns>
+        public static bool TryParse(int countryCallingCode, string text, out PhoneNumber result)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                result = default(PhoneNumber);
+                return true;
+            }
+            else if (countryCallingCode <= 0)
+            {
+                result = default(PhoneNumber);
+                return false;
+            }
+            else
+            {
+                var match = _localExpression.Match(text);
+                if (match.Success)
+                {
+                    result = new PhoneNumber(countryCallingCode, match);
+                    return true;
+                }
+                else
+                {
+                    result = default(PhoneNumber);
+                    return false;
+                }
+            }
         }
     }
 }

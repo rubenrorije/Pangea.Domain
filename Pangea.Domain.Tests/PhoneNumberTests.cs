@@ -264,5 +264,53 @@ namespace Pangea.Domain.Tests
 
             one.GetHashCode().Should().Be(other.GetHashCode());
         }
+
+        [TestMethod]
+        public void TryParse_PhoneNumber_Null_Returns_True()
+        {
+            PhoneNumber.TryParse(null, out var _).Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void TryParse_PhoneNumber_String_Empty_Returns_True()
+        {
+            PhoneNumber.TryParse(string.Empty, out var _).Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void TryParse_PhoneNumber_That_Is_Invalid_Returns_False()
+        {
+            PhoneNumber.TryParse("abc", out var _).Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void TryParse_PhoneNumber_That_Is_Valid_With_Plus_Returns_The_Parsed_PhoneNumber()
+        {
+            PhoneNumber sut;
+            PhoneNumber.TryParse("+31 123456789", out sut).Should().BeTrue();
+            sut.ToString().Should().Be("+31 123456789");
+        }
+
+        [TestMethod]
+        public void TryParse_PhoneNumber_That_Is_Valid_With_Zeros_Returns_The_Parsed_PhoneNumber()
+        {
+            PhoneNumber sut;
+            PhoneNumber.TryParse("0031 123456789", out sut).Should().BeTrue();
+            sut.ToString().Should().Be("+31 123456789");
+        }
+
+        [TestMethod]
+        public void TryParse_Local_PhoneNumber()
+        {
+            PhoneNumber sut;
+            PhoneNumber.TryParse(31, "0123456789", out sut).Should().BeTrue();
+            sut.ToString().Should().Be("+31123456789");
+        }
+        [TestMethod]
+        public void TryParse_Local_PhoneNumber_With_Invalid_Country_Code_Returns_False()
+        {
+            PhoneNumber sut;
+            PhoneNumber.TryParse(0, "0123456789", out sut).Should().BeFalse();
+        }
     }
 }
