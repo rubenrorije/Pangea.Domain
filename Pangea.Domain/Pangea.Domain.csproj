@@ -2,12 +2,18 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>Ruben Rorije</Authors>
+    <PackageLicenseUrl>https://github.com/rubenrorije/Pangea.Domain/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/rubenrorije/Pangea.Domain</PackageProjectUrl>
+    <RepositoryType>GIT</RepositoryType>
+    <Copyright>Copyright © 2018</Copyright>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
     <DocumentationFile>bin\Debug\netstandard2.0\Pangea.Domain.xml</DocumentationFile>
+    <NoWarn>1701;1702;1705;AV1500</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

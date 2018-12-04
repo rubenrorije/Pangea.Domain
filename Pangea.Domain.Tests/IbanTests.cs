@@ -150,5 +150,67 @@ namespace Pangea.Domain.Tests
 
             other.Equals(sut).Should().BeTrue();
         }
+
+        [TestMethod]
+        public void TryParse_Null_Returns_True()
+        {
+            Iban.TryParse(null, out var _).Should().BeTrue();
+        }
+
+
+        [TestMethod]
+        public void TryParse_String_Empty_Returns_True()
+        {
+            Iban.TryParse(string.Empty, out var _).Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void TryParse_Iban_That_Is_Too_Long_Returns_False()
+        {
+            Iban.TryParse(new string('1', 35), out var _).Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void TryParse_Iban_That_Is_Too_Short_Returns_False()
+        {
+            Iban.TryParse(new string('1', 3), out var _).Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void TryParse_Iban_That_Is_In_Wrong_Format_Returns_False()
+        {
+            Iban.TryParse(new string('1', 30), out var _).Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void TryParse_Iban_That_Has_LowerCase_CountryCode_Returns_False()
+        {
+            Iban.TryParse("nl12 3456789", out var _).Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void TryParse_Iban_That_Has_Letters_As_Check_Digits_Returns_False()
+        {
+            Iban.TryParse("NLA1 3456789", out var _).Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void TryParse_Iban_That_Has_Other_Characters_As_Bank_Account_Number_Returns_False()
+        {
+            Iban.TryParse("NLA1 34$56789", out var _).Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void TryParse_Iban_That_Has_Incorrect_CheckDigit_Returns_False()
+        {
+            Iban.TryParse("BE72 0961 2345 6769", out var _).Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void TryParse_Iban_That_Is_Correct_Returns_True()
+        {
+            Iban.TryParse("BE71 0961 2345 6769", out var _).Should().BeTrue();
+        }
+
     }
 }

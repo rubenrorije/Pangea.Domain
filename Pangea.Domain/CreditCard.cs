@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Pangea.Domain
 {
@@ -23,9 +24,9 @@ namespace Pangea.Domain
             var trimmed = cardNumber?.Replace(" ", "");
             if (!string.IsNullOrEmpty(cardNumber))
             {
-                if (cardNumber.Length < 8) throw new ArgumentOutOfRangeException("A credit card must be at least 8 characters");
-                if (cardNumber.Length > 19) throw new ArgumentOutOfRangeException("A credit card must be less than 20 characters");
-                if (cardNumber.Any(chr => !Char.IsDigit(chr) && chr != ' ')) throw new ArgumentOutOfRangeException("A credit card can only contain digits or spaces");
+                if (trimmed.Length < 8) throw new ArgumentOutOfRangeException("A credit card must be at least 8 characters");
+                if (trimmed.Length > 19) throw new ArgumentOutOfRangeException("A credit card must be less than 20 characters");
+                if (trimmed.Any(chr => !Char.IsDigit(chr))) throw new ArgumentOutOfRangeException("A credit card can only contain digits or spaces");
 
                 var algorithm = new LuhnChecksumCalculator();
                 if (!algorithm.Validate(trimmed)) throw new ArgumentOutOfRangeException("The creditcard is invalid because the checksum is incorrect");
@@ -111,6 +112,46 @@ namespace Pangea.Domain
             var grouped = _value.Page(4).Select(group => new string(group.ToArray()));
 
             return string.Join(" ", grouped);
+        }
+
+
+        /// <summary>
+        /// Try to parse the text to a credit card. Returns true when the parsing succeeds, false otherwise
+        /// </summary>
+        /// <param name="text">the text to parse</param>
+        /// <param name="result">the resulting credit card</param>
+        public static bool TryParse(string text, out CreditCard result)
+        {
+            var trimmed = text?.Replace(" ", "");
+            if (string.IsNullOrEmpty(text))
+            {
+                result = new CreditCard();
+                return true;
+            }
+            if (!trimmed.All(Char.IsDigit))
+            {
+                result = new CreditCard();
+                return false;
+            }
+            if (trimmed.Length < 8)
+            {
+                result = new CreditCard();
+                return false;
+            }
+            if (trimmed.Length > 19)
+            {
+                result = new CreditCard();
+                return false;
+            }
+            var algorithm = new LuhnChecksumCalculator();
+            if (!algorithm.Validate(text))
+            {
+                result = new CreditCard();
+                return false;
+            }
+
+            result = new CreditCard(text);
+            return true;
         }
     }
 }

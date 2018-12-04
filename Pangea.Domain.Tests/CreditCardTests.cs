@@ -126,5 +126,44 @@ namespace Pangea.Domain.Tests
             Action action = () => new CreditCard("4111 1111 1111 1112");
             action.Should().Throw<ArgumentOutOfRangeException>().WithMessage("*checksum*");
         }
+
+        [TestMethod]
+        public void TryParse_CreditCard_That_Is_Null_Is_Valid()
+        {
+            CreditCard.TryParse(null, out var _).Should().BeTrue();
+        }
+        [TestMethod]
+        public void TryParse_CreditCard_That_Is_Empty_Is_Valid()
+        {
+            CreditCard.TryParse(string.Empty, out var _).Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void TryParse_CreditCard_That_Is_Invalid_Does_Not_Throw_An_Exception()
+        {
+            CreditCard.TryParse("abc", out var _).Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void Credit_Card_Must_Have_At_Least_8_Digits()
+        {
+            // 8 chars, but not 8 digits
+            Action action = () => new CreditCard(" 1234567");
+            action.Should().Throw<ArgumentOutOfRangeException>().WithMessage("*8*");
+        }
+
+        [TestMethod]
+        public void Credit_Card_Must_Have_Maximum_19_Digits()
+        {
+            // 20 chars, but 19 digits
+            Action action = () => new CreditCard("1234567890123456785 ");
+            action.Should().NotThrow<ArgumentOutOfRangeException>();
+        }
+
+        [TestMethod]
+        public void TryParse_CreditCard_That_Is_Invalid_Because_Of_Invalid_Checksum_Does_Not_Throw_An_Exception()
+        {
+            CreditCard.TryParse("4111 1111 1111 1112", out var _).Should().BeFalse();
+        }
     }
 }

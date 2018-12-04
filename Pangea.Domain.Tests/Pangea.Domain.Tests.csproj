@@ -67,6 +67,7 @@
     <Compile Include="Checksums\ModChecksumCalculatorTests.cs" />
     <Compile Include="CountryCodesTests.cs" />
     <Compile Include="CreditCardTests.cs" />
+    <Compile Include="CrossCutting\TryParseTests.cs" />
     <Compile Include="CurrenciesTests.cs" />
     <Compile Include="CurrencyTests.cs" />
     <Compile Include="DateRangeTests.cs" />

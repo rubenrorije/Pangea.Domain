@@ -45,12 +45,16 @@ namespace Pangea.Domain
         /// <param name="iban">The account number</param>
         public Iban(string iban)
         {
-            var parsed = IbanParser.Parse(iban);
+            var parsed = IbanParser.TryParse(iban);
+            if (!parsed.Valid) throw new ArgumentOutOfRangeException(parsed.Message);
             _text = parsed.ToString();
             CountryCode = parsed.CountryCode;
             CheckDigits = parsed.CheckDigits;
             BasicBankAccountNumber = parsed.BasicAccountNumber;
-            IbanParser.Validate(parsed);
+            if (!IbanParser.Validate(parsed))
+            {
+                throw new ArgumentOutOfRangeException(nameof(iban), "The entered Iban is incorrect.");
+            }
         }
 
         /// <summary>
@@ -128,5 +132,34 @@ namespace Pangea.Domain
             writer.WriteElementString("value", _text);
         }
 
+        /// <summary>
+        /// Try to parse the text to an Iban.
+        /// </summary>
+        /// <param name="text">the text to parse</param>
+        /// <param name="result">the parsed Iban</param>
+        /// <returns>whether the parsing was succesful</returns>
+        public static bool TryParse(string text, out Iban result)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                result = new Iban();
+                return true;
+            }
+
+            var parsed = IbanParser.TryParse(text);
+            if (!parsed.Valid)
+            {
+                result = new Iban();
+                return false;
+            }
+            if (!IbanParser.Validate(parsed))
+            {
+                result = new Iban();
+                return false;
+            }
+
+            result = new Iban(text);
+            return true;
+        }
     }
 }
