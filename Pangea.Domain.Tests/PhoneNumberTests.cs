@@ -306,11 +306,42 @@ namespace Pangea.Domain.Tests
             PhoneNumber.TryParse(31, "0123456789", out sut).Should().BeTrue();
             sut.ToString().Should().Be("+31123456789");
         }
+
         [TestMethod]
         public void TryParse_Local_PhoneNumber_With_Invalid_Country_Code_Returns_False()
         {
             PhoneNumber sut;
             PhoneNumber.TryParse(0, "0123456789", out sut).Should().BeFalse();
         }
+
+        [TestMethod]
+        public void ToString_With_Format_To_Specify_Spaces_Using_Group_Number_Cannot_Be_Zero()
+        {
+            var sut = new PhoneNumber(31, "0123456789");
+
+            Action action = () => sut.ToString("L0");
+            action.Should().Throw<FormatException>();
+
+        }
+
+        [TestMethod]
+        public void ToString_With_Format_To_Specify_Spaces_Using_Group_Number()
+        {
+            var sut = new PhoneNumber(31, "0123456789");
+
+            sut.ToString("l2").Should().Be("01 23 45 67 89");
+            sut.ToString("l3").Should().Be("012 345 678 9");
+            sut.ToString("l9").Should().Be("012345678 9");
+        }
+
+        [TestMethod]
+        public void ToString_With_Format_To_Specify_Spaces_Using_Group_Number_Not_Allowed_With_Format_That_Specifies_The_Original_Spaces()
+        {
+            var sut = new PhoneNumber(31, "0123456789");
+
+            Action action = () => sut.ToString("L2");
+            action.Should().Throw<FormatException>();
+        }
+
     }
 }

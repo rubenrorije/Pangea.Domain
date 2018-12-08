@@ -31,4 +31,5 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Maintainability", "AV1500:Member or local function contains more than 7 statements", Justification = "<Pending>", Scope = "member", Target = "~M:Pangea.Domain.PhoneNumber.TryParse(System.String,Pangea.Domain.PhoneNumber@)~System.Boolean")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Maintainability", "AV1551:Method overload should call another overload", Justification = "<Pending>", Scope = "member", Target = "~M:Pangea.Domain.PhoneNumber.TryParse(System.String,Pangea.Domain.PhoneNumber@)~System.Boolean")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Maintainability", "AV1500:Member or local function contains more than 7 statements", Justification = "<Pending>", Scope = "member", Target = "~M:Pangea.Domain.PhoneNumber.TryParse(System.Int32,System.String,Pangea.Domain.PhoneNumber@)~System.Boolean")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Maintainability", "AV1535:Missing block in case or default clause of switch statement", Justification = "<Pending>", Scope = "member", Target = "~M:Pangea.Domain.PhoneNumberFormatter.Print~System.String")]
 

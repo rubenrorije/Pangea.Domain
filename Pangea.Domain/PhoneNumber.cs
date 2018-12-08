@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Pangea.Domain.ExtensionMethods;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -26,11 +28,11 @@ namespace Pangea.Domain
         /// <summary>
         /// The string representation of the phone number, including the original spaces
         /// </summary>
-        private string Text { get; }
+        internal string Text { get; }
         /// <summary>
         /// The string representation of the phone number, excluding spaces
         /// </summary>
-        private string Trimmed { get; }
+        internal string Trimmed { get; }
         /// <summary>
         /// The country code of the phone number, if known, otherwise null
         /// </summary>
@@ -185,7 +187,6 @@ namespace Pangea.Domain
             return ToString(format, null);
         }
 
-#pragma warning disable AV1500 // Member or local function contains more than 7 statements
         /// <summary>
         /// The string representation of the phone number, given in the format specified. 
         /// </summary>
@@ -195,37 +196,16 @@ namespace Pangea.Domain
         /// <item>g: International format using a + sign, excluding the original spaces (+31123456789)</item>
         /// <item>O: International format using 0's, including the original spaces (0031 123 456 789)</item>
         /// <item>o: International format using 0's, excluding the original spaces (0031123456789)</item>
-        /// <item>L: Local format, including the original spaces (0 123 456 789)</item>
-        /// <item>l: Local format, excluding the original spaces (0123456789)</item>
+        /// <item>L: Local format, including the original spaces (0 123 456 789) when the country calling code could not be found, the global format will be returned</item>
+        /// <item>l: Local format, excluding the original spaces (0123456789) when the country calling code could not be found, the global format will be returned</item>
         /// </list>
         /// </param>
         /// <param name="formatProvider">The format provider, does not change the output at all</param>
         /// <returns>The phone number in the given format</returns>
+        /// <exception cref="FormatException">A format exception will be thrown when the format is incorrect</exception>
         public string ToString(string format, IFormatProvider formatProvider)
-#pragma warning restore AV1500 // Member or local function contains more than 7 statements
         {
-            if (Text == null) return null;
-
-            switch (format)
-            {
-                case "o":
-                    return "00" + Trimmed;
-                case "O":
-                    return "00" + Text;
-                case "g":
-                    return "+" + Trimmed;
-                case "L":
-                    if (CountryCode == null) return ToString("G");
-                    return "0" + Text.Substring(CountryCode?.ToString().Length ?? 0);
-                case "l":
-                    if (CountryCode == null) return ToString("g");
-                    return "0" + Trimmed.Substring(CountryCode?.ToString().Length ?? 0);
-                case "G":
-                case null:
-                    return "+" + Text;
-                default:
-                    throw new FormatException($"Cannot create a representation of the phone number with the {format} format");
-            }
+            return PhoneNumberFormatter.Format(this, format);
         }
 
         /// <inheritdoc />
