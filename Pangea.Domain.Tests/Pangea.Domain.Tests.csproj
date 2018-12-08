@@ -63,10 +63,12 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyInformationTests.cs" />
     <Compile Include="Checksums\LuhnChecksumCalculatorTests.cs" />
     <Compile Include="Checksums\ModChecksumCalculatorTests.cs" />
     <Compile Include="CountryCodesTests.cs" />
     <Compile Include="CreditCardTests.cs" />
+    <Compile Include="CrossCutting\AssemblyTests.cs" />
     <Compile Include="CrossCutting\TryParseTests.cs" />
     <Compile Include="CurrenciesTests.cs" />
     <Compile Include="CurrencyTests.cs" />
