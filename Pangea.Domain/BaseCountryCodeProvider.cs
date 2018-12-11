@@ -6,7 +6,7 @@ using System.Text;
 namespace Pangea.Domain
 {
     /// <summary>
-    /// An abstract implementation of the country code provider. 
+    /// An abstract implementation of an <see cref="ICountryCodeProvider"/>. 
     /// This class will handle the way to check for country codes based on a given phone number.
     /// The actual implementation of the check can be implemented in the overriden <see cref="Check(int)"/> function.
     /// </summary>
@@ -48,11 +48,15 @@ namespace Pangea.Domain
         /// this function will be called starting with an integer that represents the first characters of the phone number.
         /// When it does not find any country code, it will continue with a character less.
         /// </summary>
-        /// <param name="phoneNumberPart">the number representation of the part of the phone number that might be a country code</param>
+        /// <param name="phoneNumberPart">The number representation of the part of the phone number that might be a country code</param>
         /// <returns>The country code when found, null otherwise</returns>
         protected abstract int? Check(int phoneNumberPart);
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Try to retrieve the country calling code from the two letter iso country name
+        /// </summary>
+        /// <param name="isoTwoLetterCountryName">the country</param>
+        /// <returns>The country calling code when found, <c>null</c> otherwise</returns>
         public abstract int? GetCountryCallingCodeFor(string isoTwoLetterCountryName);
     }
 }

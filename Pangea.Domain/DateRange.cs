@@ -14,7 +14,6 @@ namespace Pangea.Domain
     /// This range can be bounded, by a start or end date, or indefinite.
     /// Can be used for instance to model functionality about having values that change over time in a LOB app
     /// </summary>
-
     public struct DateRange
         : IEquatable<DateRange>
         , IFormattable
@@ -31,6 +30,7 @@ namespace Pangea.Domain
         /// The beginning date of the range, when null the start is not bounded, which effectively means <see cref="DateTime.MinValue"/>
         /// </summary>
         public DateTime? Start { get; }
+
         /// <summary>
         /// The end date of the range, when null the start is not bounded, which effectively means <see cref="DateTime.MaxValue"/>
         /// </summary>
@@ -94,7 +94,7 @@ namespace Pangea.Domain
         }
 
         /// <summary>
-        /// Create a date range that spans the whole year
+        /// Create a date range that spans the whole given year
         /// </summary>
         public static DateRange Year(int year)
         {
@@ -106,6 +106,7 @@ namespace Pangea.Domain
         /// </summary>
         /// <param name="startingYear">The year to start at January 1</param>
         /// <param name="numberOfYears">The number of years, the minimum value is 1</param>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="startingYear"/> is non-positive or <paramref name="numberOfYears"/> is non-positive</exception>
         public static DateRange Years(int startingYear, int numberOfYears)
         {
             return new DateRange(new DateTime(startingYear, 1, 1), new DateTime(startingYear + numberOfYears - 1, 12, 31));
@@ -170,7 +171,6 @@ namespace Pangea.Domain
             throw new ArgumentOutOfRangeException("Cannot subtract the ranges, because the end dates do not match");
         }
 
-#pragma warning disable AV1500 // Member or local function contains more than 7 statements
         /// <summary>
         /// Returns whether the two ranges are adjacent to one and other. 
         /// The order in which the ranges are specified does not matter.
@@ -178,7 +178,6 @@ namespace Pangea.Domain
         /// <param name="other">One of the ranges to compare.</param>
         /// <returns>True when the ranges are next to eachother</returns>
         public bool IsAdjacentTo(DateRange other)
-#pragma warning restore AV1500 // Member or local function contains more than 7 statements
         {
             if (!_isFilled) return false;
             if (!other._isFilled) return false;
@@ -241,10 +240,8 @@ namespace Pangea.Domain
             return ToString(format, null);
         }
 
-#pragma warning disable AV1500 // Member or local function contains more than 7 statements
         /// <inheritdoc/>
         public string ToString(string format, IFormatProvider formatProvider)
-#pragma warning restore AV1500 // Member or local function contains more than 7 statements
         {
             format = format ?? "G";
 
