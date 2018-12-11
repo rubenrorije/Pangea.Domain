@@ -26,26 +26,27 @@ namespace Pangea.Domain
         private static readonly Regex _localExpression = new Regex(@"^0(?<numbers>(\d|\s)+)$", RegexOptions.Compiled | RegexOptions.Singleline);
 
         /// <summary>
-        /// The string representation of the phone number, including the original spaces
+        /// The string representation of the phone number, including the original spaces.
         /// </summary>
         internal string Text { get; }
+
         /// <summary>
         /// The string representation of the phone number, excluding spaces
         /// </summary>
         internal string Trimmed { get; }
+
         /// <summary>
         /// The country code of the phone number, if known, otherwise null
         /// </summary>
         public int? CountryCode { get; }
 
-#pragma warning disable AV1500 // Member or local function contains more than 7 statements
         /// <summary>
         /// Create a phone number based on the text representation of the phone number. 
         /// Allowed formats are +31 12 34 56 789, 00 31 12 34 56 789, with or without spaces 
         /// </summary>
-        /// <param name="text"></param>
+        /// <param name="text">the text to parse to a valid PhoneNumbe</param>
+        /// <exception cref="FormatException">When the text cannot be parsed to a phone number</exception>
         public PhoneNumber(string text)
-#pragma warning restore AV1500 // Member or local function contains more than 7 statements
         {
             if (string.IsNullOrEmpty(text))
             {
@@ -73,15 +74,15 @@ namespace Pangea.Domain
             CountryCode = CountryCodes.Instance?.GetCountryCallingCodeFrom(numbers);
         }
 
-#pragma warning disable AV1500 // Member or local function contains more than 7 statements
         /// <summary>
         /// Create a phone number from a text representation that is in a local format. That is
         /// a number starting with a 0 without a country calling code. The country calling code is given.
         /// </summary>
         /// <param name="countryCode">The country calling code</param>
         /// <param name="text">The local phone number, starting with a 0, which can include spaces</param>
+        ///<exception cref="ArgumentOutOfRangeException">When the country code is non-positive</exception>
+        /// <exception cref="FormatException">When the text cannot be parsed to a phone number</exception>
         public PhoneNumber(int countryCode, string text)
-#pragma warning restore AV1500 // Member or local function contains more than 7 statements
         {
             if (countryCode <= 0) throw new ArgumentOutOfRangeException(nameof(countryCode));
 
@@ -245,7 +246,7 @@ namespace Pangea.Domain
         {
             if (string.IsNullOrEmpty(text))
             {
-                result = default(PhoneNumber);
+                result = default;
                 return true;
             }
             else
@@ -258,7 +259,7 @@ namespace Pangea.Domain
                 }
                 else
                 {
-                    result = default(PhoneNumber);
+                    result = default;
                     return false;
                 }
             }
@@ -275,12 +276,12 @@ namespace Pangea.Domain
         {
             if (string.IsNullOrEmpty(text))
             {
-                result = default(PhoneNumber);
+                result = default;
                 return true;
             }
             else if (countryCallingCode <= 0)
             {
-                result = default(PhoneNumber);
+                result = default;
                 return false;
             }
             else
@@ -293,7 +294,7 @@ namespace Pangea.Domain
                 }
                 else
                 {
-                    result = default(PhoneNumber);
+                    result = default;
                     return false;
                 }
             }

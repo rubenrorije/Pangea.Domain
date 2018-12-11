@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 namespace Pangea.Domain
 {
     /// <summary>
-    /// A number representing a credit card.
+    /// A validated object representing a credit card.
     /// </summary>
     public struct CreditCard : IEquatable<CreditCard>
     {
@@ -18,7 +18,8 @@ namespace Pangea.Domain
         /// <summary>
         /// Create a new credit card that is validated using the given card number
         /// </summary>
-        /// <param name="cardNumber"></param>
+        /// <param name="cardNumber">the card number in text format with or without spaces that must be validated.</param>
+        /// <exception cref="ArgumentOutOfRangeException">When the number of characters (excluding spaces) is less than 8, more than 19, are no digits, or when the checksum is not correct.</exception>
         public CreditCard(string cardNumber)
         {
             var trimmed = cardNumber?.Replace(" ", "");
@@ -34,13 +35,22 @@ namespace Pangea.Domain
             _value = trimmed;
         }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Compare this instance to another credit card.
+        /// </summary>
+        /// <param name="other">The credit card to compare to</param>
+        /// <returns>Are the cards equivalent?</returns>
         public bool Equals(CreditCard other)
         {
             return _value.Equals(other._value);
         }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Is this instance equal to the given <paramref name="obj"/>. 
+        /// <c>true</c> when <paramref name="obj"/> is a credit card and they are equivalent.
+        /// </summary>
+        /// <param name="obj">the object to compare to</param>
+        /// <returns>The <paramref name="obj"/> is a credit card and they are equivalent</returns>
         public override bool Equals(object obj)
         {
             if (obj is CreditCard) return Equals((CreditCard)obj);
@@ -104,7 +114,10 @@ namespace Pangea.Domain
             return _value.Substring((int)format, _value.Length - (int)format - 1);
         }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Returns a text format of the credit card grouped in digits of 4.
+        /// </summary>
+        /// <returns>the text format of the credit card grouped in digits of 4</returns>
         public override string ToString()
         {
             if (string.IsNullOrEmpty(_value)) return _value;

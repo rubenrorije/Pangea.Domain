@@ -25,6 +25,7 @@ namespace Pangea.Domain
         /// the phone number. A function is used so that you can resolve the country code provider for instance from your IoC container.
         /// </summary>
         /// <param name="countryCodeProviderFunc">a func to get the country code provider to be used to get the country code.</param>
+        /// <exception cref="ArgumentNullException">When the <paramref name="countryCodeProviderFunc"/> is <c>null</c></exception>
         public static void SetProvider(Func<ICountryCodeProvider> countryCodeProviderFunc)
         {
             _instanceProvider =
