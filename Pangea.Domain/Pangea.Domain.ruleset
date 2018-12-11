@@ -69,6 +69,6 @@
     <Rule Id="CA2242" Action="Warning" />
   </Rules>
   <Rules AnalyzerId="CSharpGuidelinesAnalyzer" RuleNamespace="CSharpGuidelinesAnalyzer">
-    <Rule Id="AV1535" Action="None" />
+    <Rule Id="AV1500" Action="None" />
   </Rules>
 </RuleSet>

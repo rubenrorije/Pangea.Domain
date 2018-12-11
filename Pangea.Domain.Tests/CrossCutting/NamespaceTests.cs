@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using FluentAssertions.Execution;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -17,13 +18,19 @@ namespace Pangea.Domain.Tests.CrossCutting
         public void All_Types_In_The_Checksums_Namespace_Are_Internal()
         {
             var incorrect =
-                _allTypes
-                .Where(t => t.Namespace != null)
-                .Where(t => t.Namespace.Contains(".Checksums"))
-                .Where(t => t.IsPublic)
-                .ToArray();
+                typeof(PhoneNumber)
+                .Assembly
+                .Types()
+                .ThatAreInNamespace("Pangea.Domain.Checksums")
+                .ToList();
 
-            incorrect.Should().HaveCount(0, $"{string.Join(", ", incorrect.Select(t => t.Name))} should not be public in namespace *.Checksums");
+            using (new AssertionScope())
+            {
+                foreach (var t in incorrect)
+                {
+                    t.IsPublic.Should().BeTrue($"{t.Name} should be internal");
+                }
+            }
         }
     }
 }

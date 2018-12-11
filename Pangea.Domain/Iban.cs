@@ -21,10 +21,12 @@ namespace Pangea.Domain
         /// Country code using ISO 3166-1 alpha-2 – two letters
         /// </summary>
         public string CountryCode { get; }
+
         /// <summary>
         /// The check digits of the Iban to check that the Iban is a valid one.
         /// </summary>
         public string CheckDigits { get; }
+
         /// <summary>
         /// Basic Bank Account Number (BBAN) – up to 30 alphanumeric characters that are country-specific
         /// </summary>
@@ -43,6 +45,7 @@ namespace Pangea.Domain
         /// Create an IBAN based on the text given
         /// </summary>
         /// <param name="iban">The account number</param>
+        /// <exception cref="ArgumentOutOfRangeException">When the text could not be parsed to a valid IBAN, or when the checksum is incorrect</exception>
         public Iban(string iban)
         {
             var parsed = IbanParser.TryParse(iban);

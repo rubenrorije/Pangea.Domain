@@ -86,9 +86,23 @@ namespace Pangea.Domain.Tests
         }
 
         [TestMethod]
+        public void Negative_Year_Throws_ArgumentOutOfRangeException()
+        {
+            Action action = () => DateRange.Year(-1);
+            action.Should().Throw<ArgumentOutOfRangeException>();
+        }
+
+        [TestMethod]
+        public void Negative_Number_Of_Years_Throws_ArgumentOutOfRangeException()
+        {
+            Action action = () => DateRange.Years(DateTime.Today.Year, -1);
+            action.Should().Throw<ArgumentOutOfRangeException>();
+        }
+
+        [TestMethod]
         public void Create_Years_Range_From_Year_Cannot_Be_Less_Than_1()
         {
-            Action action = ()=> DateRange.Years(2018, 0);
+            Action action = () => DateRange.Years(2018, 0);
 
             action.Should().Throw<ArgumentOutOfRangeException>();
         }
@@ -102,7 +116,7 @@ namespace Pangea.Domain.Tests
         [TestMethod]
         public void Always_Is_Equal_To_An_Unbounded_Range()
         {
-            DateRange.Always.Should().Be(new DateRange(null,null));
+            DateRange.Always.Should().Be(new DateRange(null, null));
         }
 
 
@@ -168,7 +182,7 @@ namespace Pangea.Domain.Tests
         [TestMethod]
         public void Days_Creates_A_Range_That_Spans_The_Number_Of_Days()
         {
-            var sut = DateRange.Days(DateTime.Today,2);
+            var sut = DateRange.Days(DateTime.Today, 2);
             sut.Start.Should().Be(DateTime.Today);
             sut.End.Should().Be(DateTime.Today.AddDays(1));
         }
@@ -301,7 +315,7 @@ namespace Pangea.Domain.Tests
         [TestMethod]
         public void ToString_For_Range_That_Is_Not_Bounded_At_The_End_Returns_Greater_Than_Start()
         {
-            var sut = new DateRange(new DateTime(2018,1,1), null);
+            var sut = new DateRange(new DateTime(2018, 1, 1), null);
 
             sut.ToString(null, CultureInfo.InvariantCulture).Should().Be("≥ 01/01/2018");
         }
@@ -340,7 +354,7 @@ namespace Pangea.Domain.Tests
         [TestMethod]
         public void Xml_Serialization_RoundTrip_EndBounded()
         {
-            var expected = new DateRange(null,DateTime.Today);
+            var expected = new DateRange(null, DateTime.Today);
             var sut = expected.RoundTrip();
 
             sut.Start.Should().Be(expected.Start);
