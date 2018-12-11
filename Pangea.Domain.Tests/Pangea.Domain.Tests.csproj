@@ -69,6 +69,7 @@
     <Compile Include="CountryCodesTests.cs" />
     <Compile Include="CreditCardTests.cs" />
     <Compile Include="CrossCutting\AssemblyTests.cs" />
+    <Compile Include="CrossCutting\ExtensionMethodsTests.cs" />
     <Compile Include="CrossCutting\TryParseTests.cs" />
     <Compile Include="CurrenciesTests.cs" />
     <Compile Include="CurrencyTests.cs" />
@@ -77,6 +78,8 @@
     <Compile Include="EmojiFlagTests.cs" />
     <Compile Include="ExchangeRateAtTests.cs" />
     <Compile Include="ExchangeRateTests.cs" />
+    <Compile Include="Formatters\PhoneNumberNLFormatterTests.cs" />
+    <Compile Include="Formatters\PhoneNumberFormatterWrapperTests.cs" />
     <Compile Include="GpsLocationTests.cs" />
     <Compile Include="IbanTests.cs" />
     <Compile Include="CrossCutting\NamespaceTests.cs" />
@@ -89,6 +92,7 @@
     <Compile Include="CrossCutting\FormattableTests.cs" />
     <Compile Include="PhoneNumberTests.cs" />
     <Compile Include="CrossCutting\StructTests.cs" />
+    <Compile Include="Util\TypeSelectorExtensions.cs" />
     <Compile Include="Util\XmlHelper.cs" />
     <Compile Include="CrossCutting\XmlSerializableTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

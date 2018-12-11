@@ -28,21 +28,45 @@ namespace Pangea.Domain
         {
             if (TextToPrint == null) return null;
 
-            switch (_format[0])
+            switch (_format)
             {
-                case 'o':
-                case 'O':
-                    if (_format.Length > 1) throw Exception;
+                case "o":
+                case "O":
                     return "00" + TextToPrint;
-                case 'L':
-                case 'l':
+                case "L":
+                case "l":
                     return PrintLocal();
-                case 'g':
-                case 'G':
+                case "g":
+                case "G":
                     return PrintGlobal();
                 default:
-                    throw Exception;
+                    break;
             }
+
+            var builder = new StringBuilder(_phoneNumber.Text.Length);
+
+            var numberIndex = 0;
+            foreach (var chr in _format)
+            {
+                switch (chr)
+                {
+                    case 'C':
+                        builder.Append(_phoneNumber.CountryCode);
+                        break;
+                    case 'N':
+                        builder.Append(_phoneNumber.Trimmed[numberIndex]);
+                        numberIndex++;
+                        break;
+                    default:
+                        builder.Append(chr);
+                        break;
+                }
+            }
+            if (numberIndex < _phoneNumber.Trimmed.Length)
+            {
+                builder.Append(_phoneNumber.Trimmed.Substring(numberIndex));
+            }
+            return builder.ToString();
         }
 
         private Exception Exception => new FormatException($"Cannot create a representation of the phone number with the {_format} format");
@@ -60,16 +84,14 @@ namespace Pangea.Domain
 
         private string PrintLocal()
         {
-            var callingCodeLength = _phoneNumber.CountryCode?.ToString().Length ?? 0;
-
             if (_phoneNumber.CountryCode == null) return Format(_phoneNumber, char.IsUpper(_format[0]) ? "G" : "g");
             if (_format.Length == 2 && char.IsDigit(_format[1]))
             {
-                return Group("0" + _phoneNumber.Trimmed.Substring(callingCodeLength), _format[1]);
+                return Group("0" + _phoneNumber.Trimmed, _format[1]);
             }
             else
             {
-                return "0" + TextToPrint.Substring(callingCodeLength);
+                return "0" + TextToPrint;
             }
         }
 
@@ -79,11 +101,11 @@ namespace Pangea.Domain
             if (_format.Length == 2 && char.IsDigit(_format[1]))
             {
                 // groups specified
-                return prefix + Group(_phoneNumber.Trimmed, _format[1]);
+                return prefix + Group(_phoneNumber.CountryCode.ToString() + _phoneNumber.Trimmed, _format[1]);
             }
             else
             {
-                return "+" + TextToPrint;
+                return "+" + _phoneNumber.CountryCode?.ToString() + TextToPrint;
             }
         }
 

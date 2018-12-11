@@ -130,11 +130,10 @@ namespace Pangea.Domain.Tests
 
 
         [TestMethod]
-        public void ToString_With_A_Wrong_Format_Throws_FormatException()
+        public void ToString_With_A_Format_That_Is_Unuseful_Appends_All_Numbers_To_The_End()
         {
             var sut = new PhoneNumber("+31 12 345 6789");
-            Action action = () => sut.ToString("X");
-            action.Should().Throw<FormatException>();
+            sut.ToString("X").Should().Be("X31123456789");
         }
 
         [TestMethod]
@@ -315,33 +314,20 @@ namespace Pangea.Domain.Tests
         }
 
         [TestMethod]
-        public void ToString_With_Format_To_Specify_Spaces_Using_Group_Number_Cannot_Be_Zero()
+        public void Format_With_Custom_Format()
         {
             var sut = new PhoneNumber(31, "0123456789");
 
-            Action action = () => sut.ToString("L0");
-            action.Should().Throw<FormatException>();
-
+            sut.ToString("+C NNN NN NNN N").Should().Be("+31 123 45 678 9");
+            sut.ToString("+C (0) NNN NN NN NN").Should().Be("+31 (0) 123 45 67 89");
+            sut.ToString("0NNN-NNNNNN").Should().Be("0123-456789");
         }
-
         [TestMethod]
-        public void ToString_With_Format_To_Specify_Spaces_Using_Group_Number()
+        public void Format_With_Custom_Format_That_Contains_Less_Digits_Than_The_PhoneNumber_Appends_The_Numbers_To_The_End()
         {
             var sut = new PhoneNumber(31, "0123456789");
 
-            sut.ToString("l2").Should().Be("01 23 45 67 89");
-            sut.ToString("l3").Should().Be("012 345 678 9");
-            sut.ToString("l9").Should().Be("012345678 9");
+            sut.ToString("0NN ").Should().Be("012 3456789");
         }
-
-        [TestMethod]
-        public void ToString_With_Format_To_Specify_Spaces_Using_Group_Number_Not_Allowed_With_Format_That_Specifies_The_Original_Spaces()
-        {
-            var sut = new PhoneNumber(31, "0123456789");
-
-            Action action = () => sut.ToString("L2");
-            action.Should().Throw<FormatException>();
-        }
-
     }
 }

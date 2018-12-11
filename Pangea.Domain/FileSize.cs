@@ -100,7 +100,6 @@ namespace Pangea.Domain
             return ToString(format, null);
         }
 
-#pragma warning disable AV1500 // Member or local function contains more than 7 statements
         /// <summary>
         /// Returns the representation of the FileSize by showing this in the most appropriate manner.
         /// When the FileSize is more than 1GB, the FileSize will be shown in GB, likewise for MegaBytes and KiloBytes.
@@ -110,7 +109,6 @@ namespace Pangea.Domain
         ///<param name="formatProvider">The format provider</param>
         /// <returns>The string representation of the FileSize</returns>
         public string ToString(string format, IFormatProvider formatProvider)
-#pragma warning restore AV1500 // Member or local function contains more than 7 statements
         {
             format = format ?? "G";
             formatProvider = formatProvider ?? CultureInfo.CurrentCulture;
