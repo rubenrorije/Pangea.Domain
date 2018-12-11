@@ -22,16 +22,16 @@ namespace Pangea.Domain.Formatters
 
             if (format?.ToUpper() == "L")
             {
-                if (phoneNumber.Trimmed.StartsWith("316"))
+                if (phoneNumber.Trimmed.StartsWith("6"))
                 {
-                    return "06-" + phoneNumber.Trimmed.Substring(3);
+                    return "06-" + phoneNumber.Trimmed.Substring(1);
                 }
             }
             if (format?.ToUpper() == "G")
             {
-                if (phoneNumber.Trimmed.StartsWith("316"))
+                if (phoneNumber.Trimmed.StartsWith("6"))
                 {
-                    return "+31 6 " + phoneNumber.Trimmed.Substring(3);
+                    return "+31 6 " + phoneNumber.Trimmed.Substring(1);
                 }
             }
             return phoneNumber.ToString();

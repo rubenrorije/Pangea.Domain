@@ -59,9 +59,9 @@ namespace Pangea.Domain
                 var result = _internationalExpression.Match(text);
                 if (!result.Success) throw new FormatException($"Invalid phone number");
                 var numbers = result.Groups["numbers"].Value;
-                Text = numbers;
-                Trimmed = Text.Replace(" ", "");
                 CountryCode = CountryCodes.Instance?.GetCountryCallingCodeFrom(numbers);
+                Text = numbers.ReplaceFirst(CountryCode?.ToString(), string.Empty);
+                Trimmed = Text.Replace(" ", "");
             }
         }
 
@@ -97,7 +97,7 @@ namespace Pangea.Domain
                 var result = _localExpression.Match(text);
                 if (!result.Success) throw new FormatException($"Invalid phone number");
                 var numbers = result.Groups["numbers"].Value;
-                Text = countryCode + numbers;
+                Text = numbers;
                 Trimmed = Text?.Replace(" ", "");
                 CountryCode = countryCode;
             }
@@ -107,7 +107,7 @@ namespace Pangea.Domain
         {
             if (!match.Success) throw new FormatException($"Invalid phone number");
             var numbers = match.Groups["numbers"].Value;
-            Text = countryCode.ToString() + numbers;
+            Text = numbers;
             Trimmed = Text?.Replace(" ", "");
             CountryCode = countryCode;
 
@@ -242,7 +242,7 @@ namespace Pangea.Domain
         {
             if (writer == null) throw new ArgumentNullException(nameof(writer));
             if (string.IsNullOrEmpty(Text)) writer.WriteElementString("value", string.Empty);
-            else writer.WriteElementString("value", "+" + Text);
+            else writer.WriteElementString("value", "+" + CountryCode + Text);
         }
 
 
