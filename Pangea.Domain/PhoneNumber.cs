@@ -39,14 +39,12 @@ namespace Pangea.Domain
         /// </summary>
         public int? CountryCode { get; }
 
-#pragma warning disable AV1500 // Member or local function contains more than 7 statements
         /// <summary>
         /// Create a phone number based on the text representation of the phone number. 
         /// Allowed formats are +31 12 34 56 789, 00 31 12 34 56 789, with or without spaces 
         /// </summary>
         /// <param name="text"></param>
         public PhoneNumber(string text)
-#pragma warning restore AV1500 // Member or local function contains more than 7 statements
         {
             if (string.IsNullOrEmpty(text))
             {
@@ -74,7 +72,6 @@ namespace Pangea.Domain
             CountryCode = CountryCodes.Instance?.GetCountryCallingCodeFrom(numbers);
         }
 
-#pragma warning disable AV1500 // Member or local function contains more than 7 statements
         /// <summary>
         /// Create a phone number from a text representation that is in a local format. That is
         /// a number starting with a 0 without a country calling code. The country calling code is given.
@@ -82,7 +79,6 @@ namespace Pangea.Domain
         /// <param name="countryCode">The country calling code</param>
         /// <param name="text">The local phone number, starting with a 0, which can include spaces</param>
         public PhoneNumber(int countryCode, string text)
-#pragma warning restore AV1500 // Member or local function contains more than 7 statements
         {
             if (countryCode <= 0) throw new ArgumentOutOfRangeException(nameof(countryCode));
 
@@ -147,7 +143,7 @@ namespace Pangea.Domain
         /// <returns></returns>
         public override int GetHashCode()
         {
-            return Trimmed?.GetHashCode() ?? 0;
+            return (CountryCode + Trimmed)?.GetHashCode() ?? 0;
         }
 
         /// <summary>
@@ -157,7 +153,9 @@ namespace Pangea.Domain
         /// <returns></returns>
         public bool Equals(PhoneNumber other)
         {
-            return Trimmed == other.Trimmed;
+            return 
+                Trimmed == other.Trimmed &&
+                CountryCode == other.CountryCode;
         }
 
 
@@ -196,7 +194,9 @@ namespace Pangea.Domain
         /// <returns>the string representation of the phone number</returns>
         public string ToString(string format, IPhoneNumberFormatter formatter)
         {
-            return formatter.Format(format, this, formatter);
+            var newFormat = new PhoneNumberFormatterWrapper(formatter).GetFormat(this, format);
+            return ToString(newFormat, (IFormatProvider)null);
+
         }
 
 

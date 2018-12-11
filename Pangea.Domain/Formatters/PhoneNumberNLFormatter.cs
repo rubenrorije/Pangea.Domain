@@ -15,33 +15,92 @@ namespace Pangea.Domain.Formatters
             return countryCode.Equals("31");
         }
 
-        /// <inheritdoc />
-        public string Format(string format, object arg, IFormatProvider formatProvider)
+        /// <summary>
+        /// Return the dutch format of a phone number
+        /// </summary>
+        /// <param name="phoneNumber">the phone number to format</param>
+        /// <returns>the new format</returns>
+        public string GetLocalFormat(PhoneNumber phoneNumber)
         {
-            var phoneNumber = (PhoneNumber)arg;
-
-            if (format?.ToUpper() == "L")
+            if (phoneNumber.Trimmed.StartsWith("6"))
             {
-                if (phoneNumber.Trimmed.StartsWith("6"))
-                {
-                    return "06-" + phoneNumber.Trimmed.Substring(1);
-                }
+                return "0N-NN NN NN NN";
             }
-            if (format?.ToUpper() == "G")
+            if (IsThreeDigitAreaCode(phoneNumber))
             {
-                if (phoneNumber.Trimmed.StartsWith("6"))
-                {
-                    return "+31 6 " + phoneNumber.Trimmed.Substring(1);
-                }
+                return "0NN-NNNNNNN";
             }
-            return phoneNumber.ToString();
+            else
+            {
+                return "0NNN-NNNNNN";
+            }
         }
 
-        /// <inheritdoc />
-        public object GetFormat(Type formatType)
+        /// <summary>
+        /// Return the dutch format of a phone number
+        /// </summary>
+        /// <param name="phoneNumber">the phone number to format</param>
+        /// <returns>the new format</returns>
+        public string GetGlobalFormat(PhoneNumber phoneNumber)
         {
-            if (formatType == typeof(ICustomFormatter)) return this;
-            return null;
+            if (phoneNumber.Trimmed.StartsWith("6"))
+            {
+                return "+C N NN NN NN NN";
+            }
+            if (IsThreeDigitAreaCode(phoneNumber))
+            {
+                return "+C NN-NN NN NN NN";
+            }
+            else
+            {
+                return "+C NNN-NN NN NNN";
+            }
+        }
+
+        private bool IsThreeDigitAreaCode(PhoneNumber phoneNumber)
+        {
+            if (phoneNumber.Trimmed.Length < 2) return false;
+            var possibleAreaCode = phoneNumber.Trimmed.Substring(0, 2);
+
+            switch (possibleAreaCode)
+            {
+                case "10":
+                case "13":
+                case "14":
+                case "15":
+                case "20":
+                case "23":
+                case "24":
+                case "26":
+                case "30":
+                case "33":
+                case "35":
+                case "36":
+                case "38":
+                case "40":
+                case "43":
+                case "44":
+                case "45":
+                case "46":
+                case "50":
+                case "53":
+                case "55":
+                case "58":
+                case "70":
+                case "71":
+                case "72":
+                case "73":
+                case "74":
+                case "75":
+                case "76":
+                case "77":
+                case "78":
+                case "79":
+                    return true;
+                default:
+                    return false;
+
+            }
         }
     }
 }

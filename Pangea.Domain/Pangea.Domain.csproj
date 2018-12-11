@@ -21,6 +21,11 @@
     <WarningsAsErrors />
     <DocumentationFile>bin\Debug\netstandard2.0\Pangea.Domain.xml</DocumentationFile>
     <NoWarn>1701;1702;1705;AV1500</NoWarn>
+    <CodeAnalysisRuleSet>Pangea.Domain.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <CodeAnalysisRuleSet>Pangea.Domain.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
   <ItemGroup>

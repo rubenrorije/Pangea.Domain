@@ -62,6 +62,10 @@ namespace Pangea.Domain
                         break;
                 }
             }
+            if (numberIndex < _phoneNumber.Trimmed.Length)
+            {
+                builder.Append(_phoneNumber.Trimmed.Substring(numberIndex));
+            }
             return builder.ToString();
         }
 

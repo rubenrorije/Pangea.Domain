@@ -130,10 +130,10 @@ namespace Pangea.Domain.Tests
 
 
         [TestMethod]
-        public void ToString_With_A_Format_That_Is_Unuseful_Returns_The_Text()
+        public void ToString_With_A_Format_That_Is_Unuseful_Appends_All_Numbers_To_The_End()
         {
             var sut = new PhoneNumber("+31 12 345 6789");
-            sut.ToString("X").Should().Be("X");
+            sut.ToString("X").Should().Be("X31123456789");
         }
 
         [TestMethod]
@@ -321,6 +321,13 @@ namespace Pangea.Domain.Tests
             sut.ToString("+C NNN NN NNN N").Should().Be("+31 123 45 678 9");
             sut.ToString("+C (0) NNN NN NN NN").Should().Be("+31 (0) 123 45 67 89");
             sut.ToString("0NNN-NNNNNN").Should().Be("0123-456789");
+        }
+        [TestMethod]
+        public void Format_With_Custom_Format_That_Contains_Less_Digits_Than_The_PhoneNumber_Appends_The_Numbers_To_The_End()
+        {
+            var sut = new PhoneNumber(31, "0123456789");
+
+            sut.ToString("0NN ").Should().Be("012 3456789");
         }
     }
 }
