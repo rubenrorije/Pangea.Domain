@@ -154,7 +154,7 @@ namespace Pangea.Domain.Tests
         {
             var sut = new Iban("BE71 0961 2345 6769");
 
-            sut.Should().BeXmlSerializableAndLeaveReaderInCorrectWayWhenFinished();
+            sut.Should().BeXmlSerializable();
             sut.Should().BeBinarySerializable();
             sut.Should().BeDataContractSerializable();
         }
@@ -232,7 +232,7 @@ namespace Pangea.Domain.Tests
         public void Xml_Serializable()
         {
             var sut = new Iban("BE71 0961 2345 6769");
-            sut.Should().BeXmlSerializableAndLeaveReaderInCorrectWayWhenFinished();
+            sut.Should().BeXmlSerializable();
         }
 
         [TestMethod]

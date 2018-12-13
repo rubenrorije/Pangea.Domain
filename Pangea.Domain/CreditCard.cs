@@ -205,7 +205,7 @@ namespace Pangea.Domain
             }
             else
             {
-                System.Runtime.CompilerServices.Unsafe.AsRef(this) = new CreditCard(value);
+                System.Runtime.CompilerServices.Unsafe.AsRef(this) = CreditCard.Unsafe(value);
             }
 
             reader.Skip();
