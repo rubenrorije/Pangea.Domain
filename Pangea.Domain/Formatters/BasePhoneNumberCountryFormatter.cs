@@ -26,9 +26,9 @@ namespace Pangea.Domain.Formatters
         /// </summary>
         /// <param name="countryCode"></param>
         /// <returns></returns>
-        public virtual bool AppliesTo(string countryCode)
+        public virtual bool AppliesTo(int countryCode)
         {
-            return _countryCode.ToString(CultureInfo.InvariantCulture).Equals(countryCode, StringComparison.InvariantCulture);
+            return _countryCode == countryCode;
         }
 
         /// <summary>
