@@ -100,7 +100,17 @@ namespace Pangea.Domain
         /// <returns>The converted amount in the To currency</returns>
         public static decimal operator *(decimal amount, ExchangeRate rate)
         {
-            return amount * rate.Rate;
+            return rate.Multiply(amount);
+        }
+
+        /// <summary>
+        /// Calculate the amount in the other currency. Assumes that the amount given is in the 'From' currency
+        /// </summary>
+        /// <param name="amount">The amount in the from Currency</param>
+        /// <returns>The converted amount in the To currency</returns>
+        public decimal Multiply(decimal amount)
+        {
+            return amount * Rate;
         }
 
         /// <summary>
@@ -111,7 +121,17 @@ namespace Pangea.Domain
         /// <returns>The converted amount in the FROM currency</returns>
         public static decimal operator /(decimal amount, ExchangeRate rate)
         {
-            return amount / rate.Rate;
+            return rate.Divide(amount);
+        }
+
+        /// <summary>
+        /// Calculate the amount in the other currency. Assumes that the amount given is in the 'To' currency
+        /// </summary>
+        /// <param name="amount">The amount in the TO Currency</param>
+        /// <returns>The converted amount in the FROM currency</returns>
+        public decimal Divide(decimal amount)
+        {
+            return amount / Rate;
         }
 
         /// <summary>

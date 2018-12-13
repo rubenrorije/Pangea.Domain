@@ -1,6 +1,7 @@
 ﻿using Pangea.Domain.Checksums;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -98,8 +99,8 @@ namespace Pangea.Domain
 
         private static string ToInteger(char character)
         {
-            if (char.IsLetter(character)) return ((character - 'A') + 10).ToString();
-            else return character.ToString();
+            if (char.IsLetter(character)) return ((character - 'A') + 10).ToString(CultureInfo.InvariantCulture);
+            else return character.ToString(CultureInfo.InvariantCulture);
         }
 
         /// <summary>
@@ -110,18 +111,19 @@ namespace Pangea.Domain
         public static ParsingResult TryParse(string text)
         {
             // remove whitespace chars
-            var toParse = (text ?? string.Empty).Replace(" ", "").Replace("\t", "").ToUpper();
+            var toParse = (text ?? string.Empty).Replace(" ", "").Replace("\t", "").ToUpper(CultureInfo.InvariantCulture);
             if (toParse.Length == 0) return new ParsingResult();
             if (toParse.Length > 34)
                 return ParsingResult.Invalid("the Iban can be at most 34 characters. 2 for the country code, 2 check digits and 30 for the country specific account number");
             if (toParse.Length <= 4)
                 return ParsingResult.Invalid("the Iban must be at least 5 characters. 2 for the country code, 2 check digits and at least 1 for the country specific account number");
 
-            var result = new ParsingResult();
-
-            result.CountryCode = toParse.Substring(0, 2);
-            result.CheckDigits = toParse.Substring(2, 2);
-            result.BasicAccountNumber = toParse.Substring(4, toParse.Length - 4);
+            var result = new ParsingResult
+            {
+                CountryCode = toParse.Substring(0, 2),
+                CheckDigits = toParse.Substring(2, 2),
+                BasicAccountNumber = toParse.Substring(4, toParse.Length - 4)
+            };
 
             if (!result.CountryCode.All(chr => char.IsUpper(chr))) return ParsingResult.Invalid("The Iban should start with the ISO country code (ALPHA-2)");
             if (!result.CheckDigits.All(chr => char.IsDigit(chr))) return ParsingResult.Invalid("The country code should be followed by 2 check digits (0-9)");

@@ -15,31 +15,36 @@ namespace Pangea.Domain.Tests
         [TestMethod]
         public void Create_Empty_Currencies_Does_Not_Have_Any_Currencies_Registered()
         {
-            var sut = new Currencies();
+            var sut = new CurrencyCollection();
             sut.Count.Should().Be(0);
         }
 
         [TestMethod]
         public void Provider_Is_Registered_Must_Be_False_Initially()
         {
-            Currencies.ProviderIsRegistered.Should().BeFalse();
+            CurrencyCollection.ProviderIsRegistered.Should().BeFalse();
         }
         
         [TestMethod]
         public void Add_A_Currency_Must_Increment_Count()
         {
-            var sut = new Currencies();
-            sut.Add(DefaultCurrencies.EUR);
+            var sut = new CurrencyCollection
+            {
+                DefaultCurrencies.EUR
+            };
+
             sut.Count.Should().Be(1);
         }
 
         [TestMethod]
         public void Add_A_Currency_Multiple_Times_Will_Register_It_Only_Once()
         {
-            var sut = new Currencies();
-            sut.Add(DefaultCurrencies.EUR);
-            sut.Add(DefaultCurrencies.EUR);
-            sut.Add(DefaultCurrencies.EUR);
+            var sut = new CurrencyCollection
+            {
+                DefaultCurrencies.EUR,
+                DefaultCurrencies.EUR,
+                DefaultCurrencies.EUR
+            };
 
             sut.Count.Should().Be(1);
         }
@@ -47,7 +52,7 @@ namespace Pangea.Domain.Tests
         [TestMethod]
         public void Create_Currencies_Using_Initialization_Accolades()
         {
-            var sut = new Currencies
+            var sut = new CurrencyCollection
             {
                 DefaultCurrencies.EUR
             };
@@ -58,7 +63,7 @@ namespace Pangea.Domain.Tests
         [TestMethod]
         public void Remove_Currency_From_List()
         {
-            var sut = new Currencies
+            var sut = new CurrencyCollection
             {
                 DefaultCurrencies.EUR
             };
@@ -73,7 +78,7 @@ namespace Pangea.Domain.Tests
         [TestMethod]
         public void Adding_Null_Throws_ArgumentNullException()
         {
-            Action action = () => new Currencies
+            Action action = () => new CurrencyCollection
             {
                 null
             };
@@ -83,7 +88,7 @@ namespace Pangea.Domain.Tests
         [TestMethod]
         public void Removing_Null_Throws_ArgumentNullException()
         {
-            var sut = new Currencies
+            var sut = new CurrencyCollection
             {
                 DefaultCurrencies.EUR
             };
@@ -94,9 +99,10 @@ namespace Pangea.Domain.Tests
         [TestMethod]
         public void Removing_A_Currency_That_Was_Not_Registered_Does_Not_Do_Anything()
         {
-            var sut = new Currencies();
-
-            sut.Add(DefaultCurrencies.EUR);
+            var sut = new CurrencyCollection
+            {
+                DefaultCurrencies.EUR
+            };
 
             sut.Remove(new Currency("AED", 123));
 
@@ -106,9 +112,10 @@ namespace Pangea.Domain.Tests
         [TestMethod]
         public void Removing_A_Currency_Does_Not_Depend_On_Pointer_Reference()
         {
-            var sut = new Currencies();
-
-            sut.Add(new Currency("AED", 123));
+            var sut = new CurrencyCollection
+            {
+                new Currency("AED", 123)
+            };
             sut.Remove(new Currency("AED", 456));
 
             sut.Count.Should().Be(0);
@@ -117,32 +124,36 @@ namespace Pangea.Domain.Tests
         [TestMethod]
         public void When_Provider_Function_Is_Not_Called_Yet_Throw_An_Explicit_Exception_That_Shows_What_To_Do()
         {
-            Action action = () => { var c = Currencies.Instance; };
+            Action action = () => { var c = CurrencyCollection.Instance; };
 
-            action.Should().Throw<ArgumentNullException>();
+            action.Should().Throw<InvalidOperationException>();
         }
 
         [TestMethod]
         public void Use_The_Registered_Instance_For_Currency_Resolution_By_Code()
         {
-            var sut = new Currencies();
-            sut.Add(DefaultCurrencies.EUR);
+            var sut = new CurrencyCollection
+            {
+                DefaultCurrencies.EUR
+            };
 
             using (new RegisterCurrencies(sut))
             {
-                Currencies.Instance.Find("EUR").Should().NotBeNull();
+                CurrencyCollection.Find("EUR").Should().NotBeNull();
             }
         }
 
         [TestMethod]
         public void Use_The_Registered_Instance_For_Currency_Resolution_By_Numeric_Code()
         {
-            var sut = new Currencies();
-            sut.Add(DefaultCurrencies.EUR);
+            var sut = new CurrencyCollection
+            {
+                DefaultCurrencies.EUR
+            };
 
             using (new RegisterCurrencies(sut))
             {
-                Currencies.Instance.Find(978).Should().NotBeNull();
+                CurrencyCollection.Find(978).Should().NotBeNull();
             }
         }
 

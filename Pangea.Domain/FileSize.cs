@@ -85,7 +85,7 @@ namespace Pangea.Domain
         /// <returns>The string representation of the FileSize</returns>
         public override string ToString()
         {
-            return ToString("G");
+            return ToString("G", null);
         }
 
         /// <summary>
@@ -110,14 +110,14 @@ namespace Pangea.Domain
         /// <returns>The string representation of the FileSize</returns>
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            format = format ?? "G";
-            formatProvider = formatProvider ?? CultureInfo.CurrentCulture;
+            var safeFormat = format ?? "G";
+            var safeFormatProvider = formatProvider ?? CultureInfo.CurrentCulture;
 
-            if (TotalTeraBytes >= 1) return TotalTeraBytes.ToString(format, formatProvider) + "TB";
-            else if (TotalGigaBytes >= 1) return TotalGigaBytes.ToString(format, formatProvider) + "GB";
-            else if (TotalMegaBytes >= 1) return TotalMegaBytes.ToString(format, formatProvider) + "MB";
-            else if (TotalKiloBytes >= 1) return TotalKiloBytes.ToString(format, formatProvider) + "KB";
-            else return TotalBytes.ToString(format, formatProvider) + "B";
+            if (TotalTeraBytes >= 1) return TotalTeraBytes.ToString(safeFormat, safeFormatProvider) + "TB";
+            else if (TotalGigaBytes >= 1) return TotalGigaBytes.ToString(safeFormat, safeFormatProvider) + "GB";
+            else if (TotalMegaBytes >= 1) return TotalMegaBytes.ToString(safeFormat, safeFormatProvider) + "MB";
+            else if (TotalKiloBytes >= 1) return TotalKiloBytes.ToString(safeFormat, safeFormatProvider) + "KB";
+            else return TotalBytes.ToString(safeFormat, safeFormatProvider) + "B";
         }
 
 
@@ -256,25 +256,63 @@ namespace Pangea.Domain
         /// <inheritdoc/>
         public static FileSize operator +(FileSize lhs, FileSize rhs)
         {
-            return new FileSize(lhs.TotalBytes + rhs.TotalBytes);
+            return lhs.Add(rhs);
+        }
+
+        /// <summary>
+        /// Add the given file size to the current file size
+        /// </summary>
+        /// <param name="other">The file size to add</param>
+        /// <returns>The added file sizes</returns>
+        public FileSize Add(FileSize other)
+        {
+            return new FileSize(TotalBytes + other.TotalBytes);
         }
 
         /// <inheritdoc/>
         public static FileSize operator -(FileSize lhs, FileSize rhs)
         {
-            return new FileSize(lhs.TotalBytes - rhs.TotalBytes);
+            return lhs.Subtract(rhs);
+        }
+
+        /// <summary>
+        /// Subtract the given file size from this instance and return a new instance.
+        /// </summary>
+        public FileSize Subtract(FileSize other)
+        {
+            return new FileSize(TotalBytes - other.TotalBytes);
         }
 
         /// <inheritdoc/>
         public static FileSize operator *(FileSize lhs, long rhs)
         {
-            return new FileSize(lhs.TotalBytes * rhs);
+            return lhs.Multiply(rhs);
+        }
+
+        /// <summary>
+        /// Multiply the file size by the given multiplier
+        /// </summary>
+        /// <param name="multiplier">The multiplier</param>
+        /// <returns>The result</returns>
+        public FileSize Multiply(long multiplier)
+        {
+            return new FileSize(TotalBytes * multiplier);
         }
 
         /// <inheritdoc/>
         public static FileSize operator /(FileSize lhs, long rhs)
         {
-            return new FileSize(lhs.TotalBytes / rhs);
+            return lhs.Divide(rhs);
+        }
+
+        /// <summary>
+        /// Divide the File size by the given divisor
+        /// </summary>
+        /// <param name="divisor">The divisor</param>
+        /// <returns>The result</returns>
+        public FileSize Divide(long divisor)
+        {
+            return new FileSize(TotalBytes / divisor);
         }
     }
 }

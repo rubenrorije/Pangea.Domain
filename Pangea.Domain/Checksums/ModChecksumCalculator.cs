@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 namespace Pangea.Domain.Checksums
@@ -32,11 +33,11 @@ namespace Pangea.Domain.Checksums
             if (subject == null) throw new ArgumentNullException(nameof(subject));
 
             var index = 2;
-            var mod = int.Parse(subject.Substring(0, Math.Min(subject.Length, 2)));
+            var mod = int.Parse(subject.Substring(0, Math.Min(subject.Length, 2)), CultureInfo.InvariantCulture);
 
             while (index <= subject.Length)
             {
-                var current = int.Parse(mod.ToString() + subject.Substring(index, Math.Min(subject.Length - index, 7)));
+                var current = int.Parse(mod.ToString(CultureInfo.InvariantCulture) + subject.Substring(index, Math.Min(subject.Length - index, 7)), CultureInfo.InvariantCulture);
                 mod = current % _modulo;
                 index += 7;
             }

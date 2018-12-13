@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -21,7 +22,7 @@ namespace Pangea.Domain
         {
             if (string.IsNullOrEmpty(phoneNumber)) return null;
             var trimmed = phoneNumber.Replace(" ", "").Substring(0, Math.Min(phoneNumber.Length, MaxCountryCodeLength));
-            var value = int.Parse(trimmed);
+            var value = int.Parse(trimmed, CultureInfo.InvariantCulture);
             return GetCountryCallingCodeIteratively(value);
         }
 

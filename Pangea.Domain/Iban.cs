@@ -65,7 +65,7 @@ namespace Pangea.Domain
         /// </summary>
         public bool Equals(Iban other)
         {
-            return _text.Equals(other._text);
+            return _text.Equals(other._text, StringComparison.CurrentCulture);
         }
 
         /// <inheritdoc/>

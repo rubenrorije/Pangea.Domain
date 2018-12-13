@@ -12,7 +12,7 @@ namespace Pangea.Domain.Formatters
         /// <inheritdoc/>
         public bool AppliesTo(string countryCode)
         {
-            return countryCode.Equals("31");
+            return countryCode.Equals("31",StringComparison.InvariantCultureIgnoreCase);
         }
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace Pangea.Domain.Formatters
         /// <returns>the new format</returns>
         public string GetLocalFormat(PhoneNumber phoneNumber)
         {
-            if (phoneNumber.Trimmed.StartsWith("6"))
+            if (phoneNumber.Trimmed.StartsWith("6", StringComparison.InvariantCultureIgnoreCase))
             {
                 return "0N-NN NN NN NN";
             }
@@ -43,7 +43,7 @@ namespace Pangea.Domain.Formatters
         /// <returns>the new format</returns>
         public string GetGlobalFormat(PhoneNumber phoneNumber)
         {
-            if (phoneNumber.Trimmed.StartsWith("6"))
+            if (phoneNumber.Trimmed.StartsWith("6", StringComparison.InvariantCulture))
             {
                 return "+C N NN NN NN NN";
             }
@@ -57,7 +57,7 @@ namespace Pangea.Domain.Formatters
             }
         }
 
-        private bool IsThreeDigitAreaCode(PhoneNumber phoneNumber)
+        private static bool IsThreeDigitAreaCode(PhoneNumber phoneNumber)
         {
             if (phoneNumber.Trimmed.Length < 2) return false;
             var possibleAreaCode = phoneNumber.Trimmed.Substring(0, 2);

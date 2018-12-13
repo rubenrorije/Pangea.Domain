@@ -61,7 +61,7 @@ namespace Pangea.Domain
                 if (!result.Success) throw new FormatException($"Invalid phone number");
                 var numbers = result.Groups["numbers"].Value;
                 CountryCode = CountryCodes.Instance?.GetCountryCallingCodeFrom(numbers);
-                Text = numbers.ReplaceFirst(CountryCode?.ToString(), string.Empty);
+                Text = numbers.ReplaceFirst(CountryCode?.ToString(CultureInfo.InvariantCulture), string.Empty);
                 Trimmed = Text.Replace(" ", "");
             }
         }
@@ -159,7 +159,7 @@ namespace Pangea.Domain
         /// <returns></returns>
         public bool Equals(PhoneNumber other)
         {
-            return 
+            return
                 Trimmed == other.Trimmed &&
                 CountryCode == other.CountryCode;
         }
@@ -172,7 +172,7 @@ namespace Pangea.Domain
         /// <returns>The default (international) string representation of the phone number. Equal to the "G"-format or null format</returns>
         public override string ToString()
         {
-            return ToString("G");
+            return ToString("G", CultureInfo.CurrentCulture);
         }
 
         /// <summary>

@@ -8,7 +8,7 @@ namespace Pangea.Domain
     /// A class holding an instance to a country code provider to retrieve country codes
     /// based on a phone number
     /// </summary>
-    public class CountryCodes
+    public sealed class CountryCodes
     {
         private static Func<ICountryCodeProvider> _instanceProvider;
 

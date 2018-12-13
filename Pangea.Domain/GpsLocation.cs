@@ -215,7 +215,7 @@ namespace Pangea.Domain
         public static GpsLocation Parse(string text, NumberFormatInfo format)
         {
             if (text == null) throw new ArgumentNullException(nameof(text));
-            if (text == string.Empty) throw new ArgumentOutOfRangeException(nameof(text));
+            if (string.IsNullOrEmpty(text)) throw new ArgumentOutOfRangeException(nameof(text));
 
             if (!GpsLocationParser.TryParse(text, format, out GpsLocation result))
             {
