@@ -18,6 +18,7 @@ namespace Pangea.Domain
     /// It also allows local (national) phone numbers when the country code is specified. Useful for applications that are 
     /// used within one country and therefore have an implicit country code for all phone numbers.
     /// </summary>
+    [Serializable]
     public struct PhoneNumber
         : IEquatable<PhoneNumber>
         , IFormattable
@@ -237,17 +238,26 @@ namespace Pangea.Domain
         {
             if (reader == null) throw new ArgumentNullException(nameof(reader));
 
-            reader.MoveToContent();
-            var value = reader.ReadElementContentAsString();
-            Unsafe.AsRef(this) = new PhoneNumber(value);
+            var value = reader.MoveToAttribute("value") ? reader.Value : null;
+
+            if (string.IsNullOrEmpty(value))
+            {
+                Unsafe.AsRef(this) = default;
+            }
+            else
+            {
+                Unsafe.AsRef(this) = new PhoneNumber(value);
+            }
+
+            reader.Skip();
         }
 
         /// <inheritdoc />
         public void WriteXml(XmlWriter writer)
         {
             if (writer == null) throw new ArgumentNullException(nameof(writer));
-            if (string.IsNullOrEmpty(Text)) writer.WriteElementString("value", string.Empty);
-            else writer.WriteElementString("value", "+" + CountryCode + Text);
+
+            if (!string.IsNullOrEmpty(Text)) writer.WriteAttributeString("value", "+" + CountryCode + Text);
         }
 
 

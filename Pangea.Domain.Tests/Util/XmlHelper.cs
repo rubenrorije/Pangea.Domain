@@ -27,6 +27,7 @@ namespace Pangea.Domain.Tests.Util
             using (var tr = new StringReader(xml))
             using (var reader = XmlReader.Create(tr))
             {
+                reader.MoveToContent();
                 result.ReadXml(reader);
             }
             return result;

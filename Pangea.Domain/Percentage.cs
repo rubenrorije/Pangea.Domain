@@ -12,6 +12,7 @@ namespace Pangea.Domain
     /// <summary>
     /// Representing a percentage, can be used for easy calculations with percentages.
     /// </summary>
+    [Serializable]
     public struct Percentage :
         IFormattable,
         IEquatable<Percentage>,
@@ -573,16 +574,25 @@ namespace Pangea.Domain
         {
             if (reader == null) throw new ArgumentNullException(nameof(reader));
 
-            reader.MoveToContent();
-            var value = reader.ReadElementContentAsString();
-            Unsafe.AsRef(this) = new Percentage(decimal.Parse(value, CultureInfo.InvariantCulture));
+            var value = reader.MoveToAttribute("value") ? reader.Value : null;
+
+            if (string.IsNullOrEmpty(value))
+            {
+                Unsafe.AsRef(this) = default;
+            }
+            else
+            {
+                Unsafe.AsRef(this) = new Percentage(decimal.Parse(value, CultureInfo.InvariantCulture));
+            }
+
+            reader.Skip();
         }
 
         /// <inheritdoc/>
         public void WriteXml(XmlWriter writer)
         {
             if (writer == null) throw new ArgumentNullException(nameof(writer));
-            writer.WriteElementString("value", Value.ToString(null, CultureInfo.InvariantCulture));
+            writer.WriteAttributeString("value", Value.ToString(null, CultureInfo.InvariantCulture));
         }
 
         /// <summary>

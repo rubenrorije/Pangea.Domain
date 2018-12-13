@@ -14,6 +14,7 @@ namespace Pangea.Domain
     /// This range can be bounded, by a start or end date, or indefinite.
     /// Can be used for instance to model functionality about having values that change over time in a LOB app
     /// </summary>
+    [Serializable]
     public struct DateRange
         : IEquatable<DateRange>
         , IFormattable
@@ -52,7 +53,7 @@ namespace Pangea.Domain
         /// </summary>
         public DateRange(DateTime? start, DateTime? end)
         {
-            if (start != null && end != null && end < start) throw new ArgumentOutOfRangeException(nameof(end),"Cannot create a date range with a smaller end date than the start date");
+            if (start != null && end != null && end < start) throw new ArgumentOutOfRangeException(nameof(end), "Cannot create a date range with a smaller end date than the start date");
             Start = start?.Date;
             End = end?.Date;
             _isFilled = true;
@@ -286,26 +287,22 @@ namespace Pangea.Domain
         {
             if (reader == null) throw new ArgumentNullException(nameof(reader));
 
-            reader.MoveToContent();
+            var startValue = reader.MoveToAttribute("start") ? reader.Value : null;
+            var endValue = reader.MoveToAttribute("end") ? reader.Value : null;
+            var filledValue = reader.MoveToAttribute("isFilled") ? reader.Value : null;
 
-            var value = reader.ReadElementContentAsString();
-            var splitted = value.Split("|".ToCharArray());
-            var start = ParseXmlValue(splitted[0]);
-            var end = ParseXmlValue(splitted[1]);
-
-            Unsafe.AsRef(this) = new DateRange(start, end);
-        }
-
-        private static DateTime? ParseXmlValue(string value)
-        {
-            if (string.IsNullOrEmpty(value))
+            var start = string.IsNullOrEmpty(startValue) ? (DateTime?)null : DateTime.ParseExact(startValue, "o", CultureInfo.InvariantCulture);
+            var end = string.IsNullOrEmpty(endValue) ? (DateTime?)null : DateTime.ParseExact(endValue, "o", CultureInfo.InvariantCulture);
+            if (!bool.TryParse(filledValue, out var filled)) filled = false;
+            if (!filled)
             {
-                return null;
+                Unsafe.AsRef(this) = default;
             }
             else
             {
-                return DateTime.ParseExact(value, "o", CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind);
+                Unsafe.AsRef(this) = new DateRange(start, end);
             }
+            reader.Skip();
         }
 
         /// <inheritdoc/>
@@ -313,9 +310,12 @@ namespace Pangea.Domain
         {
             if (writer == null) throw new ArgumentNullException(nameof(writer));
 
-            var startValue = Start?.ToString("o", CultureInfo.InvariantCulture) ?? string.Empty;
-            var endValue = End?.ToString("o", CultureInfo.InvariantCulture) ?? string.Empty;
-            writer.WriteElementString("value", $"{startValue}|{endValue}");
+            var startValue = Start?.ToString("o", CultureInfo.InvariantCulture);
+            var endValue = End?.ToString("o", CultureInfo.InvariantCulture);
+
+            if (startValue != null) writer.WriteAttributeString("start", startValue);
+            if (endValue != null) writer.WriteAttributeString("end", endValue);
+            writer.WriteAttributeString("isFilled", _isFilled.ToString(CultureInfo.InvariantCulture));
         }
     }
 }

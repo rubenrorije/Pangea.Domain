@@ -75,7 +75,7 @@ namespace Pangea.Domain
 
                 for (int index = 0; index < BasicAccountNumber.Length; index += 4)
                 {
-                    var size = Math.Min(index, BasicAccountNumber.Length - index);
+                    var size = Math.Min(4, BasicAccountNumber.Length - index);
                     text.Append(" ");
                     text.Append(BasicAccountNumber.Substring(index, size));
                 }

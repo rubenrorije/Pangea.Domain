@@ -42,17 +42,24 @@ namespace Pangea.Domain.Tests
         }
 
         [TestMethod]
-        public void Test_Ibans_From_Wikipedia_Must_Parse()
+        public void Equals_Of_Default_Iban_Does_Not_Throw_Exception()
         {
-            new Iban("BE71 0961 2345 6769");
-            new Iban("FR76 3000 6000 0112 3456 7890 189");
-            new Iban("DE91 1000 0000 0123 4567 89");
-            new Iban("GR96 0810 0010 0000 0123 4567 890");
-            new Iban("RO09 BCYP 0000 0012 3456 7890");
-            new Iban("SA44 2000 0001 2345 6789 1234");
-            new Iban("ES79 2100 0813 6101 2345 6789");
-            new Iban("CH56 0483 5012 3456 7800 9");
-            new Iban("GB98 MIDL 0700 9312 3456 78");
+            new Iban().Equals(new Iban()).Should().BeTrue();
+        }
+
+        [TestMethod]
+        [DataRow("BE71 0961 2345 6769")]
+        [DataRow("FR76 3000 6000 0112 3456 7890 189")]
+        [DataRow("DE91 1000 0000 0123 4567 89")]
+        [DataRow("GR96 0810 0010 0000 0123 4567 890")]
+        [DataRow("RO09 BCYP 0000 0012 3456 7890")]
+        [DataRow("SA44 2000 0001 2345 6789 1234")]
+        [DataRow("ES79 2100 0813 6101 2345 6789")]
+        [DataRow("CH56 0483 5012 3456 7800 9")]
+        [DataRow("GB98 MIDL 0700 9312 3456 78")]
+        public void Test_Ibans_From_Wikipedia_Must_Parse(string iban)
+        {
+            new Iban(iban).ToString().Should().Be(iban);
         }
 
         [TestMethod]
@@ -143,12 +150,13 @@ namespace Pangea.Domain.Tests
         }
 
         [TestMethod]
-        public void RoundTrip_Serialization()
+        public void Serialization_Of_Iban()
         {
             var sut = new Iban("BE71 0961 2345 6769");
-            var other = sut.RoundTrip();
 
-            other.Equals(sut).Should().BeTrue();
+            sut.Should().BeXmlSerializableAndLeaveReaderInCorrectWayWhenFinished();
+            sut.Should().BeBinarySerializable();
+            sut.Should().BeDataContractSerializable();
         }
 
         [TestMethod]
@@ -210,7 +218,28 @@ namespace Pangea.Domain.Tests
         public void TryParse_Iban_That_Is_Correct_Returns_True()
         {
             Iban.TryParse("BE71 0961 2345 6769", out var _).Should().BeTrue();
+            new Iban("BE71 0961 2345 6769");
         }
 
+        [TestMethod]
+        public void DataContract_Serializable()
+        {
+            var sut = new Iban("BE71 0961 2345 6769");
+            sut.Should().BeDataContractSerializable();
+        }
+
+        [TestMethod]
+        public void Xml_Serializable()
+        {
+            var sut = new Iban("BE71 0961 2345 6769");
+            sut.Should().BeXmlSerializableAndLeaveReaderInCorrectWayWhenFinished();
+        }
+
+        [TestMethod]
+        public void Binary_Serializable()
+        {
+            var sut = new Iban("BE71 0961 2345 6769");
+            sut.Should().BeBinarySerializable();
+        }
     }
 }

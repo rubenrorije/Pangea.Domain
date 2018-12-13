@@ -53,26 +53,6 @@ namespace Pangea.Domain.Tests.CrossCutting
             }
         }
 
-        [TestMethod]
-        public void Serialize_And_Deserialize_Does_Not_Throw_An_Exception()
-        {
-
-            foreach (var t in DomainClasses)
-            {
-                if (t == typeof(DateRange)) continue;
-                var sut = (IXmlSerializable)Activator.CreateInstance(t);
-                var text = new StringBuilder();
-                using (var writer = XmlWriter.Create(text, new XmlWriterSettings { OmitXmlDeclaration = true }))
-                {
-                    sut.WriteXml(writer);
-                }
-
-                using (var tr = new StringReader(text.ToString()))
-                using (var reader = XmlReader.Create(tr))
-                {
-                    sut.ReadXml(reader);
-                }
-            }
-        }
+        
     }
 }

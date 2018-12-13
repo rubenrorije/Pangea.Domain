@@ -1,10 +1,12 @@
 ﻿using FluentAssertions;
+using FluentAssertions.Execution;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Pangea.Domain.Tests.CrossCutting
 {
@@ -54,6 +56,18 @@ namespace Pangea.Domain.Tests.CrossCutting
             {
                 var toStringMethod = t.GetMethod(nameof(ToString), new Type[] { });
                 toStringMethod.DeclaringType.Should().Be(t, $"ToString() function must be overridden in {t.Name}");
+            }
+        }
+
+        [TestMethod]
+        public void Structs_Must_Implement_IXmlSerializable()
+        {
+            using (new AssertionScope())
+            {
+                foreach (var type in DomainClasses)
+                {
+                    type.Should().Implement<IXmlSerializable>();
+                }
             }
         }
     }
