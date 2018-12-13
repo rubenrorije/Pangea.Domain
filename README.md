@@ -5,7 +5,7 @@ Examples are CreditCard, Percentage, Iban, etc.
 When using this library the domain entities should have these rich value objects as properties. 
 E.g.
 
-`
+~~~~
 public class Customer
 {
 	public Percentage Discount { get; set; }
@@ -14,7 +14,7 @@ public class Customer
 	public Currency Currency { get; set; }
 	public Iban BankAccount { get; set; }
 }
-`
+~~~~
 
 The example above makes it much easier to work with the domain entities and encapsulates much more information than standard .Net types. 
 
