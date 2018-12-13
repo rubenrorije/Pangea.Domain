@@ -25,12 +25,12 @@ namespace Pangea.Domain
             var trimmed = cardNumber?.Replace(" ", "");
             if (!string.IsNullOrEmpty(cardNumber))
             {
-                if (trimmed.Length < 8) throw new ArgumentOutOfRangeException("A credit card must be at least 8 characters");
-                if (trimmed.Length > 19) throw new ArgumentOutOfRangeException("A credit card must be less than 20 characters");
-                if (trimmed.Any(chr => !Char.IsDigit(chr))) throw new ArgumentOutOfRangeException("A credit card can only contain digits or spaces");
+                if (trimmed.Length < 8) throw new ArgumentOutOfRangeException(nameof(cardNumber),"A credit card must be at least 8 characters");
+                if (trimmed.Length > 19) throw new ArgumentOutOfRangeException(nameof(cardNumber), "A credit card must be less than 20 characters");
+                if (trimmed.Any(chr => !Char.IsDigit(chr))) throw new ArgumentOutOfRangeException(nameof(cardNumber), "A credit card can only contain digits or spaces");
 
                 var algorithm = new LuhnChecksumCalculator();
-                if (!algorithm.Validate(trimmed)) throw new ArgumentOutOfRangeException("The creditcard is invalid because the checksum is incorrect");
+                if (!algorithm.Validate(trimmed)) throw new ArgumentOutOfRangeException(nameof(cardNumber), "The creditcard is invalid because the checksum is incorrect");
             }
             _value = trimmed;
         }
@@ -42,7 +42,7 @@ namespace Pangea.Domain
         /// <returns>Are the cards equivalent?</returns>
         public bool Equals(CreditCard other)
         {
-            return _value.Equals(other._value);
+            return _value.Equals(other._value, StringComparison.InvariantCultureIgnoreCase);
         }
 
         /// <summary>
@@ -85,11 +85,11 @@ namespace Pangea.Domain
             /// <summary>
             /// The issuer identifier is 8 characters long
             /// </summary>
-            Long = 8,
+            LongIdentifier = 8,
             /// <summary>
             /// The issuer identifier is 6 characters long
             /// </summary>
-            Short = 6
+            ShortIdentifier = 6
         }
 
         /// <summary>

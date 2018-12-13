@@ -12,11 +12,11 @@ namespace Pangea.Domain
         /// <summary>
         /// Get the latest exchange rate to convert 'from' to 'to'
         /// </summary>
-        ExchangeRateAt Latest(Currency from, Currency to);
+        ExchangeRateAt Latest(Currency fromCurrency, Currency toCurrency);
 
         /// <summary>
         /// Returns the exchange rate at a given date to convert 'from' to 'to'
         /// </summary>
-        ExchangeRateAt Historical(Currency from, Currency to, DateTime date);
+        ExchangeRateAt Historical(Currency fromCurrency, Currency toCurrency, DateTime exchangeRateDate);
     }
 }

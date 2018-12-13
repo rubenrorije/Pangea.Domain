@@ -56,11 +56,11 @@ namespace Pangea.Domain
         /// </summary>
         public static void Register()
         {
-            if (!Currencies.ProviderIsRegistered)
+            if (!CurrencyCollection.ProviderIsRegistered)
             {
-                Currencies.SetEmptyProvider();
+                CurrencyCollection.SetEmptyProvider();
             }
-            Currencies.Instance.AddRange(AUD, CAD, CHF, CNY, EUR, GBP, JPY, NZD, SEK, USD);
+            CurrencyCollection.Instance.AddRange(AUD, CAD, CHF, CNY, EUR, GBP, JPY, NZD, SEK, USD);
         }
 
     }

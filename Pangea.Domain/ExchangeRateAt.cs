@@ -39,10 +39,10 @@ namespace Pangea.Domain
         /// <param name="rate">the rate</param>
         public ExchangeRateAt(DateTime date, ExchangeRate rate)
         {
-            if (rate == null) throw new ArgumentNullException(nameof(rate));
             if (date == DateTime.MinValue) throw new ArgumentOutOfRangeException(nameof(date));
+
+            _innerRate = rate ?? throw new ArgumentNullException(nameof(rate));
             Date = date;
-            _innerRate = rate;
         }
 
         /// <summary>
@@ -63,7 +63,17 @@ namespace Pangea.Domain
         /// <returns>the converted amount</returns>
         public static decimal operator *(decimal amount, ExchangeRateAt rate)
         {
-            return amount * rate._innerRate;
+            return rate.Multiply(amount);
+        }
+
+        /// <summary>
+        /// Calculate the amount in the other currency. Assumes that the amount given is in the 'From' currency
+        /// </summary>
+        /// <param name="amount">the amount to convert</param>
+        /// <returns>the converted amount</returns>
+        public decimal Multiply(decimal amount)
+        {
+            return amount * _innerRate;
         }
 
         /// <summary>
@@ -74,7 +84,17 @@ namespace Pangea.Domain
         /// <returns>The converted amount in the FROM currency</returns>
         public static decimal operator /(decimal amount, ExchangeRateAt rate)
         {
-            return amount / rate._innerRate;
+            return rate.Divide(amount);
+        }
+
+        /// <summary>
+        /// Calculate the amount in the other currency. Assumes that the amount given is in the 'To' currency
+        /// </summary>
+        /// <param name="amount">The amount in the TO Currency</param>
+        /// <returns>The converted amount in the FROM currency</returns>
+        public decimal Divide(decimal amount)
+        {
+            return amount / _innerRate;
         }
 
         /// <summary>
@@ -113,9 +133,9 @@ namespace Pangea.Domain
         /// </summary>
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            if (format == "G") format = null;
+            var safeFormat = format == "G" ? null : format;
 
-            var formats = ExtractFormats(format);
+            var formats = ExtractFormats(safeFormat);
 
             return Date.ToString(formats.Item1, formatProvider) + ": " + _innerRate.ToString(formats.Item2, formatProvider);
         }

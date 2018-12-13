@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 namespace Pangea.Domain.Checksums
@@ -33,7 +34,7 @@ namespace Pangea.Domain.Checksums
         /// <returns>Is the expected checksum found</returns>
         public static bool Validate(this IChecksumCalculator calculator, string subject, string expectedChecksum)
         {
-            return calculator.Validate(subject, int.Parse(expectedChecksum));
+            return calculator.Validate(subject, int.Parse(expectedChecksum, CultureInfo.InvariantCulture));
         }
 
         /// <summary>

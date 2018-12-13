@@ -52,7 +52,7 @@ namespace Pangea.Domain
         /// </summary>
         public DateRange(DateTime? start, DateTime? end)
         {
-            if (start != null && end != null && end < start) throw new ArgumentOutOfRangeException("Cannot create a date range with a smaller end date than the start date");
+            if (start != null && end != null && end < start) throw new ArgumentOutOfRangeException(nameof(end),"Cannot create a date range with a smaller end date than the start date");
             Start = start?.Date;
             End = end?.Date;
             _isFilled = true;
@@ -65,7 +65,7 @@ namespace Pangea.Domain
         /// <param name="end">The end of the range</param>
         public DateRange(DateTime start, DateTime end)
         {
-            if (end < start) throw new ArgumentOutOfRangeException("Cannot create a date range with a smaller end date than the start date");
+            if (end < start) throw new ArgumentOutOfRangeException(nameof(end), "Cannot create a date range with a smaller end date than the start date");
             Start = start.Date;
             End = end.Date;
             _isFilled = true;
@@ -144,17 +144,25 @@ namespace Pangea.Domain
         /// </summary>
         public static DateRange operator +(DateRange lhs, DateRange rhs)
         {
-            if (lhs.Start != null && rhs.End != null && lhs.Start.Value == rhs.End.Value.AddDays(1))
+            return lhs.Add(rhs);
+        }
+
+        /// <summary>
+        /// Combines two date ranges if the two ranges are adjacent. Otherwise an exception will be thrown.
+        /// </summary>
+        public DateRange Add(DateRange other)
+        {
+            if (Start != null && other.End != null && Start.Value == other.End.Value.AddDays(1))
             {
-                return new DateRange(rhs.Start, lhs.End);
+                return new DateRange(other.Start, End);
             }
-            else if (rhs.Start != null && lhs.End != null && rhs.Start.Value == lhs.End.Value.AddDays(1))
+            else if (other.Start != null && End != null && other.Start.Value == End.Value.AddDays(1))
             {
-                return new DateRange(lhs.Start, rhs.End);
+                return new DateRange(Start, other.End);
             }
             else
             {
-                throw new ArgumentOutOfRangeException("Cannot combine the ranges because the ranges are not adjacent");
+                throw new ArgumentOutOfRangeException(nameof(other), "Cannot combine the ranges because the ranges are not adjacent");
             }
         }
 
@@ -164,11 +172,20 @@ namespace Pangea.Domain
         /// </summary>
         public static DateRange operator -(DateRange lhs, DateRange rhs)
         {
-            if (lhs.Equals(rhs)) return new DateRange();
-            if (lhs.End == rhs.End) return new DateRange(lhs.Start, rhs.Start.Value.AddDays(-1));
-            if (lhs.Start == rhs.Start) return new DateRange(rhs.End.Value.AddDays(1), lhs.End);
+            return lhs.Subtract(rhs);
+        }
 
-            throw new ArgumentOutOfRangeException("Cannot subtract the ranges, because the end dates do not match");
+        /// <summary>
+        /// Subtract the right hand side from the left hand side. This only works when the ranges have the same end date.
+        /// Otherwise an exception will be thrown.
+        /// </summary>
+        public DateRange Subtract(DateRange other)
+        {
+            if (Equals(other)) return new DateRange();
+            if (End == other.End) return new DateRange(Start, other.Start.Value.AddDays(-1));
+            if (Start == other.Start) return new DateRange(other.End.Value.AddDays(1), End);
+
+            throw new ArgumentOutOfRangeException(nameof(other), "Cannot subtract the ranges, because the end dates do not match");
         }
 
         /// <summary>
@@ -243,19 +260,19 @@ namespace Pangea.Domain
         /// <inheritdoc/>
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            format = format ?? "G";
+            var safeFormat = format ?? "G";
 
-            if (format == "G") format = "d";
+            if (safeFormat == "G") safeFormat = "d";
 
             if (!_isFilled) return "Never";
             if (Start == null && End == null) return "Always";
-            if (Start == null) return "≤ " + End.Value.ToString(format, formatProvider);
-            if (End == null) return "≥ " + Start.Value.ToString(format, formatProvider);
+            if (Start == null) return "≤ " + End.Value.ToString(safeFormat, formatProvider);
+            if (End == null) return "≥ " + Start.Value.ToString(safeFormat, formatProvider);
 
             return
-                Start.Value.ToString(format, formatProvider) +
+                Start.Value.ToString(safeFormat, formatProvider) +
                 " - " +
-                End.Value.ToString(format, formatProvider);
+                End.Value.ToString(safeFormat, formatProvider);
         }
 
         /// <inheritdoc/>
@@ -267,7 +284,7 @@ namespace Pangea.Domain
         /// <inheritdoc/>
         public void ReadXml(XmlReader reader)
         {
-            if (reader == null) throw new ArgumentNullException();
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
 
             reader.MoveToContent();
 
@@ -294,7 +311,7 @@ namespace Pangea.Domain
         /// <inheritdoc/>
         public void WriteXml(XmlWriter writer)
         {
-            if (writer == null) throw new ArgumentNullException();
+            if (writer == null) throw new ArgumentNullException(nameof(writer));
 
             var startValue = Start?.ToString("o", CultureInfo.InvariantCulture) ?? string.Empty;
             var endValue = End?.ToString("o", CultureInfo.InvariantCulture) ?? string.Empty;

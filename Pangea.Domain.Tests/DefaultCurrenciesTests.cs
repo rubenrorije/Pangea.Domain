@@ -17,13 +17,13 @@ namespace Pangea.Domain.Tests
         {
             DefaultCurrencies.Register();
 
-            Currencies.Instance.Count.Should().Be(10);
+            CurrencyCollection.Instance.Count.Should().Be(10);
         }
 
         [TestMethod]
         public void Register_All_Top_10_Currencies_To_A_Given_Instance()
         {
-            var sut = new Currencies();
+            var sut = new CurrencyCollection();
             using (new RegisterCurrencies(sut))
             {
                 DefaultCurrencies.Register();

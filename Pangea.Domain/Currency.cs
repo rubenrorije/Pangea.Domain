@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -87,7 +88,7 @@ namespace Pangea.Domain
                 case "G":
                     return Code;
                 case "N":
-                    return Numeric.ToString();
+                    return Numeric.ToString(CultureInfo.InvariantCulture);
                 case "S":
                     return Symbol;
                 default:
@@ -114,7 +115,7 @@ namespace Pangea.Domain
         public bool Equals(Currency other)
         {
             if (other == null) return false;
-            return Code.Equals(other.Code);
+            return Code.Equals(other.Code, StringComparison.InvariantCultureIgnoreCase);
         }
     }
 }

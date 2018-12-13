@@ -244,7 +244,17 @@ namespace Pangea.Domain
         /// <returns>The result</returns>
         public static decimal operator +(decimal value, Percentage percentage)
         {
-            return value * (1 + percentage.Fraction);
+            return percentage.Add(value);
+        }
+
+        /// <summary>
+        /// Add the percentage to the given value. E.g. 1 + 10% = 1.1
+        /// </summary>
+        /// <param name="value">the number to add the percentage to</param>
+        /// <returns>The result</returns>
+        public decimal Add(decimal value)
+        {
+            return value * (1 + Fraction);
         }
 
         /// <summary>
@@ -266,7 +276,17 @@ namespace Pangea.Domain
         /// <returns>The result, converted to decimal</returns>
         public static decimal operator -(int value, Percentage percentage)
         {
-            return value * (1 - percentage.Fraction);
+            return percentage.Subtract(value);
+        }
+
+        /// <summary>
+        /// Subtract the percentage from the given value. E.g. 5 - 10% = 4.5
+        /// </summary>
+        /// <param name="value">The value to subtract the percentage from</param>
+        /// <returns>The result, converted to decimal</returns>
+        public decimal Subtract(int value)
+        {
+            return value * (1 - Fraction);
         }
 
         /// <summary>
@@ -305,7 +325,15 @@ namespace Pangea.Domain
         /// </summary>
         public static decimal operator *(decimal value, Percentage percentage)
         {
-            return value * percentage.Fraction;
+            return percentage.Multiply(value);
+        }
+
+        /// <summary>
+        /// Calculate the result of the percentage of a given value. E.g. 200 * 10% = 20
+        /// </summary>
+        public decimal Multiply(decimal value)
+        {
+            return value * Fraction;
         }
 
         /// <summary>
@@ -576,8 +604,20 @@ namespace Pangea.Domain
         ///</summary>
         public static decimal operator /(decimal value, Percentage percentage)
         {
-            return value / percentage.Fraction;
+            return percentage.Divide(value);
         }
+
+        /// <summary>
+        /// Divide the amount by the given percentage.
+        /// Note that this is extremely useful to calculate for instance the amount without VAT, given the total amount. 
+        /// E.g. to calculate the amount without 25% VAT for 10,- (which is 8,-), 
+        /// calculate <code>10 / new Percentage(125)</code>
+        ///</summary>
+        public decimal Divide(decimal value)
+        {
+            return value / Fraction;
+        }
+
 
         /// <summary>
         /// Divide the amount by the given percentage.
@@ -595,6 +635,14 @@ namespace Pangea.Domain
         /// </summary>
         public static explicit operator Percentage(int percentage)
         {
+            return FromInt32(percentage);
+        }
+
+        /// <summary>
+        /// Convert the percentage value to a percentage struct
+        /// </summary>
+        public static Percentage FromInt32(int percentage)
+        {
             return new Percentage(percentage);
         }
 
@@ -603,6 +651,14 @@ namespace Pangea.Domain
         /// </summary>
         public static explicit operator Percentage(double percentage)
         {
+            return FromDouble(percentage);
+        }
+
+        /// <summary>
+        /// Convert the percentage value to a percentage struct
+        /// </summary>
+        public static Percentage FromDouble(double percentage)
+        {
             return new Percentage(percentage);
         }
 
@@ -610,6 +666,14 @@ namespace Pangea.Domain
         /// Cast the percentage value to a percentage struct
         /// </summary>
         public static explicit operator Percentage(decimal percentage)
+        {
+            return FromDecimal(percentage);
+        }
+
+        /// <summary>
+        /// Convert the percentage value to a percentage struct
+        /// </summary>
+        public static Percentage FromDecimal(decimal percentage)
         {
             return new Percentage(percentage);
         }

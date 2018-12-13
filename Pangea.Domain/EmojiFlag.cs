@@ -49,10 +49,10 @@ namespace Pangea.Domain
             if (isoTwoLetterName == null) return null;
             if (isoTwoLetterName.Length < 2) throw new FormatException($"{nameof(isoTwoLetterName)} should have 2 characters, but has less characters");
             if (isoTwoLetterName.Length > 2) throw new FormatException($"{nameof(isoTwoLetterName)} should have 2 characters, but has more characters");
-            return 
+            return
                 string.Concat(
                     isoTwoLetterName
-                    .ToUpper()
+                    .ToUpper(CultureInfo.InvariantCulture)
                     .Select(character => char.ConvertFromUtf32(character + 0x1F1A5)));
         }
     }

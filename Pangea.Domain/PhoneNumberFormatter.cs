@@ -1,6 +1,7 @@
 ﻿using Pangea.Domain.ExtensionMethods;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -105,7 +106,7 @@ namespace Pangea.Domain
             }
             else
             {
-                return "+" + _phoneNumber.CountryCode?.ToString() + TextToPrint;
+                return "+" + _phoneNumber.CountryCode?.ToString(CultureInfo.InvariantCulture) + TextToPrint;
             }
         }
 
@@ -113,7 +114,7 @@ namespace Pangea.Domain
         {
             if (_includeOriginalSpaces) throw Exception;
 
-            if (char.IsDigit(groupSize) && int.TryParse(groupSize.ToString(), out var size))
+            if (char.IsDigit(groupSize) && int.TryParse(groupSize.ToString(CultureInfo.InvariantCulture), out var size))
             {
                 if (size == 0) throw Exception;
                 return string.Join(" ", text.Page(size).Select(chrs => new string(chrs.ToArray())));
