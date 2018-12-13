@@ -17,16 +17,16 @@ namespace Pangea.Domain.Tests.Formatters
         [TestMethod]
         public void Format_Mobile_Phone_Number()
         {
-            var sut = new PhoneNumberNLFormatter();
+            var sut = new PhoneNumberNLFormatter(31);
 
             _mobilePhone.ToString("L", sut).Should().Be("06-23 45 67 89");
-            _mobilePhone.ToString("G", sut).Should().Be("+31 6 23 45 67 89");
+            _mobilePhone.ToString("G", sut).Should().Be("+31 6-23 45 67 89");
         }
 
         [TestMethod]
         public void Format_Area_Codes()
         {
-            var sut = new PhoneNumberNLFormatter();
+            var sut = new PhoneNumberNLFormatter(31);
             sut.GetLocalFormat(new PhoneNumber(31, "0101234567")).Should().Be("0NN-NNNNNNN");
             sut.GetLocalFormat(new PhoneNumber(31, "0131234567")).Should().Be("0NN-NNNNNNN");
             sut.GetLocalFormat(new PhoneNumber(31, "0141234567")).Should().Be("0NN-NNNNNNN");
@@ -62,7 +62,7 @@ namespace Pangea.Domain.Tests.Formatters
         [TestMethod]
         public void FormatStrings_That_Are_Not_Allowed_Throw_FormatException()
         {
-            var sut = new PhoneNumberNLFormatter();
+            var sut = new PhoneNumberNLFormatter(31);
 
             Action action = () => _mobilePhone.ToString("X", sut);
             action.Should().Throw<FormatException>();
@@ -71,7 +71,7 @@ namespace Pangea.Domain.Tests.Formatters
         [TestMethod]
         public void AppliesTo_For_31()
         {
-            var sut = new PhoneNumberNLFormatter();
+            var sut = new PhoneNumberNLFormatter(31);
             sut.AppliesTo("31").Should().BeTrue();
         }
     }
