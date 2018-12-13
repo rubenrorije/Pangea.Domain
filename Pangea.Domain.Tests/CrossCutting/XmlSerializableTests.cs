@@ -1,5 +1,7 @@
 ﻿using FluentAssertions;
+using FluentAssertions.Execution;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Pangea.Domain.Tests.Util;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -53,6 +55,18 @@ namespace Pangea.Domain.Tests.CrossCutting
             }
         }
 
+
+        [TestMethod]
+        public void Must_Implement_IXmlSerializable_Explicit()
+        {
+            using (new AssertionScope())
+            {
+                foreach (var type in DomainClasses)
+                {
+                    type.ImplementsExplicitly<IXmlSerializable>().Should().BeTrue($"IXmlSerializable should be implemented explicitly for {type.Name}");
+                }
+            }
+        }
         
     }
 }
