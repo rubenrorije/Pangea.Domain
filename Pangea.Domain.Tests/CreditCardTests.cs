@@ -52,12 +52,19 @@ namespace Pangea.Domain.Tests
         }
 
         [TestMethod]
-        public void Create_Example_Credit_Cards()
+        [DataRow("4111 1111 1111 1111")]
+        [DataRow("5500 0000 0000 0004")]
+        [DataRow("3400 0000 0000 009")]
+        [DataRow("3000 0000 0000 04")]
+        public void Create_Example_Credit_Cards(string creditCard)
         {
-            new CreditCard("4111 1111 1111 1111");
-            new CreditCard("5500 0000 0000 0004");
-            new CreditCard("3400 0000 0000 009");
-            new CreditCard("3000 0000 0000 04");
+            new CreditCard(creditCard).ToString().Should().Be(creditCard);
+        }
+
+        [TestMethod]
+        public void Equals_Default_CreditCards_Does_Not_Throw_Exception()
+        {
+            new CreditCard().Equals(new CreditCard()).Should().BeTrue();
         }
 
         [TestMethod]

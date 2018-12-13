@@ -91,14 +91,13 @@
     <Compile Include="PercentageTests.cs" />
     <Compile Include="Util\RegisterCurrencies.cs" />
     <Compile Include="SimpleCountryCodeProviderTests.cs" />
-    <Compile Include="CountryCodeGenerator.cs" />
+    <Compile Include="Util\CountryCodeGenerator.cs" />
     <Compile Include="DefaultCountryCodeProviderTests.cs" />
     <Compile Include="CrossCutting\FormattableTests.cs" />
     <Compile Include="PhoneNumberTests.cs" />
     <Compile Include="CrossCutting\StructTests.cs" />
     <Compile Include="Util\TypeExtensions.cs" />
     <Compile Include="Util\TypeSelectorExtensions.cs" />
-    <Compile Include="Util\XmlHelper.cs" />
     <Compile Include="CrossCutting\XmlSerializableTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FileSizeTests.cs" />
