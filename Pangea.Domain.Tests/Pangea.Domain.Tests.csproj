@@ -95,6 +95,7 @@
     <Compile Include="CrossCutting\FormattableTests.cs" />
     <Compile Include="PhoneNumberTests.cs" />
     <Compile Include="CrossCutting\StructTests.cs" />
+    <Compile Include="Util\TypeExtensions.cs" />
     <Compile Include="Util\TypeSelectorExtensions.cs" />
     <Compile Include="Util\XmlHelper.cs" />
     <Compile Include="CrossCutting\XmlSerializableTests.cs" />

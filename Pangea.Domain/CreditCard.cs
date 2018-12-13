@@ -190,13 +190,10 @@ namespace Pangea.Domain
 
 
         /// <inheritdoc />
-        public XmlSchema GetSchema()
-        {
-            return null;
-        }
+        XmlSchema IXmlSerializable.GetSchema() => null;
 
         /// <inheritdoc />
-        public void ReadXml(XmlReader reader)
+        void IXmlSerializable.ReadXml(XmlReader reader)
         {
             if (reader == null) throw new ArgumentNullException(nameof(reader));
 
@@ -215,7 +212,7 @@ namespace Pangea.Domain
         }
 
         /// <inheritdoc />
-        public void WriteXml(XmlWriter writer)
+        void IXmlSerializable.WriteXml(XmlWriter writer)
         {
             if (writer == null) throw new ArgumentNullException(nameof(writer));
 
