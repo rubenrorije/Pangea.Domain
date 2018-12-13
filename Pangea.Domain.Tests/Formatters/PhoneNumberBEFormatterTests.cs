@@ -19,7 +19,7 @@ namespace Pangea.Domain.Tests.Formatters
         public void AppliesTo_Correct_Country(int countryCode, bool result)
         {
             var sut = new PhoneNumberBEFormatter();
-            sut.AppliesTo(countryCode.ToString()).Should().Be(result);
+            sut.AppliesTo(countryCode).Should().Be(result);
         }
 
         [TestMethod]

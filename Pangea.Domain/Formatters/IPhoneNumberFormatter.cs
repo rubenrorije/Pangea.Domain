@@ -14,7 +14,7 @@ namespace Pangea.Domain.Formatters
         /// </summary>
         /// <param name="countryCode">the calling code of the country</param>
         /// <returns>whether the formatter applies</returns>
-        bool AppliesTo(string countryCode);
+        bool AppliesTo(int countryCode);
 
         /// <summary>
         /// Returns a format string for a given phone number and an original format.

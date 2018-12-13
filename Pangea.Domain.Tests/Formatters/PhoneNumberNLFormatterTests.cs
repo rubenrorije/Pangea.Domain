@@ -82,7 +82,7 @@ namespace Pangea.Domain.Tests.Formatters
         public void AppliesTo_For_31()
         {
             var sut = new PhoneNumberNLFormatter();
-            sut.AppliesTo("31").Should().BeTrue();
+            sut.AppliesTo(31).Should().BeTrue();
         }
     }
 }
