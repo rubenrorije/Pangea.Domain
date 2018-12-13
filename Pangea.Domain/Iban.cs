@@ -129,7 +129,7 @@ namespace Pangea.Domain
             }
             else
             {
-                System.Runtime.CompilerServices.Unsafe.AsRef(this) = new Iban(value);
+                System.Runtime.CompilerServices.Unsafe.AsRef(this) = Iban.Unsafe(value);
             }
 
             reader.Skip();

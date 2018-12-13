@@ -191,7 +191,7 @@ namespace Pangea.Domain.Tests
         public void Xml_Serializable()
         {
             var sut = new CreditCard("4111 1111 1111 1111");
-            sut.Should().BeXmlSerializableAndLeaveReaderInCorrectWayWhenFinished();
+            sut.Should().BeXmlSerializable();
         }
 
         [TestMethod]
@@ -206,7 +206,7 @@ namespace Pangea.Domain.Tests
         public void Serialization_Of_CreditCard()
         {
             var sut = new CreditCard("4111 1111 1111 1111");
-            sut.Should().BeXmlSerializableAndLeaveReaderInCorrectWayWhenFinished();
+            sut.Should().BeXmlSerializable();
             sut.Should().BeBinarySerializable();
             sut.Should().BeDataContractSerializable();
         }
@@ -215,10 +215,18 @@ namespace Pangea.Domain.Tests
         public void Serialization_Of_Empty_CreditCard()
         {
             var sut = default(CreditCard);
-            sut.Should().BeXmlSerializableAndLeaveReaderInCorrectWayWhenFinished();
+            sut.Should().BeXmlSerializable();
             sut.Should().BeBinarySerializable();
             sut.Should().BeDataContractSerializable();
         }
 
+        [TestMethod]
+        public void Invalid_CreditCard_Must_Be_Serializable_And_Not_Throw_On_Deserialization()
+        {
+            var sut = CreditCard.Unsafe("4111 1111 1111 1112");
+            sut.Should().BeXmlSerializable();
+            sut.Should().BeBinarySerializable();
+            sut.Should().BeDataContractSerializable();
+        }
     }
 }

@@ -249,7 +249,7 @@ namespace Pangea.Domain.Tests
         public void Xml_Serializable()
         {
             var sut = new FileSize(1024);
-            sut.Should().BeXmlSerializableAndLeaveReaderInCorrectWayWhenFinished();
+            sut.Should().BeXmlSerializable();
         }
 
         [TestMethod]

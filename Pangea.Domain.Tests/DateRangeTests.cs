@@ -324,7 +324,7 @@ namespace Pangea.Domain.Tests
         public void Serialization_Of_Never()
         {
             var sut = DateRange.Never;
-            sut.Should().BeXmlSerializableAndLeaveReaderInCorrectWayWhenFinished();
+            sut.Should().BeXmlSerializable();
             sut.Should().BeBinarySerializable();
             sut.Should().BeDataContractSerializable();
         }
@@ -333,7 +333,7 @@ namespace Pangea.Domain.Tests
         public void Serialization_Of_Both_Bounded()
         {
             var sut = DateRange.Today();
-            sut.Should().BeXmlSerializableAndLeaveReaderInCorrectWayWhenFinished();
+            sut.Should().BeXmlSerializable();
             sut.Should().BeBinarySerializable();
             sut.Should().BeDataContractSerializable();
         }
@@ -342,7 +342,7 @@ namespace Pangea.Domain.Tests
         public void Serialization_Of_End_Bounded()
         {
             var sut = new DateRange(null, DateTime.Today);
-            sut.Should().BeXmlSerializableAndLeaveReaderInCorrectWayWhenFinished();
+            sut.Should().BeXmlSerializable();
             sut.Should().BeBinarySerializable();
             sut.Should().BeDataContractSerializable();
         }
@@ -351,7 +351,7 @@ namespace Pangea.Domain.Tests
         public void Serialization_Of_Start_Bounded()
         {
             var sut = new DateRange(null, DateTime.Today);
-            sut.Should().BeXmlSerializableAndLeaveReaderInCorrectWayWhenFinished();
+            sut.Should().BeXmlSerializable();
             sut.Should().BeBinarySerializable();
             sut.Should().BeDataContractSerializable();
         }

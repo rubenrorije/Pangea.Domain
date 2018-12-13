@@ -361,7 +361,7 @@ namespace Pangea.Domain.Tests
         public void Xml_Serializable()
         {
             var sut = Create(_athens);
-            sut.Should().BeXmlSerializableAndLeaveReaderInCorrectWayWhenFinished();
+            sut.Should().BeXmlSerializable();
         }
 
         [TestMethod]
