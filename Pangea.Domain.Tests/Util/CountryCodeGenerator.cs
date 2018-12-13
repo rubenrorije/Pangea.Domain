@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pangea.Domain.Tests
+namespace Pangea.Domain.Tests.Util
 {
     [TestClass]
     public class CountryCodeGenerator
