@@ -28,7 +28,7 @@ namespace Pangea.Domain.Tests.CrossCutting
             {
                 foreach (var t in incorrect)
                 {
-                    t.IsPublic.Should().BeTrue($"{t.Name} should be internal");
+                    t.IsPublic.Should().BeFalse($"{t.Name} should be internal");
                 }
             }
         }
