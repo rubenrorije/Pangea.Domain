@@ -11,6 +11,7 @@ namespace Pangea.Domain
     /// <summary>
     /// International bank account number (https://en.wikipedia.org/wiki/International_Bank_Account_Number)
     /// </summary>
+    [Serializable]
     public struct Iban :
         IXmlSerializable,
         IEquatable<Iban>
@@ -65,7 +66,7 @@ namespace Pangea.Domain
         /// </summary>
         public bool Equals(Iban other)
         {
-            return _text.Equals(other._text, StringComparison.CurrentCulture);
+            return string.Equals(_text, other._text, StringComparison.CurrentCulture);
         }
 
         /// <inheritdoc/>
@@ -123,16 +124,25 @@ namespace Pangea.Domain
         {
             if (reader == null) throw new ArgumentNullException(nameof(reader));
 
-            reader.MoveToContent();
-            var value = reader.ReadElementContentAsString();
-            System.Runtime.CompilerServices.Unsafe.AsRef(this) = Iban.Unsafe(value);
+            var value = reader.MoveToAttribute("value") ? reader.Value : null;
+
+            if (string.IsNullOrEmpty(value))
+            {
+                System.Runtime.CompilerServices.Unsafe.AsRef(this) = default;
+            }
+            else
+            {
+                System.Runtime.CompilerServices.Unsafe.AsRef(this) = new Iban(value);
+            }
+
+            reader.Skip();
         }
 
         /// <inheritdoc/>
         public void WriteXml(XmlWriter writer)
         {
             if (writer == null) throw new ArgumentNullException(nameof(writer));
-            writer.WriteElementString("value", _text);
+            if (_text != null) writer.WriteAttributeString("value", _text);
         }
 
         /// <summary>

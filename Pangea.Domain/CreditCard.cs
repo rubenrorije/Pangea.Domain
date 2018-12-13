@@ -5,13 +5,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 
 namespace Pangea.Domain
 {
     /// <summary>
     /// A validated object representing a credit card.
     /// </summary>
-    public struct CreditCard : IEquatable<CreditCard>
+    [Serializable]
+    public struct CreditCard
+        : IEquatable<CreditCard>
+        , IXmlSerializable
     {
         private readonly string _value;
 
@@ -46,7 +52,7 @@ namespace Pangea.Domain
         /// <returns>Are the cards equivalent?</returns>
         public bool Equals(CreditCard other)
         {
-            return _value.Equals(other._value, StringComparison.InvariantCultureIgnoreCase);
+            return string.Equals(_value, other._value, StringComparison.InvariantCultureIgnoreCase);
         }
 
         /// <summary>
@@ -183,5 +189,37 @@ namespace Pangea.Domain
         }
 
 
+        /// <inheritdoc />
+        public XmlSchema GetSchema()
+        {
+            return null;
+        }
+
+        /// <inheritdoc />
+        public void ReadXml(XmlReader reader)
+        {
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+
+            var value = reader.MoveToAttribute("value") ? reader.Value : null;
+            
+            if (string.IsNullOrEmpty(value))
+            {
+                System.Runtime.CompilerServices.Unsafe.AsRef(this) = default;
+            }
+            else
+            {
+                System.Runtime.CompilerServices.Unsafe.AsRef(this) = new CreditCard(value);
+            }
+
+            reader.Skip();
+        }
+
+        /// <inheritdoc />
+        public void WriteXml(XmlWriter writer)
+        {
+            if (writer == null) throw new ArgumentNullException(nameof(writer));
+
+            if (!string.IsNullOrEmpty(_value)) writer.WriteAttributeString("value", _value);
+        }
     }
 }

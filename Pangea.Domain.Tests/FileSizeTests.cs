@@ -5,6 +5,7 @@ using System.Text;
 using System.Xml;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Pangea.Domain.Tests.Util;
 
 namespace Pangea.Domain.Tests
 {
@@ -238,29 +239,24 @@ namespace Pangea.Domain.Tests
         }
 
         [TestMethod]
-        public void Serialize_FileSize()
+        public void DataContract_Serializable()
         {
-            var sut = new FileSize(1234);
-            var text = new StringBuilder();
-            using (var writer = XmlWriter.Create(text))
-            {
-                sut.WriteXml(writer);
-            }
-
-            text.ToString().Should().Contain("<value>1234</value>");
+            var sut = new FileSize(1024);
+            sut.Should().BeDataContractSerializable();
         }
 
         [TestMethod]
-        public void Deserialize_FileSize()
+        public void Xml_Serializable()
         {
-            using (var tr = new StringReader("<value>42</value>"))
-            using (var reader = XmlReader.Create(tr))
-            {
-                var sut = new FileSize();
-                sut.ReadXml(reader);
+            var sut = new FileSize(1024);
+            sut.Should().BeXmlSerializableAndLeaveReaderInCorrectWayWhenFinished();
+        }
 
-                sut.TotalBytes.Should().Be(42);
-            }
+        [TestMethod]
+        public void Binary_Serializable()
+        {
+            var sut = new FileSize(1024);
+            sut.Should().BeBinarySerializable();
         }
 
     }
