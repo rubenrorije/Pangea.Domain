@@ -20,14 +20,18 @@ namespace Pangea.Domain
         /// </summary>
         /// <param name="cardNumber">the card number in text format with or without spaces that must be validated.</param>
         /// <exception cref="ArgumentOutOfRangeException">When the number of characters (excluding spaces) is less than 8, more than 19, are no digits, or when the checksum is not correct.</exception>
-        public CreditCard(string cardNumber)
+        public CreditCard(string cardNumber) : this(cardNumber, false)
+        {
+        }
+
+        private CreditCard(string cardNumber, bool bypassChecks)
         {
             var trimmed = cardNumber?.Replace(" ", "");
-            if (!string.IsNullOrEmpty(cardNumber))
+            if (!bypassChecks && !string.IsNullOrEmpty(cardNumber))
             {
-                if (trimmed.Length < 8) throw new ArgumentOutOfRangeException(nameof(cardNumber),"A credit card must be at least 8 characters");
+                if (trimmed.Length < 8) throw new ArgumentOutOfRangeException(nameof(cardNumber), "A credit card must be at least 8 characters");
                 if (trimmed.Length > 19) throw new ArgumentOutOfRangeException(nameof(cardNumber), "A credit card must be less than 20 characters");
-                if (trimmed.Any(chr => !Char.IsDigit(chr))) throw new ArgumentOutOfRangeException(nameof(cardNumber), "A credit card can only contain digits or spaces");
+                if (trimmed.Any(chr => !char.IsDigit(chr))) throw new ArgumentOutOfRangeException(nameof(cardNumber), "A credit card can only contain digits or spaces");
 
                 var algorithm = new LuhnChecksumCalculator();
                 if (!algorithm.Validate(trimmed)) throw new ArgumentOutOfRangeException(nameof(cardNumber), "The creditcard is invalid because the checksum is incorrect");
@@ -166,5 +170,18 @@ namespace Pangea.Domain
             result = new CreditCard(text);
             return true;
         }
+
+        /// <summary>
+        /// Create a new credit card from the given card number, but bypass all checks. 
+        /// This assumes that these checks are already done on the card number.
+        /// </summary>
+        /// <param name="cardNumber">The card number to create a credit card from. No validation on this parameter will be done.</param>
+        /// <returns>The credit card</returns>
+        public static CreditCard Unsafe(string cardNumber)
+        {
+            return new CreditCard(cardNumber, true);
+        }
+
+
     }
 }
