@@ -55,6 +55,7 @@ namespace Pangea.Domain
                         builder.Append(_phoneNumber.CountryCode);
                         break;
                     case 'N':
+                        if (numberIndex >= _phoneNumber.Trimmed.Length) break;
                         builder.Append(_phoneNumber.Trimmed[numberIndex]);
                         numberIndex++;
                         break;

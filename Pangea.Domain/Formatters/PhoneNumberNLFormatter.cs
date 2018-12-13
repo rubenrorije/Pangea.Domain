@@ -10,12 +10,12 @@ namespace Pangea.Domain.Formatters
     public class PhoneNumberNLFormatter : BasePhoneNumberCountryFormatter, IPhoneNumberFormatter
     {
         /// <inheritdoc/>
-        public PhoneNumberNLFormatter(int countryCode) : base(countryCode)
+        public PhoneNumberNLFormatter() : base(31)
         {
         }
 
         /// <inheritdoc/>
-        public override string GetPartialFormat(PhoneNumber phoneNumber)
+        protected override string GetPartialFormat(PhoneNumber phoneNumber)
         {
             if (StartsWith(phoneNumber, 6))
             {

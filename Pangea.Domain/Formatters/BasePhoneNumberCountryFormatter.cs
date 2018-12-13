@@ -61,7 +61,7 @@ namespace Pangea.Domain.Formatters
         /// </summary>
         /// <param name="phoneNumber">The phone number to format</param>
         /// <returns>The partial format that will be prepended with a local/global prefix</returns>
-        public virtual string GetPartialFormat(PhoneNumber phoneNumber)
+        protected virtual string GetPartialFormat(PhoneNumber phoneNumber)
         {
             return null;
         }

@@ -300,12 +300,28 @@ namespace Pangea.Domain.Tests
             sut.ToString("+C (0) NNN NN NN NN").Should().Be("+31 (0) 123 45 67 89");
             sut.ToString("0NNN-NNNNNN").Should().Be("0123-456789");
         }
+
         [TestMethod]
         public void Format_With_Custom_Format_That_Contains_Less_Digits_Than_The_PhoneNumber_Appends_The_Numbers_To_The_End()
         {
             var sut = new PhoneNumber(31, "0123456789");
 
             sut.ToString("0NN ").Should().Be("012 3456789");
+        }
+
+        [TestMethod]
+        public void PhoneNumber_112()
+        {
+            Assert.Inconclusive("Not supported");
+        }
+
+
+        [TestMethod]
+        public void Format_With_Custom_Format_That_Contains_More_Digits_Than_The_PhoneNumber_Does_Not_Do_Anything_With_The_Superfluous_Digits()
+        {
+            var sut = new PhoneNumber(31, "0123456789");
+
+            sut.ToString(new string('N', 50)).Should().Be("123456789");
         }
     }
 }

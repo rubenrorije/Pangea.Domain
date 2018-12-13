@@ -80,6 +80,7 @@
     <Compile Include="EmojiFlagTests.cs" />
     <Compile Include="ExchangeRateAtTests.cs" />
     <Compile Include="ExchangeRateTests.cs" />
+    <Compile Include="Formatters\PhoneNumberBEFormatterTests.cs" />
     <Compile Include="Formatters\PhoneNumberNLFormatterTests.cs" />
     <Compile Include="Formatters\PhoneNumberFormatterWrapperTests.cs" />
     <Compile Include="GpsLocationTests.cs" />
