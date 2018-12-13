@@ -7,56 +7,30 @@ namespace Pangea.Domain.Formatters
     /// <summary>
     /// Format the phone number in the dutch format.
     /// </summary>
-    public class PhoneNumberNLFormatter : IPhoneNumberFormatter
+    public class PhoneNumberNLFormatter : BasePhoneNumberCountryFormatter, IPhoneNumberFormatter
     {
         /// <inheritdoc/>
-        public bool AppliesTo(string countryCode)
+        public PhoneNumberNLFormatter(int countryCode) : base(countryCode)
         {
-            return countryCode.Equals("31",StringComparison.InvariantCultureIgnoreCase);
         }
 
-        /// <summary>
-        /// Return the dutch format of a phone number
-        /// </summary>
-        /// <param name="phoneNumber">the phone number to format</param>
-        /// <returns>the new format</returns>
-        public string GetLocalFormat(PhoneNumber phoneNumber)
+        /// <inheritdoc/>
+        public override string GetPartialFormat(PhoneNumber phoneNumber)
         {
-            if (phoneNumber.Trimmed.StartsWith("6", StringComparison.InvariantCultureIgnoreCase))
+            if (StartsWith(phoneNumber, 6))
             {
-                return "0N-NN NN NN NN";
+                return "N-NN NN NN NN";
             }
             if (IsThreeDigitAreaCode(phoneNumber))
             {
-                return "0NN-NNNNNNN";
+                return "NN-NNNNNNN";
             }
             else
             {
-                return "0NNN-NNNNNN";
+                return "NNN-NNNNNN";
             }
         }
-
-        /// <summary>
-        /// Return the dutch format of a phone number
-        /// </summary>
-        /// <param name="phoneNumber">the phone number to format</param>
-        /// <returns>the new format</returns>
-        public string GetGlobalFormat(PhoneNumber phoneNumber)
-        {
-            if (phoneNumber.Trimmed.StartsWith("6", StringComparison.InvariantCulture))
-            {
-                return "+C N NN NN NN NN";
-            }
-            if (IsThreeDigitAreaCode(phoneNumber))
-            {
-                return "+C NN-NN NN NN NN";
-            }
-            else
-            {
-                return "+C NNN-NN NN NNN";
-            }
-        }
-
+        
         private static bool IsThreeDigitAreaCode(PhoneNumber phoneNumber)
         {
             if (phoneNumber.Trimmed.Length < 2) return false;
