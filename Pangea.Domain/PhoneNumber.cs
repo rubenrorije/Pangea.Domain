@@ -148,6 +148,7 @@ namespace Pangea.Domain
         /// <returns></returns>
         public override int GetHashCode()
         {
+            if (CountryCode == null && Trimmed == null) return 0;
             return (CountryCode + Trimmed)?.GetHashCode() ?? 0;
         }
 
