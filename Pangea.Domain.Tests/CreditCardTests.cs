@@ -66,13 +66,7 @@ namespace Pangea.Domain.Tests
         {
             new CreditCard().Equals(new CreditCard()).Should().BeTrue();
         }
-
-        [TestMethod]
-        public void Equals_Default_CreditCards_Does_Not_Throw_Exception()
-        {
-            new CreditCard().Equals(new CreditCard()).Should().BeTrue();
-        }
-
+        
         [TestMethod]
         public void Create_Example_Credit_Cards_Without_Spaces()
         {
