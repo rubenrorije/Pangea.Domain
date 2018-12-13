@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Text;
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 using static Pangea.Domain.Util.Math;
 using static System.Math;
 namespace Pangea.Domain
@@ -9,9 +13,11 @@ namespace Pangea.Domain
     /// <summary>
     /// Location represented by Latitude and Longitude to store a position on the earth.
     /// </summary>
+    [Serializable]
     public struct GpsLocation
         : IEquatable<GpsLocation>
         , IFormattable
+        , IXmlSerializable
     {
         /// <summary>
         /// An angle which ranges from -90° to 90° (south to north)
@@ -282,6 +288,34 @@ namespace Pangea.Domain
         public static bool TryParse(string text, NumberFormatInfo format, out GpsLocation result)
         {
             return GpsLocationParser.TryParse(text, format, out result);
+        }
+
+        /// <inheritdoc />
+        XmlSchema IXmlSerializable.GetSchema() => null;
+
+        /// <inheritdoc />
+        void IXmlSerializable.ReadXml(XmlReader reader)
+        {
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+
+            var latValue = reader.MoveToAttribute("lat") ? reader.Value : null;
+            var lonValue = reader.MoveToAttribute("lon") ? reader.Value : null;
+
+            if (!double.TryParse(latValue, NumberStyles.Float, CultureInfo.InvariantCulture, out var lat)) lat = 0;
+            if (!double.TryParse(lonValue, NumberStyles.Float, CultureInfo.InvariantCulture, out var lon)) lon = 0;
+
+            Unsafe.AsRef(this) = new GpsLocation(lat, lon);
+
+            reader.Skip();
+        }
+
+        /// <inheritdoc />
+        void IXmlSerializable.WriteXml(XmlWriter writer)
+        {
+            if (writer == null) throw new ArgumentNullException(nameof(writer));
+
+            if (Latitude != 0) writer.WriteAttributeString("lat", Latitude.ToString(CultureInfo.InvariantCulture));
+            if (Longitude != 0) writer.WriteAttributeString("lon", Longitude.ToString(CultureInfo.InvariantCulture));
         }
     }
 }

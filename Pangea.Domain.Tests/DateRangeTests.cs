@@ -319,56 +319,41 @@ namespace Pangea.Domain.Tests
 
             sut.ToString(null, CultureInfo.InvariantCulture).Should().Be("≥ 01/01/2018");
         }
-
-
+        
         [TestMethod]
-        public void Xml_Serialization_RoundTrip_Unbounded()
+        public void Serialization_Of_Never()
         {
-            var expected = DateRange.Always;
-            var sut = expected.RoundTrip();
-
-            sut.Start.Should().Be(expected.Start);
-            sut.End.Should().Be(expected.End);
+            var sut = DateRange.Never;
+            sut.Should().BeXmlSerializable();
+            sut.Should().BeBinarySerializable();
+            sut.Should().BeDataContractSerializable();
         }
 
         [TestMethod]
-        public void Xml_Serialization_RoundTrip_Empty()
+        public void Serialization_Of_Both_Bounded()
         {
-            var expected = DateRange.Never;
-            var sut = expected.RoundTrip();
-
-            sut.Start.Should().Be(expected.Start);
-            sut.End.Should().Be(expected.End);
+            var sut = DateRange.Today();
+            sut.Should().BeXmlSerializable();
+            sut.Should().BeBinarySerializable();
+            sut.Should().BeDataContractSerializable();
         }
 
         [TestMethod]
-        public void Xml_Serialization_RoundTrip_StartBounded()
+        public void Serialization_Of_End_Bounded()
         {
-            var expected = new DateRange(DateTime.Today, null);
-            var sut = expected.RoundTrip();
-
-            sut.Start.Should().Be(expected.Start);
-            sut.End.Should().Be(expected.End);
+            var sut = new DateRange(null, DateTime.Today);
+            sut.Should().BeXmlSerializable();
+            sut.Should().BeBinarySerializable();
+            sut.Should().BeDataContractSerializable();
         }
 
         [TestMethod]
-        public void Xml_Serialization_RoundTrip_EndBounded()
+        public void Serialization_Of_Start_Bounded()
         {
-            var expected = new DateRange(null, DateTime.Today);
-            var sut = expected.RoundTrip();
-
-            sut.Start.Should().Be(expected.Start);
-            sut.End.Should().Be(expected.End);
-        }
-
-        [TestMethod]
-        public void Xml_Serialization_RoundTrip_Bounded()
-        {
-            var expected = DateRange.Today();
-            var sut = expected.RoundTrip();
-
-            sut.Start.Should().Be(expected.Start);
-            sut.End.Should().Be(expected.End);
+            var sut = new DateRange(null, DateTime.Today);
+            sut.Should().BeXmlSerializable();
+            sut.Should().BeBinarySerializable();
+            sut.Should().BeDataContractSerializable();
         }
 
     }

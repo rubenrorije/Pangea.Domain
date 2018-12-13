@@ -70,6 +70,7 @@
     <Compile Include="CreditCardTests.cs" />
     <Compile Include="CrossCutting\AssemblyTests.cs" />
     <Compile Include="CrossCutting\ExtensionMethodsTests.cs" />
+    <Compile Include="CrossCutting\SerializableTests.cs" />
     <Compile Include="CrossCutting\TryParseTests.cs" />
     <Compile Include="CrossCutting\UnsafeTests.cs" />
     <Compile Include="CurrenciesTests.cs" />
@@ -93,6 +94,7 @@
     <Compile Include="CrossCutting\FormattableTests.cs" />
     <Compile Include="PhoneNumberTests.cs" />
     <Compile Include="CrossCutting\StructTests.cs" />
+    <Compile Include="Util\TypeExtensions.cs" />
     <Compile Include="Util\TypeSelectorExtensions.cs" />
     <Compile Include="Util\XmlHelper.cs" />
     <Compile Include="CrossCutting\XmlSerializableTests.cs" />

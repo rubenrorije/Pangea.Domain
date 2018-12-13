@@ -1,5 +1,7 @@
 ﻿using FluentAssertions;
+using FluentAssertions.Execution;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Pangea.Domain.Tests.Util;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -53,26 +55,18 @@ namespace Pangea.Domain.Tests.CrossCutting
             }
         }
 
+
         [TestMethod]
-        public void Serialize_And_Deserialize_Does_Not_Throw_An_Exception()
+        public void Must_Implement_IXmlSerializable_Explicit()
         {
-
-            foreach (var t in DomainClasses)
+            using (new AssertionScope())
             {
-                if (t == typeof(DateRange)) continue;
-                var sut = (IXmlSerializable)Activator.CreateInstance(t);
-                var text = new StringBuilder();
-                using (var writer = XmlWriter.Create(text, new XmlWriterSettings { OmitXmlDeclaration = true }))
+                foreach (var type in DomainClasses)
                 {
-                    sut.WriteXml(writer);
-                }
-
-                using (var tr = new StringReader(text.ToString()))
-                using (var reader = XmlReader.Create(tr))
-                {
-                    sut.ReadXml(reader);
+                    type.ImplementsExplicitly<IXmlSerializable>().Should().BeTrue($"IXmlSerializable should be implemented explicitly for {type.Name}");
                 }
             }
         }
+        
     }
 }

@@ -293,12 +293,44 @@ namespace Pangea.Domain.Tests
         }
 
         [TestMethod]
-        public void RoundTrip_XmlSerialization()
+        public void Serialization()
         {
-            var expected = new Percentage(20);
-            var sut = expected.RoundTrip();
+            var sut = new Percentage(20);
 
-            sut.Value.Should().Be(expected.Value);
+            sut.Should().BeXmlSerializable();
+            sut.Should().BeBinarySerializable();
+            sut.Should().BeDataContractSerializable();
+        }
+
+        [TestMethod]
+        public void DataContract_Serializable()
+        {
+            var sut = new Percentage(5);
+            sut.Should().BeDataContractSerializable();
+        }
+
+        [TestMethod]
+        public void Xml_Serializable()
+        {
+            var sut = new Percentage(5);
+            sut.Should().BeXmlSerializable();
+        }
+
+        [TestMethod]
+        public void Binary_Serializable()
+        {
+            var sut = new Iban("BE71 0961 2345 6769");
+            sut.Should().BeBinarySerializable();
+        }
+
+        [TestMethod]
+        public void Invalid_Iban_Must_Be_Serializable_And_Not_Throw_On_Deserialization()
+        {
+            var sut = Iban.Unsafe("BE71 0962 2345 6769"); // invalid check digit
+
+            sut.Should().BeBinarySerializable();
+            sut.Should().BeXmlSerializable();
+            sut.Should().BeDataContractSerializable();
         }
     }
 }

@@ -60,7 +60,7 @@
     <Rule Id="CA2229" Action="Warning" />
     <Rule Id="CA2231" Action="Warning" />
     <Rule Id="CA2232" Action="Warning" />
-    <Rule Id="CA2235" Action="Warning" />
+    <Rule Id="CA2235" Action="None" />
     <Rule Id="CA2236" Action="Warning" />
     <Rule Id="CA2237" Action="Warning" />
     <Rule Id="CA2238" Action="Warning" />
@@ -71,5 +71,8 @@
   <Rules AnalyzerId="CSharpGuidelinesAnalyzer" RuleNamespace="CSharpGuidelinesAnalyzer">
     <Rule Id="AV1500" Action="None" />
     <Rule Id="AV1535" Action="None" />
+  </Rules>
+  <Rules AnalyzerId="Microsoft.NetFramework.Analyzers" RuleNamespace="Microsoft.NetFramework.Analyzers">
+    <Rule Id="CA2235" Action="None" />
   </Rules>
 </RuleSet>

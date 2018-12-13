@@ -13,6 +13,7 @@ namespace Pangea.Domain
     /// <summary>
     /// Represent a number of bytes in a human readable format
     /// </summary>
+    [Serializable]
     public struct FileSize
         : IEquatable<FileSize>
         , IComparable<FileSize>
@@ -163,26 +164,32 @@ namespace Pangea.Domain
         }
 
         /// <inheritdoc/>
-        public XmlSchema GetSchema()
-        {
-            return null;
-        }
+        XmlSchema IXmlSerializable.GetSchema() => null;
 
         /// <inheritdoc/>
-        public void ReadXml(XmlReader reader)
+        void IXmlSerializable.ReadXml(XmlReader reader)
         {
             if (reader == null) throw new ArgumentNullException(nameof(reader));
 
-            reader.MoveToContent();
-            var value = reader.ReadElementContentAsString();
-            Unsafe.AsRef(this) = new FileSize(long.Parse(value, CultureInfo.InvariantCulture));
+            var value = reader.MoveToAttribute("value") ? reader.Value : null;
+
+            if (string.IsNullOrEmpty(value))
+            {
+                Unsafe.AsRef(this) = default;
+            }
+            else
+            {
+                Unsafe.AsRef(this) = new FileSize(long.Parse(value, CultureInfo.InvariantCulture));
+            }
+
+            reader.Skip();
         }
 
         /// <inheritdoc/>
-        public void WriteXml(XmlWriter writer)
+        void IXmlSerializable.WriteXml(XmlWriter writer)
         {
             if (writer == null) throw new ArgumentNullException(nameof(writer));
-            writer.WriteElementString("value", TotalBytes.ToString(null, CultureInfo.InvariantCulture));
+            if (TotalBytes > 0) writer.WriteAttributeString("value", TotalBytes.ToString(null, CultureInfo.InvariantCulture));
         }
 
         /// <inheritdoc/>

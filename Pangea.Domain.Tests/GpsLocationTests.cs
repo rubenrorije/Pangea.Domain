@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Pangea.Domain.Tests.Util;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -291,7 +292,7 @@ namespace Pangea.Domain.Tests
         {
             var location = "-41,95,12,45";
 
-            Action action = ()=> GpsLocation.Parse(location, CultureInfo.GetCultureInfo(1043));
+            Action action = () => GpsLocation.Parse(location, CultureInfo.GetCultureInfo(1043));
 
             action.Should().Throw<ArgumentException>();
         }
@@ -347,6 +348,27 @@ namespace Pangea.Domain.Tests
         private static GpsLocation Create(Tuple<double, double> tuple)
         {
             return new GpsLocation(tuple.Item1, tuple.Item2);
+        }
+
+        [TestMethod]
+        public void DataContract_Serializable()
+        {
+            var sut = Create(_athens);
+            sut.Should().BeDataContractSerializable();
+        }
+
+        [TestMethod]
+        public void Xml_Serializable()
+        {
+            var sut = Create(_athens);
+            sut.Should().BeXmlSerializable();
+        }
+
+        [TestMethod]
+        public void Binary_Serializable()
+        {
+            var sut = Create(_athens);
+            sut.Should().BeBinarySerializable();
         }
     }
 }

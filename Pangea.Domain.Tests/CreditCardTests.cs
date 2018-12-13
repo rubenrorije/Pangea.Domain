@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Pangea.Domain.Tests.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,6 +58,12 @@ namespace Pangea.Domain.Tests
             new CreditCard("5500 0000 0000 0004");
             new CreditCard("3400 0000 0000 009");
             new CreditCard("3000 0000 0000 04");
+        }
+
+        [TestMethod]
+        public void Equals_Default_CreditCards_Does_Not_Throw_Exception()
+        {
+            new CreditCard().Equals(new CreditCard()).Should().BeTrue();
         }
 
         [TestMethod]
@@ -171,6 +178,55 @@ namespace Pangea.Domain.Tests
         {
             Action action = () => CreditCard.Unsafe("1");
             action.Should().NotThrow();
+        }
+
+        [TestMethod]
+        public void DataContract_Serializable()
+        {
+            var sut = new CreditCard("4111 1111 1111 1111");
+            sut.Should().BeDataContractSerializable();
+        }
+
+        [TestMethod]
+        public void Xml_Serializable()
+        {
+            var sut = new CreditCard("4111 1111 1111 1111");
+            sut.Should().BeXmlSerializable();
+        }
+
+        [TestMethod]
+        public void Binary_Serializable()
+        {
+            var sut = new CreditCard("4111 1111 1111 1111");
+            sut.Should().BeBinarySerializable();
+        }
+
+
+        [TestMethod]
+        public void Serialization_Of_CreditCard()
+        {
+            var sut = new CreditCard("4111 1111 1111 1111");
+            sut.Should().BeXmlSerializable();
+            sut.Should().BeBinarySerializable();
+            sut.Should().BeDataContractSerializable();
+        }
+
+        [TestMethod]
+        public void Serialization_Of_Empty_CreditCard()
+        {
+            var sut = default(CreditCard);
+            sut.Should().BeXmlSerializable();
+            sut.Should().BeBinarySerializable();
+            sut.Should().BeDataContractSerializable();
+        }
+
+        [TestMethod]
+        public void Invalid_CreditCard_Must_Be_Serializable_And_Not_Throw_On_Deserialization()
+        {
+            var sut = CreditCard.Unsafe("4111 1111 1111 1112");
+            sut.Should().BeXmlSerializable();
+            sut.Should().BeBinarySerializable();
+            sut.Should().BeDataContractSerializable();
         }
     }
 }

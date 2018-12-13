@@ -171,30 +171,12 @@ namespace Pangea.Domain.Tests
             Action action = () => new PhoneNumber(0, null);
             action.Should().Throw<ArgumentOutOfRangeException>();
         }
-
+        
         [TestMethod]
-        public void Serialize()
+        public void DataContract_Serializable()
         {
-            var sut = new PhoneNumber("+31123456789");
-            var text = new StringBuilder();
-            using (var writer = XmlWriter.Create(text))
-            {
-                sut.WriteXml(writer);
-            }
-            text.ToString().Should().Contain("<value>+31123456789</value>");
-        }
-
-        [TestMethod]
-        public void Deserialize()
-        {
-            using (var tr = new StringReader("<value>+31 1234 56789</value>"))
-            using (var reader = XmlReader.Create(tr))
-            {
-                var sut = new PhoneNumber();
-                sut.ReadXml(reader);
-
-                sut.ToString().Should().Be("+31 1234 56789");
-            }
+            var sut = new PhoneNumber("+31 1234567899");
+            sut.Should().BeDataContractSerializable();
         }
 
         [TestMethod]
@@ -285,32 +267,28 @@ namespace Pangea.Domain.Tests
         [TestMethod]
         public void TryParse_PhoneNumber_That_Is_Valid_With_Plus_Returns_The_Parsed_PhoneNumber()
         {
-            PhoneNumber sut;
-            PhoneNumber.TryParse("+31 123456789", out sut).Should().BeTrue();
+            PhoneNumber.TryParse("+31 123456789", out PhoneNumber sut).Should().BeTrue();
             sut.ToString().Should().Be("+31 123456789");
         }
 
         [TestMethod]
         public void TryParse_PhoneNumber_That_Is_Valid_With_Zeros_Returns_The_Parsed_PhoneNumber()
         {
-            PhoneNumber sut;
-            PhoneNumber.TryParse("0031 123456789", out sut).Should().BeTrue();
+            PhoneNumber.TryParse("0031 123456789", out PhoneNumber sut).Should().BeTrue();
             sut.ToString().Should().Be("+31 123456789");
         }
 
         [TestMethod]
         public void TryParse_Local_PhoneNumber()
         {
-            PhoneNumber sut;
-            PhoneNumber.TryParse(31, "0123456789", out sut).Should().BeTrue();
+            PhoneNumber.TryParse(31, "0123456789", out PhoneNumber sut).Should().BeTrue();
             sut.ToString().Should().Be("+31123456789");
         }
 
         [TestMethod]
         public void TryParse_Local_PhoneNumber_With_Invalid_Country_Code_Returns_False()
         {
-            PhoneNumber sut;
-            PhoneNumber.TryParse(0, "0123456789", out sut).Should().BeFalse();
+            PhoneNumber.TryParse(0, "0123456789", out PhoneNumber sut).Should().BeFalse();
         }
 
         [TestMethod]
