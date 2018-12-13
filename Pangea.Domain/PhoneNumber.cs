@@ -111,7 +111,6 @@ namespace Pangea.Domain
             Text = numbers;
             Trimmed = Text?.Replace(" ", "");
             CountryCode = countryCode;
-
         }
 
         /// <summary>
