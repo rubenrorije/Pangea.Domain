@@ -165,5 +165,12 @@ namespace Pangea.Domain.Tests
         {
             CreditCard.TryParse("4111 1111 1111 1112", out var _).Should().BeFalse();
         }
+
+        [TestMethod]
+        public void Unsafe_Does_Not_Check_Any_Validation_For_The_CreditCard()
+        {
+            Action action = () => CreditCard.Unsafe("1");
+            action.Should().NotThrow();
+        }
     }
 }

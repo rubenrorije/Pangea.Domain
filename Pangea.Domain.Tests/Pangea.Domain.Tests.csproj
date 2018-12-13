@@ -71,6 +71,7 @@
     <Compile Include="CrossCutting\AssemblyTests.cs" />
     <Compile Include="CrossCutting\ExtensionMethodsTests.cs" />
     <Compile Include="CrossCutting\TryParseTests.cs" />
+    <Compile Include="CrossCutting\UnsafeTests.cs" />
     <Compile Include="CurrenciesTests.cs" />
     <Compile Include="CurrencyTests.cs" />
     <Compile Include="DateRangeTests.cs" />
