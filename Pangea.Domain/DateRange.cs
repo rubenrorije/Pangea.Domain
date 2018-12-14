@@ -314,5 +314,13 @@ namespace Pangea.Domain
             if (endValue != null) writer.WriteAttributeString("end", endValue);
             writer.WriteAttributeString("isFilled", _isFilled.ToString(CultureInfo.InvariantCulture));
         }
+
+        /// <summary>
+        /// Deconstruct the date range into (start, end)
+        /// </summary>
+        public ValueTuple<DateTime?, DateTime?> Deconstruct()
+        {
+            return (Start, End);
+        }
     }
 }
