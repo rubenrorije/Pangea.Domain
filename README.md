@@ -27,8 +27,8 @@ Some types have quite some validation to make sure the given constructor argumen
 ### Deconstruct
 When applicable it is easy for a type to be deconstructed into its parts in C# 7.0. E.g.
 ```csharp
-var (lat, lon) = new GpsLocation(5.454,7.244);
-var (start, end) = DateRange.Today();
+var (lat, lon) = new GpsLocation(5.454,7.244).Deconstruct();
+var (start, end) = DateRange.Today().Deconstruct();
 ```
 
 ----
