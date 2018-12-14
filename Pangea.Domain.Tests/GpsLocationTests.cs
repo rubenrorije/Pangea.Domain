@@ -345,6 +345,14 @@ namespace Pangea.Domain.Tests
             GpsLocation.TryParse("-41,95;12,45", CultureInfo.GetCultureInfo(1043), out var _).Should().BeTrue();
         }
 
+        [TestMethod]
+        public void Deconstruct_Into_Parts()
+        {
+            var (lat, lon) = Create(_athens).Deconstruct();
+            lat.Should().Be(_athens.Item1);
+            lon.Should().Be(_athens.Item2);
+        }
+
         private static GpsLocation Create(Tuple<double, double> tuple)
         {
             return new GpsLocation(tuple.Item1, tuple.Item2);
