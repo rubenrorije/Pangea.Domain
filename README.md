@@ -19,7 +19,7 @@ public class Customer
 The example above makes it much easier to work with the domain entities and encapsulates much more information than standard .Net types. 
 
 ## Commonalities between value types
-All value types are `[Serializable]` and `IXmlSerializable`.
+All value types are `[Serializable]` and implement `IXmlSerializable`.
 ### TryParse
 All the types for which it makes sense have a `TryParse` method that works similar to the default .Net implementations
 ### Unsafe
