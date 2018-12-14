@@ -317,5 +317,13 @@ namespace Pangea.Domain
             if (Latitude != 0) writer.WriteAttributeString("lat", Latitude.ToString(CultureInfo.InvariantCulture));
             if (Longitude != 0) writer.WriteAttributeString("lon", Longitude.ToString(CultureInfo.InvariantCulture));
         }
+
+        /// <summary>
+        /// Returns a tuple (Latitude, Longitude)
+        /// </summary>
+        public ValueTuple<double, double> Deconstruct()
+        {
+            return (Latitude, Longitude);
+        }
     }
 }
