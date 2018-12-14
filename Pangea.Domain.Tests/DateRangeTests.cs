@@ -319,7 +319,15 @@ namespace Pangea.Domain.Tests
 
             sut.ToString(null, CultureInfo.InvariantCulture).Should().Be("≥ 01/01/2018");
         }
-        
+
+        [TestMethod]
+        public void Deconstruct_Into_Parts()
+        {
+            var (start, end) = DateRange.Today().Deconstruct();
+            start.Should().Be(DateTime.Today);
+            end.Should().Be(DateTime.Today);
+        }
+
         [TestMethod]
         public void Serialization_Of_Never()
         {
