@@ -39,5 +39,36 @@ namespace Pangea.Domain.Tests.CrossCutting
                 }
             }
         }
+        [TestMethod]
+        public void When_A_Constructor_With_A_Single_Argument_Then_Must_Have_A_Cast_Operator()
+        {
+            var constructors =
+                typeof(CreditCard)
+                .Assembly
+                .Types()
+                .ThatAreStructs()
+                .SelectMany(t => t.GetConstructors())
+                .Where(c => c.GetParameters().Count() == 1)
+                .Where(c => c.GetParameters()[0].ParameterType.IsValueType)
+                .ToList();
+
+            using (new AssertionScope())
+            {
+                foreach (var ctor in constructors)
+                {
+                    var type = ctor.DeclaringType;
+                    var parameterType = ctor.GetParameters()[0].ParameterType;
+
+                    var castingOperators =
+                        type
+                        .GetMethods()
+                        .Where(m => m.Name == "op_Explicit")
+                        .Where(m => m.ReturnType == parameterType)
+                        .ToList();
+
+                    castingOperators.Should().HaveCount(1, $"expected an explicit {parameterType.Name} cast operator for {type.Name} because it has a constructor with this type");
+                }
+            }
+        }
     }
 }
