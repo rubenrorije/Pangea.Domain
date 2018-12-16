@@ -684,5 +684,53 @@ namespace Pangea.Domain
         {
             return new Percentage(percentage);
         }
+
+        /// <summary>
+        /// Cast the percentage to a decimal
+        /// </summary>
+        public static explicit operator decimal(Percentage percentage)
+        {
+            return percentage.ToDecimal();
+        }
+
+        /// <summary>
+        /// Convert the percentage to a decimal
+        /// </summary>
+        public decimal ToDecimal()
+        {
+            return Value;
+        }
+
+        /// <summary>
+        /// Cast the percentage to a double
+        /// </summary>
+        public static explicit operator double(Percentage percentage)
+        {
+            return percentage.ToDouble();
+        }
+
+        /// <summary>
+        /// Convert the percentage to a double
+        /// </summary>
+        public double ToDouble()
+        {
+            return Convert.ToDouble(Value);
+        }
+
+        /// <summary>
+        /// Cast the percentage to an int
+        /// </summary>
+        public static explicit operator int(Percentage percentage)
+        {
+            return percentage.ToInt32();
+        }
+
+        /// <summary>
+        /// Convert the percentage to an int
+        /// </summary>
+        public int ToInt32()
+        {
+            return Convert.ToInt32(Value);
+        }
     }
 }

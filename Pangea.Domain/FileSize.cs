@@ -321,5 +321,21 @@ namespace Pangea.Domain
         {
             return new FileSize(TotalBytes / divisor);
         }
+
+        /// <summary>
+        /// Cast file size to a long
+        /// </summary>
+        public static explicit operator long(FileSize fileSize)
+        {
+            return fileSize.ToInt64();
+        }
+
+        /// <summary>
+        /// Convert file size to a long
+        /// </summary>
+        public long ToInt64()
+        {
+            return TotalBytes;
+        }
     }
 }

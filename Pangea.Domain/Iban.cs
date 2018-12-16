@@ -171,5 +171,13 @@ namespace Pangea.Domain
             result = new Iban(text);
             return true;
         }
+
+        /// <summary>
+        /// Cast an Iban to a string
+        /// </summary>
+        public static explicit operator string(Iban iban)
+        {
+            return iban.ToString();
+        }
     }
 }
