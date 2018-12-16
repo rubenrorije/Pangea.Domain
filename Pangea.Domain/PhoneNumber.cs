@@ -323,5 +323,12 @@ namespace Pangea.Domain
                 }
             }
         }
+        /// <summary>
+        /// Cast the phone number to string
+        /// </summary>
+        public static explicit operator string(PhoneNumber phoneNumber)
+        {
+            return phoneNumber.ToString("G", CultureInfo.CurrentCulture);
+        }
     }
 }

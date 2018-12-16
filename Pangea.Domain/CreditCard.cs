@@ -218,5 +218,13 @@ namespace Pangea.Domain
 
             if (!string.IsNullOrEmpty(_value)) writer.WriteAttributeString("value", _value);
         }
+
+        /// <summary>
+        /// Cast a credit card to a string
+        /// </summary>
+        public static explicit operator string(CreditCard creditCard)
+        {
+            return creditCard.ToString();
+        }
     }
 }
