@@ -17,6 +17,7 @@ namespace Pangea.Domain
     [Serializable]
     public struct CreditCard
         : IEquatable<CreditCard>
+        , IConvertible
         , IXmlSerializable
     {
         private readonly string _value;
@@ -226,5 +227,24 @@ namespace Pangea.Domain
         {
             return creditCard.ToString();
         }
+
+        TypeCode IConvertible.GetTypeCode() => TypeCode.Object;
+        bool IConvertible.ToBoolean(IFormatProvider provider) => Convert.ToBoolean(_value, provider);
+        byte IConvertible.ToByte(IFormatProvider provider) => Convert.ToByte(_value, provider);
+        char IConvertible.ToChar(IFormatProvider provider) => Convert.ToChar(_value, provider);
+        DateTime IConvertible.ToDateTime(IFormatProvider provider) => Convert.ToDateTime(_value, provider);
+        decimal IConvertible.ToDecimal(IFormatProvider provider) => Convert.ToDecimal(_value, provider);
+        double IConvertible.ToDouble(IFormatProvider provider) => Convert.ToDouble(_value, provider);
+        short IConvertible.ToInt16(IFormatProvider provider) => Convert.ToInt16(_value, provider);
+        int IConvertible.ToInt32(IFormatProvider provider) => Convert.ToInt32(_value, provider);
+        long IConvertible.ToInt64(IFormatProvider provider) => Convert.ToInt64(_value, provider);
+        sbyte IConvertible.ToSByte(IFormatProvider provider) => Convert.ToSByte(_value, provider);
+        float IConvertible.ToSingle(IFormatProvider provider) => Convert.ToSingle(_value, provider);
+        string IConvertible.ToString(IFormatProvider provider) => Convert.ToString(_value, provider);
+        object IConvertible.ToType(Type conversionType, IFormatProvider provider) => Convert.ChangeType(_value, conversionType, provider);
+        ushort IConvertible.ToUInt16(IFormatProvider provider) => Convert.ToUInt16(_value, provider);
+        uint IConvertible.ToUInt32(IFormatProvider provider) => Convert.ToUInt32(_value, provider);
+        ulong IConvertible.ToUInt64(IFormatProvider provider) => Convert.ToUInt64(_value, provider);
+
     }
 }

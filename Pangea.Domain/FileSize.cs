@@ -20,6 +20,7 @@ namespace Pangea.Domain
         , IComparable<long>
         , IFormattable
         , IComparable
+        , IConvertible
         , IXmlSerializable
     {
         /// <summary>
@@ -337,5 +338,23 @@ namespace Pangea.Domain
         {
             return TotalBytes;
         }
+
+        TypeCode IConvertible.GetTypeCode() => TypeCode.Object;
+        bool IConvertible.ToBoolean(IFormatProvider provider) => Convert.ToBoolean(TotalBytes, provider);
+        byte IConvertible.ToByte(IFormatProvider provider) => Convert.ToByte(TotalBytes, provider);
+        char IConvertible.ToChar(IFormatProvider provider) => Convert.ToChar(TotalBytes, provider);
+        DateTime IConvertible.ToDateTime(IFormatProvider provider) => Convert.ToDateTime(TotalBytes, provider);
+        decimal IConvertible.ToDecimal(IFormatProvider provider) => Convert.ToDecimal(TotalBytes, provider);
+        double IConvertible.ToDouble(IFormatProvider provider) => Convert.ToDouble(TotalBytes, provider);
+        short IConvertible.ToInt16(IFormatProvider provider) => Convert.ToInt16(TotalBytes, provider);
+        int IConvertible.ToInt32(IFormatProvider provider) => Convert.ToInt32(TotalBytes, provider);
+        long IConvertible.ToInt64(IFormatProvider provider) => Convert.ToInt64(TotalBytes, provider);
+        sbyte IConvertible.ToSByte(IFormatProvider provider) => Convert.ToSByte(TotalBytes, provider);
+        float IConvertible.ToSingle(IFormatProvider provider) => Convert.ToSingle(TotalBytes, provider);
+        string IConvertible.ToString(IFormatProvider provider) => Convert.ToString(TotalBytes, provider);
+        object IConvertible.ToType(Type conversionType, IFormatProvider provider) => Convert.ChangeType(TotalBytes, conversionType, provider);
+        ushort IConvertible.ToUInt16(IFormatProvider provider) => Convert.ToUInt16(TotalBytes, provider);
+        uint IConvertible.ToUInt32(IFormatProvider provider) => Convert.ToUInt32(TotalBytes, provider);
+        ulong IConvertible.ToUInt64(IFormatProvider provider) => Convert.ToUInt64(TotalBytes, provider);
     }
 }

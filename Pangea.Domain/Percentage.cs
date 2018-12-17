@@ -13,15 +13,16 @@ namespace Pangea.Domain
     /// Representing a percentage, can be used for easy calculations with percentages.
     /// </summary>
     [Serializable]
-    public struct Percentage :
-        IFormattable,
-        IEquatable<Percentage>,
-        IComparable<int>,
-        IComparable<decimal>,
-        IComparable<double>,
-        IComparable,
-        IComparable<Percentage>,
-        IXmlSerializable
+    public struct Percentage 
+        : IFormattable
+        , IEquatable<Percentage>
+        , IComparable<int>
+        , IComparable<decimal>
+        , IComparable<double>
+        , IComparable<Percentage>
+        , IComparable
+        , IConvertible
+        , IXmlSerializable
     {
         /// <summary>
         /// The actual percentage value
@@ -732,5 +733,24 @@ namespace Pangea.Domain
         {
             return Convert.ToInt32(Value);
         }
+
+        TypeCode IConvertible.GetTypeCode() => TypeCode.Object;
+        bool IConvertible.ToBoolean(IFormatProvider provider) => Convert.ToBoolean(Value, provider);
+        byte IConvertible.ToByte(IFormatProvider provider) => Convert.ToByte(Value, provider);
+        char IConvertible.ToChar(IFormatProvider provider) => Convert.ToChar(Value, provider);
+        DateTime IConvertible.ToDateTime(IFormatProvider provider) => Convert.ToDateTime(Value, provider);
+        decimal IConvertible.ToDecimal(IFormatProvider provider) => Convert.ToDecimal(Value, provider);
+        double IConvertible.ToDouble(IFormatProvider provider) => Convert.ToDouble(Value, provider);
+        short IConvertible.ToInt16(IFormatProvider provider) => Convert.ToInt16(Value, provider);
+        int IConvertible.ToInt32(IFormatProvider provider) => Convert.ToInt32(Value, provider);
+        long IConvertible.ToInt64(IFormatProvider provider) => Convert.ToInt64(Value, provider);
+        sbyte IConvertible.ToSByte(IFormatProvider provider) => Convert.ToSByte(Value, provider);
+        float IConvertible.ToSingle(IFormatProvider provider) => Convert.ToSingle(Value, provider);
+        string IConvertible.ToString(IFormatProvider provider) => Convert.ToString(Value, provider);
+        object IConvertible.ToType(Type conversionType, IFormatProvider provider) => Convert.ChangeType(Value, conversionType, provider);
+        ushort IConvertible.ToUInt16(IFormatProvider provider) => Convert.ToUInt16(Value, provider);
+        uint IConvertible.ToUInt32(IFormatProvider provider) => Convert.ToUInt32(Value, provider);
+        ulong IConvertible.ToUInt64(IFormatProvider provider) => Convert.ToUInt64(Value, provider);
+
     }
 }

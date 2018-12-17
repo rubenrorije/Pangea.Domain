@@ -70,6 +70,7 @@
     <Compile Include="CreditCardTests.cs" />
     <Compile Include="CrossCutting\AssemblyTests.cs" />
     <Compile Include="CrossCutting\CastingTests.cs" />
+    <Compile Include="CrossCutting\ConvertibleTests.cs" />
     <Compile Include="CrossCutting\ExtensionMethodsTests.cs" />
     <Compile Include="CrossCutting\SerializableTests.cs" />
     <Compile Include="CrossCutting\TryParseTests.cs" />
