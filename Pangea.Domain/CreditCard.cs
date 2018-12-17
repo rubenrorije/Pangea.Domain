@@ -107,8 +107,10 @@ namespace Pangea.Domain
         /// </summary>
         /// <param name="format">Either Long (8) or Short (6)</param>
         /// <returns>The part of the credit card denoting the issuer</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Invalid enum value argument (0)</exception>
         public string GetIssuerIdentificationNumber(IssuerIdentifierFormat format)
         {
+            if (format == 0) throw new ArgumentOutOfRangeException(nameof(format));
             if (string.IsNullOrEmpty(_value)) return _value;
             return _value.Substring(0, (int)format);
         }
@@ -118,8 +120,10 @@ namespace Pangea.Domain
         /// </summary>
         /// <param name="format">How many characters are used for the Issuer, either 8 (Long) or 6 (Short)</param>
         /// <returns>The part of the credit card denoting the individual account number</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Invalid enum value argument (0)</exception>
         public string GetIndividualAccountNumber(IssuerIdentifierFormat format)
         {
+            if (format == 0) throw new ArgumentOutOfRangeException(nameof(format));
             if (string.IsNullOrEmpty(_value)) return _value;
             return _value.Substring((int)format, _value.Length - (int)format - 1);
         }

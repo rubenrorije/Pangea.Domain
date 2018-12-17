@@ -32,10 +32,14 @@ namespace Pangea.Domain
         /// </summary>
         public DateTime? Start { get; }
 
+        private DateTime SafeStart => Start == null ? DateTime.MinValue : Start.Value;
+
         /// <summary>
         /// The end date of the range, when null the start is not bounded, which effectively means <see cref="DateTime.MaxValue"/>
         /// </summary>
         public DateTime? End { get; }
+
+        private DateTime SafeEnd => End == null ? DateTime.MaxValue : End.Value;
 
         /// <summary>
         /// The Date range that represents an empty range. No dates are within this date range
@@ -180,6 +184,7 @@ namespace Pangea.Domain
         /// Subtract the right hand side from the left hand side. This only works when the ranges have the same end date.
         /// Otherwise an exception will be thrown.
         /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException">The range could not be subtracted, because the two ranges do not have a common start or end date</exception>
         public DateRange Subtract(DateRange other)
         {
             if (Equals(other)) return new DateRange();
@@ -313,6 +318,22 @@ namespace Pangea.Domain
             if (startValue != null) writer.WriteAttributeString("start", startValue);
             if (endValue != null) writer.WriteAttributeString("end", endValue);
             writer.WriteAttributeString("isFilled", _isFilled.ToString(CultureInfo.InvariantCulture));
+        }
+
+        /// <summary>
+        /// Returns whether the two date ranges are overlapping
+        /// </summary>
+        public bool OverlapsWith(DateRange other)
+        {
+            if (IsEmpty) return false;
+            if (other.IsEmpty) return false;
+
+            if (SafeStart <= other.SafeStart && SafeEnd >= other.SafeEnd) return true; // surrounded (1)
+            if (other.SafeStart <= SafeStart && other.SafeEnd >= SafeEnd) return true; // surrounded (2)
+            if (SafeStart <= other.SafeStart && SafeEnd >= other.SafeStart) return true; // other.SafeStart within this.Range
+            if (other.SafeStart <= SafeStart && other.SafeEnd >= SafeStart) return true; // SafeStart within other.Range
+
+            return false;
         }
 
         /// <summary>
