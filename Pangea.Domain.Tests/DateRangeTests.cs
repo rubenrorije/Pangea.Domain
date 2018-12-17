@@ -418,5 +418,96 @@ namespace Pangea.Domain.Tests
             untilJan1.OverlapsWith(fromJan1).Should().BeTrue();
             fromJan1.OverlapsWith(untilJan1).Should().BeTrue();
         }
+
+        [TestMethod]
+        public void DateRange_For_Day_Can_Inline_Year_Month_Day()
+        {
+            DateRange.Day(2018, 1, 1).Should().Be(DateRange.Day(new DateTime(2018, 1, 1)));
+        }
+
+        [TestMethod]
+        public void DateRange_Yesterday()
+        {
+            var sut = DateRange.Yesterday();
+            sut.Start.Should().Be(DateTime.Today.AddDays(-1));
+            sut.End.Should().Be(DateTime.Today.AddDays(-1));
+        }
+
+        [TestMethod]
+        public void DateRange_Tomorrow()
+        {
+            var sut = DateRange.Tomorrow();
+            sut.Start.Should().Be(DateTime.Today.AddDays(1));
+            sut.End.Should().Be(DateTime.Today.AddDays(1));
+        }
+
+        [TestMethod]
+        public void DateRange_FromDay()
+        {
+            var sut = DateRange.From(2018, 1, 1);
+            sut.Start.Should().Be(new DateTime(2018, 1, 1));
+            sut.End.Should().BeNull();
+        }
+
+        [TestMethod]
+        public void DateRange_UntilDay()
+        {
+            var sut = DateRange.Until(2018, 1, 1);
+            sut.Start.Should().BeNull();
+            sut.End.Should().Be(new DateTime(2018, 1, 1));
+        }
+
+        [TestMethod]
+        public void DateRange_Month_Year_Argument_Cannot_Be_Zero_Or_Less()
+        {
+            Action action = () => DateRange.Month(0, 11);
+            action.Should().Throw<ArgumentOutOfRangeException>();
+        }
+
+        [TestMethod]
+        public void DateRange_Month_Month_Argument_Cannot_Be_Zero_Or_Less()
+        {
+            Action action = () => DateRange.Month(2018, 0);
+            action.Should().Throw<ArgumentOutOfRangeException>();
+        }
+
+        [TestMethod]
+        public void DateRange_One_Month()
+        {
+            var nov = DateRange.Month(2018, 11);
+            nov.Start.Should().Be(new DateTime(2018, 11, 1));
+            nov.End.Should().Be(new DateTime(2018, 11, 30));
+        }
+
+        [TestMethod]
+        public void DateRange_One_Month_Leap_Year()
+        {
+            var nov = DateRange.Month(2016, 2);
+            nov.Start.Should().Be(new DateTime(2016, 2, 1));
+            nov.End.Should().Be(new DateTime(2016, 2, 29));
+        }
+
+        [TestMethod]
+        public void DateRange_One_Month_No_Leap_Year()
+        {
+            var nov = DateRange.Month(2015, 2);
+            nov.Start.Should().Be(new DateTime(2015, 2, 1));
+            nov.End.Should().Be(new DateTime(2015, 2, 28));
+        }
+
+        [TestMethod]
+        public void DateRange_Multiple_Months_The_Number_Of_Months_Must_Be_Positive()
+        {
+            Action action = () => DateRange.Months(2018, 1, 0);
+            action.Should().Throw<ArgumentOutOfRangeException>();
+        }
+
+        [TestMethod]
+        public void DateRange_Multiple_Months()
+        {
+            var months = DateRange.Months(2018, 1, 12);
+
+            months.Should().Be(DateRange.Year(2018));
+        }
     }
 }

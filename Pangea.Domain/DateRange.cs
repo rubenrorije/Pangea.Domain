@@ -117,6 +117,7 @@ namespace Pangea.Domain
             return new DateRange(new DateTime(startingYear, 1, 1), new DateTime(startingYear + numberOfYears - 1, 12, 31));
         }
 
+
         /// <summary>
         /// Create a range that only spans today
         /// </summary>
@@ -124,6 +125,64 @@ namespace Pangea.Domain
         public static DateRange Today()
         {
             return Day(DateTime.Today);
+        }
+
+        /// <summary>
+        /// Create a range that only spans tomorrow
+        /// </summary>
+        /// <returns>The range that starts and ends with tomorrow</returns>
+        public static DateRange Tomorrow()
+        {
+            return Day(DateTime.Today.AddDays(1));
+        }
+
+        /// <summary>
+        /// Create a range that only spans yesterday
+        /// </summary>
+        /// <returns>The range that starts and ends with yesterday</returns>
+        public static DateRange Yesterday()
+        {
+            return Day(DateTime.Today.AddDays(-1));
+        }
+
+        /// <summary>
+        /// Return a date range that starts at the given date until forever
+        /// </summary>
+        public static DateRange From(int year, int month, int day)
+        {
+            return From(new DateTime(year, month, day));
+        }
+
+        /// <summary>
+        /// Return a date range that starts at the given date until forever
+        /// </summary>
+        public static DateRange From(DateTime date)
+        {
+            return new DateRange(date, null);
+        }
+
+        /// <summary>
+        /// Return a date range that ends at the given date 
+        /// </summary>
+        public static DateRange Until(int year, int month, int day)
+        {
+            return Until(new DateTime(year, month, day));
+        }
+
+        /// <summary>
+        /// Return a date range that ends at the given date 
+        /// </summary>
+        public static DateRange Until(DateTime date)
+        {
+            return new DateRange(null, date);
+        }
+
+        /// <summary>
+        /// Create a daterange for the given date
+        /// </summary>
+        public static DateRange Day(int year, int month, int day)
+        {
+            return Day(new DateTime(year, month, day));
         }
 
         /// <summary>
@@ -343,5 +402,27 @@ namespace Pangea.Domain
         {
             return (Start, End);
         }
+
+        /// <summary>
+        /// Returns a DateRange for the given year and month.
+        /// </summary>
+        public static DateRange Month(int year, int month)
+        {
+            return Months(year, month, 1);
+        }
+
+        /// <summary>
+        /// Returns a DateRange for the given number of months starting in the given starting month/year
+        /// </summary>
+        public static DateRange Months(int year, int startingMonth, int numberOfMonths)
+        {
+            if (numberOfMonths <= 0) throw new ArgumentOutOfRangeException(nameof(numberOfMonths));
+
+            var start = new DateTime(year, startingMonth, 1);
+            var end = new DateTime(year, startingMonth, 1).AddMonths(numberOfMonths).AddDays(-1);
+
+            return new DateRange(start, end);
+        }
+
     }
 }
