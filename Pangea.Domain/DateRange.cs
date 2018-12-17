@@ -52,6 +52,19 @@ namespace Pangea.Domain
         public static DateRange Always => new DateRange(null, null);
 
         /// <summary>
+        /// Return the total number of days between <see cref="Start"/> and <see cref="End"/>
+        /// </summary>
+        public int TotalDays
+        {
+            get
+            {
+                if (IsEmpty) return 0;
+                if (Start == null || End == null) return int.MaxValue;
+                return ((int)(End.Value - Start.Value).TotalDays) + 1;
+            }
+        }
+
+        /// <summary>
         /// Create a Date range based on the start and end date. When the start or end date is null, this means that that part 
         /// of the range will be unbounded. Which effectively means MinValue / MaxValue
         /// </summary>
@@ -117,6 +130,7 @@ namespace Pangea.Domain
             return new DateRange(new DateTime(startingYear, 1, 1), new DateTime(startingYear + numberOfYears - 1, 12, 31));
         }
 
+
         /// <summary>
         /// Create a range that only spans today
         /// </summary>
@@ -124,6 +138,64 @@ namespace Pangea.Domain
         public static DateRange Today()
         {
             return Day(DateTime.Today);
+        }
+
+        /// <summary>
+        /// Create a range that only spans tomorrow
+        /// </summary>
+        /// <returns>The range that starts and ends with tomorrow</returns>
+        public static DateRange Tomorrow()
+        {
+            return Day(DateTime.Today.AddDays(1));
+        }
+
+        /// <summary>
+        /// Create a range that only spans yesterday
+        /// </summary>
+        /// <returns>The range that starts and ends with yesterday</returns>
+        public static DateRange Yesterday()
+        {
+            return Day(DateTime.Today.AddDays(-1));
+        }
+
+        /// <summary>
+        /// Return a date range that starts at the given date until forever
+        /// </summary>
+        public static DateRange From(int year, int month, int day)
+        {
+            return From(new DateTime(year, month, day));
+        }
+
+        /// <summary>
+        /// Return a date range that starts at the given date until forever
+        /// </summary>
+        public static DateRange From(DateTime date)
+        {
+            return new DateRange(date, null);
+        }
+
+        /// <summary>
+        /// Return a date range that ends at the given date 
+        /// </summary>
+        public static DateRange Until(int year, int month, int day)
+        {
+            return Until(new DateTime(year, month, day));
+        }
+
+        /// <summary>
+        /// Return a date range that ends at the given date 
+        /// </summary>
+        public static DateRange Until(DateTime date)
+        {
+            return new DateRange(null, date);
+        }
+
+        /// <summary>
+        /// Create a daterange for the given date
+        /// </summary>
+        public static DateRange Day(int year, int month, int day)
+        {
+            return Day(new DateTime(year, month, day));
         }
 
         /// <summary>
@@ -342,6 +414,125 @@ namespace Pangea.Domain
         public ValueTuple<DateTime?, DateTime?> Deconstruct()
         {
             return (Start, End);
+        }
+
+        /// <summary>
+        /// Returns a DateRange for the given year and month.
+        /// </summary>
+        public static DateRange Month(int year, int month)
+        {
+            return Months(year, month, 1);
+        }
+
+        /// <summary>
+        /// Returns a DateRange for the given number of months starting in the given starting month/year
+        /// </summary>
+        public static DateRange Months(int year, int startingMonth, int numberOfMonths)
+        {
+            if (numberOfMonths <= 0) throw new ArgumentOutOfRangeException(nameof(numberOfMonths));
+
+            var start = new DateTime(year, startingMonth, 1);
+            var end = new DateTime(year, startingMonth, 1).AddMonths(numberOfMonths).AddDays(-1);
+
+            return new DateRange(start, end);
+        }
+
+        /// <summary>
+        /// Return a date range that contains the given date using the starting day of the week of the current culture
+        /// </summary>
+        /// <param name="dayWithinWeek">The date that is contained in the range</param>
+        public static DateRange Week(DateTime dayWithinWeek)
+        {
+            return Weeks(dayWithinWeek, 1, CultureInfo.CurrentCulture);
+        }
+
+        /// <summary>
+        /// Return a date range that contains the given date using the starting day of the week of the current culture
+        /// </summary>
+        /// <param name="dayWithinWeek">The date that is contained in the range</param>
+        /// <param name="culture">The culture to determine the first day of the week</param>
+        public static DateRange Week(DateTime dayWithinWeek, CultureInfo culture)
+        {
+            return Weeks(dayWithinWeek, 1, culture.DateTimeFormat);
+        }
+
+        /// <summary>
+        /// Return a date range that contains the given date using the starting day of the week of the current culture
+        /// </summary>
+        /// <param name="dayWithinWeek">The date that is contained in the range</param>
+        /// <param name="format">The date time format to determine the first day of the week</param>
+        public static DateRange Week(DateTime dayWithinWeek, DateTimeFormatInfo format)
+        {
+            return Weeks(dayWithinWeek, 1, format.FirstDayOfWeek);
+        }
+
+        /// <summary>
+        /// Return a date range that contains the given date using the starting day of the week of the current culture
+        /// </summary>
+        /// <param name="dayWithinWeek">The date that is contained in the range</param>
+        /// <param name="startingDayOfWeek">The day of the week at which the week starts</param>
+        public static DateRange Week(DateTime dayWithinWeek, DayOfWeek startingDayOfWeek)
+        {
+            return Weeks(dayWithinWeek, 1, startingDayOfWeek);
+        }
+
+        /// <summary>
+        /// Return a date range starting at, or the first day of the week before, the given date, for the number of weeks
+        /// </summary>
+        /// <param name="dayWithinWeek">The day that falls within the first week. The day can be the first day or any other day within that week</param>
+        /// <param name="numberOfWeeks">The number of weeks to return</param>
+        public static DateRange Weeks(DateTime dayWithinWeek, int numberOfWeeks)
+        {
+            return Weeks(dayWithinWeek, numberOfWeeks, CultureInfo.CurrentCulture);
+        }
+
+        /// <summary>
+        /// Return a date range starting at, or the first day of the week before, the given date, for the number of weeks
+        /// </summary>
+        /// <param name="dayWithinWeek">The day that falls within the first week. The day can be the first day or any other day within that week</param>
+        /// <param name="numberOfWeeks">The number of weeks to return</param>
+        /// <param name="culture">The culture to determine the first day of the week</param>
+        public static DateRange Weeks(DateTime dayWithinWeek, int numberOfWeeks, CultureInfo culture)
+        {
+            return Weeks(dayWithinWeek, numberOfWeeks, culture.DateTimeFormat);
+        }
+
+        /// <summary>
+        /// Return a date range starting at, or the first day of the week before, the given date, for the number of weeks
+        /// </summary>
+        /// <param name="dayWithinWeek">The day that falls within the first week. The day can be the first day or any other day within that week</param>
+        /// <param name="numberOfWeeks">The number of weeks to return</param>
+        /// <param name="format">The date time format to determine the first day of the week</param>
+        public static DateRange Weeks(DateTime dayWithinWeek, int numberOfWeeks, DateTimeFormatInfo format)
+        {
+            return Weeks(dayWithinWeek, numberOfWeeks, format.FirstDayOfWeek);
+        }
+
+        /// <summary>
+        /// Return a date range starting at, or the first day of the week before, the given date, for the number of weeks
+        /// </summary>
+        /// <param name="dayWithinWeek">The day that falls within the first week. The day can be the first day or any other day within that week</param>
+        /// <param name="numberOfWeeks">The number of weeks to return</param>
+        /// <param name="startingDayOfWeek">The day of the week at which the week starts</param>
+        public static DateRange Weeks(DateTime dayWithinWeek, int numberOfWeeks, DayOfWeek startingDayOfWeek)
+        {
+            if (numberOfWeeks <= 0) throw new ArgumentOutOfRangeException(nameof(numberOfWeeks));
+
+            int currentDay = (int)dayWithinWeek.DayOfWeek;
+            int targetDay = (int)startingDayOfWeek;
+
+            var daysToSubtract = 0;
+            if (targetDay <= currentDay) // e.g. Thursday, start of the week Monday
+            {
+                daysToSubtract = currentDay - targetDay;
+            }
+            else // E.g. Monday, start of the week is Saturday
+            {
+                daysToSubtract = 7 - (targetDay - currentDay);
+            }
+            var firstDay = dayWithinWeek.AddDays(-daysToSubtract);
+
+            return new DateRange(firstDay, firstDay.AddDays((numberOfWeeks * 7) - 1));
         }
     }
 }
