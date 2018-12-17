@@ -35,6 +35,11 @@ namespace Pangea.Domain.Tests.Util
             return new TypeSelector(types.Where(t => t.IsValueType && !t.IsEnum).ToList());
         }
 
+        public static TypeSelector ThatHaveAConstructorWith(this TypeSelector types, Func<ConstructorInfo, bool> whereFunc)
+        {
+            return new TypeSelector(types.Where(t => t.GetConstructors().Any(whereFunc)).ToList());
+        }
+
         public static TypeSelector ThatHaveAConstructorWithArguments<T1>(this TypeSelector types)
         {
             return types.ThatHaveAConstructorWithArguments(typeof(T1));

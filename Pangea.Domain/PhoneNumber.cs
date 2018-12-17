@@ -21,6 +21,7 @@ namespace Pangea.Domain
     [Serializable]
     public struct PhoneNumber
         : IEquatable<PhoneNumber>
+        , IConvertible
         , IFormattable
         , IXmlSerializable
     {
@@ -330,5 +331,23 @@ namespace Pangea.Domain
         {
             return phoneNumber.ToString("G", CultureInfo.CurrentCulture);
         }
+
+        TypeCode IConvertible.GetTypeCode() => TypeCode.Object;
+        bool IConvertible.ToBoolean(IFormatProvider provider) => Convert.ToBoolean(Text, provider);
+        byte IConvertible.ToByte(IFormatProvider provider) => Convert.ToByte(Text, provider);
+        char IConvertible.ToChar(IFormatProvider provider) => Convert.ToChar(Text, provider);
+        DateTime IConvertible.ToDateTime(IFormatProvider provider) => Convert.ToDateTime(Text, provider);
+        decimal IConvertible.ToDecimal(IFormatProvider provider) => Convert.ToDecimal(Text, provider);
+        double IConvertible.ToDouble(IFormatProvider provider) => Convert.ToDouble(Text, provider);
+        short IConvertible.ToInt16(IFormatProvider provider) => Convert.ToInt16(Text, provider);
+        int IConvertible.ToInt32(IFormatProvider provider) => Convert.ToInt32(Text, provider);
+        long IConvertible.ToInt64(IFormatProvider provider) => Convert.ToInt64(Text, provider);
+        sbyte IConvertible.ToSByte(IFormatProvider provider) => Convert.ToSByte(Text, provider);
+        float IConvertible.ToSingle(IFormatProvider provider) => Convert.ToSingle(Text, provider);
+        string IConvertible.ToString(IFormatProvider provider) => Convert.ToString(Text, provider);
+        object IConvertible.ToType(Type conversionType, IFormatProvider provider) => Convert.ChangeType(Text, conversionType, provider);
+        ushort IConvertible.ToUInt16(IFormatProvider provider) => Convert.ToUInt16(Text, provider);
+        uint IConvertible.ToUInt32(IFormatProvider provider) => Convert.ToUInt32(Text, provider);
+        ulong IConvertible.ToUInt64(IFormatProvider provider) => Convert.ToUInt64(Text, provider);
     }
 }
