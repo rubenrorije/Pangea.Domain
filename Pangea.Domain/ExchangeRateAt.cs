@@ -37,6 +37,7 @@ namespace Pangea.Domain
         /// </summary>
         /// <param name="date">The date of the exchange rate</param>
         /// <param name="rate">the rate</param>
+        /// <exception cref="ArgumentOutOfRangeException">The date is <c>DateTime.MinValue</c></exception>
         public ExchangeRateAt(DateTime date, ExchangeRate rate)
         {
             if (date == DateTime.MinValue) throw new ArgumentOutOfRangeException(nameof(date));
@@ -129,7 +130,6 @@ namespace Pangea.Domain
         /// <summary>
         /// return the textual representation of the exchange rate on the given date.
         /// When a format is given, both parts (for the date and the number) must be specified, separated by a |.
-        /// 
         /// </summary>
         public string ToString(string format, IFormatProvider formatProvider)
         {
@@ -139,6 +139,7 @@ namespace Pangea.Domain
 
             return Date.ToString(formats.Item1, formatProvider) + ": " + _innerRate.ToString(formats.Item2, formatProvider);
         }
+
         private static Tuple<string, string> ExtractFormats(string format)
         {
             if (format == null) return new Tuple<string, string>("d", null);

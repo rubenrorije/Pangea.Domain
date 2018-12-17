@@ -31,6 +31,9 @@ namespace Pangea.Domain
         /// <param name="from">the currency that will be used to convert a money amount from</param>
         /// <param name="to">the currency that will be used to convert a money amount to</param>
         /// <param name="rate">The actual rate to convert the currencies</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="from"/> or <paramref name="to"/> currency is <c>null</c></exception>
+        /// <exception cref="ArgumentOutOfRangeException">The <paramref name="rate"/>is non-positive</exception>
+        /// <exception cref="ArgumentException">The <paramref name="from"/> is equal to <paramref name="to"/></exception>
         public ExchangeRate(Currency from, Currency to, decimal rate)
         {
             if (from == null) throw new ArgumentNullException(nameof(from));
@@ -48,7 +51,6 @@ namespace Pangea.Domain
         {
             return ToString(null, null);
         }
-
 
         /// <summary>
         /// return the text representation for the exchange rate, based on the given format.

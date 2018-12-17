@@ -66,7 +66,7 @@ namespace Pangea.Domain.Tests
         {
             new CreditCard().Equals(new CreditCard()).Should().BeTrue();
         }
-        
+
         [TestMethod]
         public void Create_Example_Credit_Cards_Without_Spaces()
         {
@@ -120,6 +120,15 @@ namespace Pangea.Domain.Tests
         }
 
         [TestMethod]
+        public void Get_The_Issuer_Identification_Of_A_Credit_Card_Throws_An_Exception_When_A_Wrong_Enum_Value_Is_Used()
+        {
+            var sut = new CreditCard("4111 1111 1111 1111");
+
+            Action action = () => sut.GetIssuerIdentificationNumber(0);
+            action.Should().Throw<ArgumentOutOfRangeException>();
+        }
+
+        [TestMethod]
         public void Get_The_Individual_Account_Number_Of_A_CreditCard()
         {
             var sut = new CreditCard("4111 1111 1111 1111");
@@ -128,6 +137,14 @@ namespace Pangea.Domain.Tests
             sut.GetIndividualAccountNumber(CreditCard.IssuerIdentifierFormat.ShortIdentifier).Should().Be("111111111");
         }
 
+        [TestMethod]
+        public void Get_The_Individual_Account_Number_Of_A_Credit_Card_Throws_An_Exception_When_A_Wrong_Enum_Value_Is_Used()
+        {
+            var sut = new CreditCard("4111 1111 1111 1111");
+
+            Action action = () => sut.GetIndividualAccountNumber(0);
+            action.Should().Throw<ArgumentOutOfRangeException>();
+        }
         [TestMethod]
         public void Validate_The_CheckSum_Digit()
         {
