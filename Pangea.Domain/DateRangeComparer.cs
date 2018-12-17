@@ -14,7 +14,10 @@ namespace Pangea.Domain
         /// </summary>
         public int Compare(DateRange x, DateRange y)
         {
-            var result = Nullable.Compare(x.Start, y.Start);
+            var result = -x.IsEmpty.CompareTo(y.IsEmpty);
+            if (result != 0) return result;
+
+            result = Nullable.Compare(x.Start, y.Start);
             if (result != 0) return result;
 
             return Nullable.Compare(x.End, y.End);

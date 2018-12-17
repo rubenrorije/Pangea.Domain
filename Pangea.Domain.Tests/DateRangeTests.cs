@@ -250,18 +250,18 @@ namespace Pangea.Domain.Tests
         [TestMethod]
         public void IsAdjacentTo_Returns_The_Right_Value_For_Adjacent_Ranges()
         {
-            var one = DateRange.Year(2018);
-            var other = DateRange.Year(2019);
-            var wrong = DateRange.Year(2021);
-            var indefinite = new DateRange();
+            var year2018 = DateRange.Year(2018);
+            var year2019 = DateRange.Year(2019);
+            var year2021 = DateRange.Year(2021);
+            var never = DateRange.Never;
 
-            one.IsAdjacentTo(other).Should().BeTrue();
-            other.IsAdjacentTo(one).Should().BeTrue();
+            year2018.IsAdjacentTo(year2019).Should().BeTrue();
+            year2019.IsAdjacentTo(year2018).Should().BeTrue();
 
-            one.IsAdjacentTo(wrong).Should().BeFalse();
-            wrong.IsAdjacentTo(one).Should().BeFalse();
+            year2018.IsAdjacentTo(year2021).Should().BeFalse();
+            year2021.IsAdjacentTo(year2018).Should().BeFalse();
 
-            indefinite.IsAdjacentTo(wrong).Should().BeFalse();
+            never.IsAdjacentTo(year2021).Should().BeFalse();
         }
 
         [TestMethod]
@@ -364,5 +364,59 @@ namespace Pangea.Domain.Tests
             sut.Should().BeDataContractSerializable();
         }
 
+        [TestMethod]
+        public void OverlapsWith_Returns_False_For_Never_And_Always()
+        {
+            DateRange.Always.OverlapsWith(DateRange.Never).Should().BeFalse();
+            DateRange.Never.OverlapsWith(DateRange.Always).Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void OverlapsWith_Returns_True_For_Always_And_Always()
+        {
+            DateRange.Always.OverlapsWith(DateRange.Always).Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void OverlapsWith_Returns_True_For_A_DateRange_That_Surrounds_Another()
+        {
+            DateRange.Always.OverlapsWith(DateRange.Today()).Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void OverlapsWith_Returns_True_For_A_DateRange_That_Have_The_Same_StartDate_And_Different_EndDates()
+        {
+            DateRange.Years(2017, 2).OverlapsWith(DateRange.Years(2017, 3)).Should().BeTrue();
+            DateRange.Years(2017, 3).OverlapsWith(DateRange.Years(2017, 2)).Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void OverlapsWith_Returns_True_For_A_DateRange_That_Have_The_Same_EndDate_And_Different_StartDates()
+        {
+            var one = new DateRange(new DateTime(2017, 1, 1), new DateTime(2018, 1, 1));
+            var other = new DateRange(new DateTime(2017, 2, 1), new DateTime(2018, 1, 1));
+
+            one.OverlapsWith(other).Should().BeTrue();
+            other.OverlapsWith(one).Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void Overlaps_With_Returns_False_When_The_Dates_Are_Not_Overlapping()
+        {
+            var Jan1 = DateRange.Day(new DateTime(2018, 1, 1));
+            var Dec5 = DateRange.Day(new DateTime(2018, 12, 5));
+
+            Jan1.OverlapsWith(Dec5).Should().BeFalse();
+            Dec5.OverlapsWith(Jan1).Should().BeFalse();
+        }
+        [TestMethod]
+        public void Overlaps_With_Returns_True_When_The_Ranges_Are_Just_Overlapping()
+        {
+            var untilJan1 = new DateRange(new DateTime(2017, 1, 1), new DateTime(2018, 1, 1));
+            var fromJan1 = new DateRange(new DateTime(2018, 1, 1), new DateTime(2018, 12, 5));
+
+            untilJan1.OverlapsWith(fromJan1).Should().BeTrue();
+            fromJan1.OverlapsWith(untilJan1).Should().BeTrue();
+        }
     }
 }

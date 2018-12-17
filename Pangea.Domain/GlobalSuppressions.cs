@@ -15,4 +15,5 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Class Design", "AV1008:Class should not be static", Justification = "<Pending>", Scope = "type", Target = "~T:Pangea.Domain.IbanParser")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "<Pending>", Scope = "member", Target = "~P:Pangea.Domain.AssemblyInformation.Item(System.String)")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:Identifiers should have correct suffix", Justification = "<Pending>", Scope = "type", Target = "~T:Pangea.Domain.Formatters.PhoneNumberAggregateFormatter")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Member Design", "AV1130:Return type in method signature should be a collection interface instead of a concrete type", Justification = "<Pending>", Scope = "member", Target = "~M:Pangea.Domain.DateRangeCollection.Ordered~Pangea.Domain.DateRangeCollection")]
 

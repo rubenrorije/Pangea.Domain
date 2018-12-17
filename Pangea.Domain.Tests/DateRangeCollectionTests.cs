@@ -86,5 +86,120 @@ namespace Pangea.Domain.Tests
             sut.IsOverlapping().Should().Be(result);
         }
 
+        [TestMethod]
+        public void Ordered_Collection()
+        {
+
+            var collection = new DateRangeCollection
+            {
+                DateRange.Always,
+                DateRange.Year(2018),
+                DateRange.Year(2017),
+                DateRange.Years(2018, 2),
+                DateRange.Day(new DateTime(2018, 1, 1)),
+                DateRange.Days(new DateTime(2018, 1, 1),2),
+                DateRange.Never
+            };
+
+            var ordered = collection.Ordered();
+
+            ordered[0].Should().Be(DateRange.Never);
+            ordered[1].Should().Be(DateRange.Always);
+            ordered[2].Should().Be(DateRange.Year(2017));
+            ordered[3].Should().Be(DateRange.Day(new DateTime(2018, 1, 1)));
+            ordered[4].Should().Be(DateRange.Days(new DateTime(2018, 1, 1), 2));
+            ordered[5].Should().Be(DateRange.Year(2018));
+            ordered[6].Should().Be(DateRange.Years(2018, 2));
+        }
+
+        [TestMethod]
+        public void IsInRangeIndexed_Returns_The_First_Index_Of_The_Range_That_Contains_The_Date()
+        {
+
+            var collection = new DateRangeCollection
+            {
+                DateRange.Year(2016),
+                DateRange.Year(2017),
+                DateRange.Year(2018),
+                DateRange.Years(2018, 2),
+                DateRange.Day(new DateTime(2019, 1, 1)),
+            };
+
+            collection.InRangeIndexed(new DateTime(2016, 6, 6)).Should().Be(0);
+            collection.InRangeIndexed(new DateTime(2018, 6, 6)).Should().Be(2);
+            collection.InRangeIndexed(new DateTime(2019, 1, 1)).Should().Be(3);
+            collection.InRangeIndexed(new DateTime(2020, 1, 2)).Should().Be(-1);
+        }
+
+        [TestMethod]
+        public void IsChain_With_Adjacent_Ranges_Should_Be_True()
+        {
+            var collection = new DateRangeCollection
+            {
+                DateRange.Year(2016),
+                DateRange.Year(2018),
+                DateRange.Year(2017),
+            };
+
+            collection.IsSingleChain().Should().BeTrue();
+            collection.GetSingleChain().Should().Be(DateRange.Years(2016, 3));
+        }
+
+        [TestMethod]
+        public void IsChain_With_Overlapping_Ranges_Should_Be_False()
+        {
+            var collection = new DateRangeCollection
+            {
+                DateRange.Year(2016),
+                DateRange.Year(2018),
+                DateRange.Year(2017),
+                DateRange.Year(2018),
+            };
+
+            collection.IsSingleChain().Should().BeFalse();
+            collection.GetSingleChain().IsEmpty.Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void IsChain_With_Non_Adjacent_Ranges_Should_Be_False()
+        {
+            var collection = new DateRangeCollection
+            {
+                DateRange.Year(2016),
+                DateRange.Year(2018),
+                DateRange.Year(2019),
+            };
+
+            collection.IsSingleChain().Should().BeFalse();
+            collection.GetSingleChain().IsEmpty.Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void Chain_With_Unbounded_Ranges_Creates_Always_Single_Chain()
+        {
+            var collection = new DateRangeCollection
+            {
+                new DateRange(null, new DateTime(2017,12,31)),
+                new DateRange(new DateTime(2018,1,1), null),
+            };
+
+            collection.IsSingleChain().Should().BeTrue();
+            collection.GetSingleChain().Should().Be(DateRange.Always);
+        }
+
+        [TestMethod]
+        public void IsSingleChain_Not_Allowed_When_There_Are_No_Ranges()
+        {
+            var collection = new DateRangeCollection();
+            Action action = () => collection.IsSingleChain();
+            action.Should().Throw<InvalidOperationException>();
+        }
+
+        [TestMethod]
+        public void GetSingleChain_Returns_Never_When_There_Are_No_Ranges_Specified()
+        {
+            var collection = new DateRangeCollection();
+            collection.GetSingleChain().IsEmpty.Should().BeTrue();
+        }
     }
 }
