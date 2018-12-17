@@ -509,5 +509,120 @@ namespace Pangea.Domain.Tests
 
             months.Should().Be(DateRange.Year(2018));
         }
+
+        [TestMethod]
+        public void Weeks_Throws_Exception_When_Non_Positive_Number_Of_Weeks()
+        {
+            Action action = () => DateRange.Weeks(new DateTime(2018, 1, 1), -1);
+            action.Should().Throw<ArgumentOutOfRangeException>();
+        }
+
+        [TestMethod]
+        public void TotalDays_Always_Must_Be_Int_MaxValue()
+        {
+            DateRange.Always.TotalDays.Should().Be(int.MaxValue);
+        }
+
+
+        [TestMethod]
+        public void TotalDays_Never_Must_Be_Zero()
+        {
+            DateRange.Never.TotalDays.Should().Be(0);
+        }
+
+        [TestMethod]
+        public void TotalDays_Day_Must_Be_One()
+        {
+            DateRange.Today().TotalDays.Should().Be(1);
+        }
+
+        [TestMethod]
+        public void TotalDays_Year_2018_Must_Be_365()
+        {
+            DateRange.Year(2018).TotalDays.Should().Be(365);
+        }
+
+        [TestMethod]
+        public void Weeks_Number_Of_Days_Equal_To_7()
+        {
+            var sut = DateRange.Weeks(new DateTime(2018, 1, 1), 1);
+            sut.TotalDays.Should().Be(7);
+        }
+
+        [TestMethod]
+        public void Week_Must_Start_At_The_First_Day_Of_The_Week()
+        {
+            var expected = CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek;
+            var sut = DateRange.Weeks(new DateTime(2019, 1, 1), 1);
+            sut.Start.Value.DayOfWeek.Should().Be(expected, "the first day of the week must match the one specified in the culture");
+        }
+
+        // sunday
+        [DataRow("2017-01-01", "2017-01-01", DayOfWeek.Sunday)]
+        [DataRow("2017-01-01", "2016-12-26", DayOfWeek.Monday)]
+        [DataRow("2017-01-01", "2016-12-27", DayOfWeek.Tuesday)]
+        [DataRow("2017-01-01", "2016-12-28", DayOfWeek.Wednesday)]
+        [DataRow("2017-01-01", "2016-12-29", DayOfWeek.Thursday)]
+        [DataRow("2017-01-01", "2016-12-30", DayOfWeek.Friday)]
+        [DataRow("2017-01-01", "2016-12-31", DayOfWeek.Saturday)]
+        // monday
+        [DataRow("2018-01-01", "2017-12-31", DayOfWeek.Sunday)]
+        [DataRow("2018-01-01", "2018-01-01", DayOfWeek.Monday)]
+        [DataRow("2018-01-01", "2017-12-26", DayOfWeek.Tuesday)]
+        [DataRow("2018-01-01", "2017-12-27", DayOfWeek.Wednesday)]
+        [DataRow("2018-01-01", "2017-12-28", DayOfWeek.Thursday)]
+        [DataRow("2018-01-01", "2017-12-29", DayOfWeek.Friday)]
+        [DataRow("2018-01-01", "2017-12-30", DayOfWeek.Saturday)]
+        // tuesday
+        [DataRow("2019-01-01", "2018-12-30", DayOfWeek.Sunday)]
+        [DataRow("2019-01-01", "2018-12-31", DayOfWeek.Monday)]
+        [DataRow("2019-01-01", "2019-01-01", DayOfWeek.Tuesday)]
+        [DataRow("2019-01-01", "2018-12-26", DayOfWeek.Wednesday)]
+        [DataRow("2019-01-01", "2018-12-27", DayOfWeek.Thursday)]
+        [DataRow("2019-01-01", "2018-12-28", DayOfWeek.Friday)]
+        [DataRow("2019-01-01", "2018-12-29", DayOfWeek.Saturday)]
+        // wednesday
+        [DataRow("2014-01-01", "2013-12-29", DayOfWeek.Sunday)]
+        [DataRow("2014-01-01", "2013-12-30", DayOfWeek.Monday)]
+        [DataRow("2014-01-01", "2013-12-31", DayOfWeek.Tuesday)]
+        [DataRow("2014-01-01", "2014-01-01", DayOfWeek.Wednesday)]
+        [DataRow("2014-01-01", "2013-12-26", DayOfWeek.Thursday)]
+        [DataRow("2014-01-01", "2013-12-27", DayOfWeek.Friday)]
+        [DataRow("2014-01-01", "2013-12-28", DayOfWeek.Saturday)]
+        // thursday
+        [DataRow("2015-01-01", "2014-12-28", DayOfWeek.Sunday)]
+        [DataRow("2015-01-01", "2014-12-29", DayOfWeek.Monday)]
+        [DataRow("2015-01-01", "2014-12-30", DayOfWeek.Tuesday)]
+        [DataRow("2015-01-01", "2014-12-31", DayOfWeek.Wednesday)]
+        [DataRow("2015-01-01", "2015-01-01", DayOfWeek.Thursday)]
+        [DataRow("2015-01-01", "2014-12-26", DayOfWeek.Friday)]
+        [DataRow("2015-01-01", "2014-12-27", DayOfWeek.Saturday)]
+        // friday
+        [DataRow("2010-01-01", "2009-12-27", DayOfWeek.Sunday)]
+        [DataRow("2010-01-01", "2009-12-28", DayOfWeek.Monday)]
+        [DataRow("2010-01-01", "2009-12-29", DayOfWeek.Tuesday)]
+        [DataRow("2010-01-01", "2009-12-30", DayOfWeek.Wednesday)]
+        [DataRow("2010-01-01", "2009-12-31", DayOfWeek.Thursday)]
+        [DataRow("2010-01-01", "2010-01-01", DayOfWeek.Friday)]
+        [DataRow("2010-01-01", "2009-12-26", DayOfWeek.Saturday)]
+        // saturday
+        [DataRow("2011-01-01", "2010-12-26", DayOfWeek.Sunday)]
+        [DataRow("2011-01-01", "2010-12-27", DayOfWeek.Monday)]
+        [DataRow("2011-01-01", "2010-12-28", DayOfWeek.Tuesday)]
+        [DataRow("2011-01-01", "2010-12-29", DayOfWeek.Wednesday)]
+        [DataRow("2011-01-01", "2010-12-30", DayOfWeek.Thursday)]
+        [DataRow("2011-01-01", "2010-12-31", DayOfWeek.Friday)]
+        [DataRow("2011-01-01", "2011-01-01", DayOfWeek.Saturday)]
+        [TestMethod]
+        public void Week_Must_Start_At_The_First_Day_Of_The_Week_For_All_Days(string day, string start, DayOfWeek startingDay)
+        {
+            var dayWithinWeek = DateTime.Parse(day);
+            var startDate = DateTime.Parse(start);
+
+            var sut = DateRange.Weeks(dayWithinWeek, 1, startingDay);
+
+            sut.Start.Value.DayOfWeek.Should().Be(startingDay);
+            sut.Start.Value.Should().Be(startDate);
+        }
     }
 }
