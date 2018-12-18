@@ -1,5 +1,8 @@
 # Pangea.Domain
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+![](https://img.shields.io/nuget/v/Pangea.Domain.svg)
+
 A project containing multiple different value objects with behaviour to have a rich domain model and have logic about these value objects in one place.
 Examples are CreditCard, Percentage, Iban, etc. 
 When using this library the domain entities should have these rich value objects as properties. 
