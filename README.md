@@ -1,6 +1,6 @@
 # Pangea.Domain
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) ![](https://img.shields.io/nuget/v/Pangea.Domain.svg) ![](https://img.shields.io/nuget/dt/Pangea.Domain.svg)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) ![](https://img.shields.io/nuget/v/Pangea.Domain.svg) ![](https://img.shields.io/nuget/dt/Pangea.Domain.svg) [![Build status](https://ci.appveyor.com/api/projects/status/2d9iaivv4mafq9xv?svg=true)](https://ci.appveyor.com/project/rubenrorije/pangea-domain)
 
 A project containing multiple different value objects with behaviour to have a rich domain model and have logic about these value objects in one place.
 Examples are CreditCard, Percentage, Iban, etc. 
