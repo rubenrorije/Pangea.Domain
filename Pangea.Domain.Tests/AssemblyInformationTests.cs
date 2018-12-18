@@ -77,7 +77,11 @@ namespace Pangea.Domain.Tests
         public void Get_Configuration_Of_Assembly()
         {
             var sut = new AssemblyInformation(AssemblyUnderTest.Instance);
+#if DEBUG
             sut.Configuration.Should().Be("Debug");
+#else
+            sut.Configuration.Should().Be("Release");
+#endif 
         }
 
         [TestMethod]
@@ -112,14 +116,14 @@ namespace Pangea.Domain.Tests
         public void Get_FileVersion_Of_Assembly()
         {
             var sut = new AssemblyInformation(AssemblyUnderTest.Instance);
-            sut.FileVersion.Should().Be("1.0.0.0");
+            sut.FileVersion.Should().Be("0.5.0.0");
         }
 
         [TestMethod]
         public void Get_FileVersionInfo_Of_Assembly()
         {
             var sut = new AssemblyInformation(AssemblyUnderTest.Instance);
-            sut.FileVersionInfo.Should().Be(new Version(1, 0, 0, 0));
+            sut.FileVersionInfo.Should().Be(new Version(0,5, 0, 0));
         }
 
         [TestMethod]
@@ -139,7 +143,7 @@ namespace Pangea.Domain.Tests
         public void Get_InformationalVersion_Of_Assembly()
         {
             var sut = new AssemblyInformation(AssemblyUnderTest.Instance);
-            sut.InformationalVersion.Should().Be("1.0.0");
+            sut.InformationalVersion.Should().Be("0.5");
         }
 
         [TestMethod]
@@ -206,12 +210,12 @@ namespace Pangea.Domain.Tests
             var sut = new AssemblyInformation(AssemblyUnderTest.Instance);
             sut.Trademark.Should().BeNull();
         }
-        
+
         [TestMethod]
         public void Get_AssemblyVersionInfo_Of_Assembly()
         {
             var sut = new AssemblyInformation(AssemblyUnderTest.Instance);
-            sut.AssemblyVersionInfo.Should().Be(new Version(1,0,0,0));
+            sut.AssemblyVersionInfo.Should().Be(new Version(0, 5, 0, 0));
         }
 
         [TestMethod]
