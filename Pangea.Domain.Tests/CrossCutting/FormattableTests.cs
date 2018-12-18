@@ -1,5 +1,7 @@
 ﻿using FluentAssertions;
+using FluentAssertions.Types;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Pangea.Domain.Tests.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,14 +13,10 @@ namespace Pangea.Domain.Tests.CrossCutting
     [TestClass]
     public class FormattableTests
     {
-        public static IEnumerable<Type> DomainClasses =>
-            typeof(FileSize)
-            .Assembly
-            .GetTypes()
-            .Where(t => t.GetInterface(nameof(IFormattable)) != null)
-            .ToList();
-
-
+        public static TypeSelector DomainClasses =>
+            AssemblyUnderTest.Instance
+            .Types()
+            .ThatImplement<IFormattable>();
 
         [TestMethod]
         public void When_Implementing_IFormattable_It_Has_An_Overload_Without_The_FormatProvider()

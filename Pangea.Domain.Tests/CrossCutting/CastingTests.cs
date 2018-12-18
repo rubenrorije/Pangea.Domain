@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
+using FluentAssertions.Types;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Pangea.Domain.Tests.Util;
 using System;
@@ -13,20 +14,20 @@ namespace Pangea.Domain.Tests.CrossCutting
     [TestClass]
     public class CastingTests
     {
+        private TypeSelector Structs =>
+            AssemblyUnderTest.Instance
+                .Types()
+                .ThatAreStructs();
+
 
         [TestMethod]
         public void When_A_Constructor_With_A_Single_String_Argument_Then_Must_Have_A_String_Cast_Operator()
         {
-            var structs =
-                typeof(CreditCard)
-                .Assembly
-                .Types()
-                .ThatAreStructs()
-                .ThatHaveAConstructorWithArguments<string>();
+            var types = Structs.ThatHaveAConstructorWithArguments<string>();
 
             using (new AssertionScope())
             {
-                foreach (var type in structs)
+                foreach (var type in types)
                 {
                     var castingOperators =
                         type
@@ -43,10 +44,7 @@ namespace Pangea.Domain.Tests.CrossCutting
         public void When_A_Constructor_With_A_Single_Argument_Then_Must_Have_A_Cast_Operator()
         {
             var constructors =
-                typeof(CreditCard)
-                .Assembly
-                .Types()
-                .ThatAreStructs()
+                Structs
                 .SelectMany(t => t.GetConstructors())
                 .Where(c => c.GetParameters().Count() == 1)
                 .Where(c => c.GetParameters()[0].ParameterType.IsValueType)

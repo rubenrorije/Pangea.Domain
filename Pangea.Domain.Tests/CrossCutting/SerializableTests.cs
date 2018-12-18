@@ -14,17 +14,11 @@ namespace Pangea.Domain.Tests.CrossCutting
     [TestClass]
     public class SerializableTests
     {
-        private static TypeSelector Structs
-        {
-            get
-            {
-                return
-                   typeof(CreditCard)
-                   .Assembly
-                   .Types()
-                   .ThatAreStructs();
-            }
-        }
+        private static TypeSelector Structs=>
+            AssemblyUnderTest
+            .Instance
+            .Types()
+            .ThatAreStructs();
 
 
         [TestMethod]

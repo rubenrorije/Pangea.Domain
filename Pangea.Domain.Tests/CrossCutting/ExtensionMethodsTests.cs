@@ -18,8 +18,8 @@ namespace Pangea.Domain.Tests.CrossCutting
         public void All_Classes_In_ExtensionMethods_Namespace_Are_Static()
         {
             var types =
-                typeof(PhoneNumber)
-                .Assembly
+                AssemblyUnderTest
+                .Instance
                 .Types()
                 .ThatAreInNamespace("Pangea.Domain.ExtensionMethods")
                 .ThatArePublicOrInternal();
@@ -38,8 +38,8 @@ namespace Pangea.Domain.Tests.CrossCutting
         public void All_Methods_In_ExtensionMethods_Namespace_Are_Extension_Methods()
         {
             var types =
-                typeof(PhoneNumber)
-                .Assembly
+                AssemblyUnderTest
+                .Instance
                 .Types()
                 .ThatAreInNamespace("Pangea.Domain.ExtensionMethods")
                 .ThatArePublicOrInternal();

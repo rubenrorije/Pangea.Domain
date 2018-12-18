@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
+using FluentAssertions.Types;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Pangea.Domain.Tests.Util;
 using System;
@@ -13,14 +14,17 @@ namespace Pangea.Domain.Tests.CrossCutting
     [TestClass]
     public class ConvertibleTests
     {
+        private TypeSelector Structs =>
+            AssemblyUnderTest
+            .Instance
+            .Types()
+            .ThatAreStructs();
+
         [TestMethod]
         public void Structs_Implement_IConvertible()
         {
             var incorrect =
-                typeof(CreditCard)
-                .Assembly
-                .Types()
-                .ThatAreStructs()
+                Structs
                 .ThatDoNotImplement<IConvertible>()
                 .ThatHaveAConstructorWith(c => c.GetParameters().Count() == 1)
                 .ToList();
@@ -32,10 +36,7 @@ namespace Pangea.Domain.Tests.CrossCutting
         public void All_IConvertible_Methods_Must_Be_Explicitly_Defined()
         {
             var types =
-                typeof(CreditCard)
-                .Assembly
-                .Types()
-                .ThatAreStructs()
+                Structs
                 .ThatHaveAConstructorWith(c => c.GetParameters().Count() == 1)
                 .ThatImplement<IConvertible>()
                 .ToList();

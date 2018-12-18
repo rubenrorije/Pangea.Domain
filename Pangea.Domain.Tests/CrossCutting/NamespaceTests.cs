@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Pangea.Domain.Tests.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,11 +19,10 @@ namespace Pangea.Domain.Tests.CrossCutting
         public void All_Types_In_The_Checksums_Namespace_Are_Internal()
         {
             var incorrect =
-                typeof(PhoneNumber)
-                .Assembly
+                AssemblyUnderTest
+                .Instance
                 .Types()
-                .ThatAreInNamespace("Pangea.Domain.Checksums")
-                .ToList();
+                .ThatAreInNamespace("Pangea.Domain.Checksums");
 
             using (new AssertionScope())
             {
