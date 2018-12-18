@@ -21,7 +21,10 @@ namespace Pangea.Domain.Tests
         [TestMethod]
         public void Resolve_Netherlands()
         {
-            var sut = new SimpleCountryCodeProvider(new Dictionary<string, int> { { "NL", 31 } });
+            var sut = new SimpleCountryCodeProvider
+            {
+                { "NL", 31 }
+            };
 
             sut.GetCountryCallingCodeFrom("31").Should().Be(31);
         }
@@ -29,14 +32,19 @@ namespace Pangea.Domain.Tests
         [TestMethod]
         public void Resolve_The_Country_Calling_Code_For_The_Country_Alpha_2_Name()
         {
-            var sut = new SimpleCountryCodeProvider(new Dictionary<string, int> { { "NL", 31 } });
+            var sut = new SimpleCountryCodeProvider
+            {
+                { "NL", 31 }
+            };
             sut.GetCountryCallingCodeFor("NL").Should().Be(31);
         }
 
         [TestMethod]
         public void Resolving_Null_Should_Return_Null()
         {
-            var sut = new SimpleCountryCodeProvider(new Dictionary<string, int>());
+            var sut = new SimpleCountryCodeProvider
+            {
+            };
 
             sut.GetCountryCallingCodeFrom(null).Should().Be(null);
         }
@@ -44,26 +52,32 @@ namespace Pangea.Domain.Tests
         [TestMethod]
         public void Resolve_With_Multiple_Different_Size_CountryCodes()
         {
-            var sut = new SimpleCountryCodeProvider(new Dictionary<string, int> { { "XX", 123 }, { "NL", 31 } });
-
+            var sut = new SimpleCountryCodeProvider
+            {
+                { "XX", 123 },
+                { "NL", 31 }
+            };
             sut.GetCountryCallingCodeFrom("31").Should().Be(31);
         }
 
         [TestMethod]
         public void Add_A_Country()
         {
-            var sut = new SimpleCountryCodeProvider();
-            sut.Add("NL", 31);
+            var sut = new SimpleCountryCodeProvider
+            {
+                { "NL", 31 }
+            };
         }
 
         [TestMethod]
         public void Add_A_Country_Twice_Is_Not_Allowed()
         {
-            var sut = new SimpleCountryCodeProvider();
-            sut.Add("NL", 31);
+            var sut = new SimpleCountryCodeProvider
+            {
+                { "NL", 31 }
+            };
             Action action = () => sut.Add("NL", 31);
             action.Should().Throw<Exception>();
         }
-
     }
 }
