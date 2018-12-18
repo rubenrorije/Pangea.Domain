@@ -310,13 +310,6 @@ namespace Pangea.Domain.Tests
         }
 
         [TestMethod]
-        public void PhoneNumber_112()
-        {
-            Assert.Inconclusive("Not supported");
-        }
-
-
-        [TestMethod]
         public void Format_With_Custom_Format_That_Contains_More_Digits_Than_The_PhoneNumber_Does_Not_Do_Anything_With_The_Superfluous_Digits()
         {
             var sut = new PhoneNumber(31, "0123456789");

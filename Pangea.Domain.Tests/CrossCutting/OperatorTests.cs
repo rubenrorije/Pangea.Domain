@@ -1,5 +1,7 @@
 ﻿using FluentAssertions;
+using FluentAssertions.Types;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Pangea.Domain.Tests.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,18 +14,16 @@ namespace Pangea.Domain.Tests.CrossCutting
     [TestClass]
     public class OperatorTests
     {
-        public static IEnumerable<Type> DomainClasses =>
-            typeof(FileSize)
-            .Assembly
-            .GetTypes()
-            .Where(t => t.IsValueType)
-            .Where(t => t.BaseType != typeof(Enum))
-            .ToList();
+        private static TypeSelector Structs =>
+            AssemblyUnderTest
+            .Instance
+            .Types()
+            .ThatAreStructs();
 
         [TestMethod]
         public void Struct_Implements_Equals_Operator()
         {
-            foreach (var t in DomainClasses)
+            foreach (var t in Structs)
             {
                 FindOperator(t, "op_Equality").Should().NotBeNull($"a struct should implement the == operator for {t.Name}");
             }
@@ -32,7 +32,7 @@ namespace Pangea.Domain.Tests.CrossCutting
         [TestMethod]
         public void Struct_Implements_NotEquals_Operator()
         {
-            foreach (var t in DomainClasses)
+            foreach (var t in Structs)
             {
                 FindOperator(t, "op_Inequality").Should().NotBeNull($"a struct should implement the != operator for {t.Name}");
             }
@@ -41,7 +41,7 @@ namespace Pangea.Domain.Tests.CrossCutting
         [TestMethod]
         public void When_Struct_Implements_GreaterThan_Must_Also_Implement_IComparable()
         {
-            foreach (var t in DomainClasses)
+            foreach (var t in Structs)
             {
                 var operators = GetOperators(t);
                 var greaterThanOperators = operators.Where(o => o.Name.Equals("op_GreaterThan"));
@@ -74,7 +74,7 @@ namespace Pangea.Domain.Tests.CrossCutting
         [TestMethod]
         public void When_Struct_Implements_IComparable_It_Must_IComparable_Generic_And_Vice_Versa()
         {
-            foreach (var t in DomainClasses)
+            foreach (var t in Structs)
             {
                 var hasGeneric = t.GetInterface("IComparable") != null;
                 var HasSpecific = t.GetInterfaces().Where(i => i.Name == "IComparable`1").Any(i => i.GetGenericArguments()[0] == t);
@@ -110,7 +110,7 @@ namespace Pangea.Domain.Tests.CrossCutting
 
         private void A_Struct_That_Implement_An_Operator_Must_Implement_It_Both_Ways(string operatorFunctionName)
         {
-            foreach (var t in DomainClasses)
+            foreach (var t in Structs)
             {
                 var operators = GetOperators(t);
                 var allOperators = operators.Where(o => o.Name.Equals(operatorFunctionName));
@@ -137,7 +137,7 @@ namespace Pangea.Domain.Tests.CrossCutting
                  .GetMethods(BindingFlags.Public | BindingFlags.Static)
                  .Where(m => m.Attributes.HasFlag(MethodAttributes.HideBySig))
                  .Where(m => m.Attributes.HasFlag(MethodAttributes.SpecialName))
-                 .Where(m => m.ReturnType == typeof(Boolean))
+                 .Where(m => m.ReturnType == typeof(bool))
                  .Where(m => m.GetParameters().Count() == 2);
         }
 

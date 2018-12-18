@@ -16,17 +16,16 @@ namespace Pangea.Domain.Tests.CrossCutting
     [TestClass]
     public class XmlSerializableTests
     {
-        public static IEnumerable<Type> DomainClasses =>
-            typeof(FileSize)
-            .Assembly
-            .GetTypes()
-            .Where(t => t.GetInterface(nameof(IXmlSerializable)) != null)
-            .ToList();
+        public static IEnumerable<Type> Structs =>
+            AssemblyUnderTest
+            .Instance
+            .Types()
+            .ThatImplement<IXmlSerializable>();
 
         [TestMethod]
         public void Throws_When_XmlReader_Is_Null()
         {
-            foreach (var t in DomainClasses)
+            foreach (var t in Structs)
             {
                 var sut = (IXmlSerializable)Activator.CreateInstance(t);
                 Action action = () => sut.ReadXml(null);
@@ -37,7 +36,7 @@ namespace Pangea.Domain.Tests.CrossCutting
         [TestMethod]
         public void GetSchema_Returns_Null()
         {
-            foreach (var t in DomainClasses)
+            foreach (var t in Structs)
             {
                 var sut = (IXmlSerializable)Activator.CreateInstance(t);
                 sut.GetSchema().Should().BeNull();
@@ -47,7 +46,7 @@ namespace Pangea.Domain.Tests.CrossCutting
         [TestMethod]
         public void Throws_When_XmlWriter_Is_Null()
         {
-            foreach (var t in DomainClasses)
+            foreach (var t in Structs)
             {
                 var sut = (IXmlSerializable)Activator.CreateInstance(t);
                 Action action = () => sut.WriteXml(null);
@@ -61,7 +60,7 @@ namespace Pangea.Domain.Tests.CrossCutting
         {
             using (new AssertionScope())
             {
-                foreach (var type in DomainClasses)
+                foreach (var type in Structs)
                 {
                     type.ImplementsExplicitly<IXmlSerializable>().Should().BeTrue($"IXmlSerializable should be implemented explicitly for {type.Name}");
                 }

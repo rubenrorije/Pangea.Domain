@@ -17,8 +17,8 @@ namespace Pangea.Domain.Tests.CrossCutting
         public void Struct_That_Has_A_String_Constructor_Must_Have_A_Static_Unsafe_Method_To_Create_An_Instance()
         {
             var types =
-                typeof(CreditCard)
-                .Assembly
+                AssemblyUnderTest
+                .Instance
                 .Types()
                 .ThatAreStructs()
                 .ThatHaveAConstructorWithArguments<string>();
