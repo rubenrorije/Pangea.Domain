@@ -16,6 +16,7 @@ namespace Pangea.Domain
         /// the ISO 4217 code of the given currency
         /// </summary>
         public string Code { get; }
+     
         /// <summary>
         /// The numeric code for the given currency
         /// </summary>
@@ -32,6 +33,8 @@ namespace Pangea.Domain
         /// <param name="code">The ISO 4217 code (uppercase)</param>
         /// <param name="numeric">the numeric value</param>
         /// <param name="symbol">the (optional) symbol for the currency</param>
+        /// <exception cref="ArgumentNullException"><paramref name="code"/> is null</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="code"/> is not 3 characters, not uppercase, or <paramref name="numeric"/> is 0 or less</exception>
         public Currency(string code, int numeric, string symbol)
         {
             if (code == null) throw new ArgumentNullException(nameof(code));

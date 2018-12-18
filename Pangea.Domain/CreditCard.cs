@@ -75,17 +75,9 @@ namespace Pangea.Domain
         }
 
         /// <inheritdoc/>
-        public static bool operator ==(CreditCard lhs, CreditCard rhs)
-        {
-            return lhs._value == rhs._value;
-        }
-
+        public static bool operator ==(CreditCard lhs, CreditCard rhs)=> lhs._value == rhs._value;
         /// <inheritdoc/>
-        public static bool operator !=(CreditCard lhs, CreditCard rhs)
-        {
-            return !(lhs == rhs);
-        }
-
+        public static bool operator !=(CreditCard lhs, CreditCard rhs)=> !(lhs == rhs);
 
         /// <summary>
         /// Represent how the issuer is formatted. Since 2017 the issuer can be 8 (Long) characters,
@@ -192,7 +184,6 @@ namespace Pangea.Domain
         {
             return new CreditCard(cardNumber, true);
         }
-
 
         /// <inheritdoc />
         XmlSchema IXmlSerializable.GetSchema() => null;

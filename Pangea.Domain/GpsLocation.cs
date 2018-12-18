@@ -119,16 +119,9 @@ namespace Pangea.Domain
         }
 
         /// <inheritdoc/>
-        public static bool operator ==(GpsLocation lhs, GpsLocation rhs)
-        {
-            return lhs.Equals(rhs);
-        }
-
+        public static bool operator ==(GpsLocation lhs, GpsLocation rhs)=> lhs.Equals(rhs);
         /// <inheritdoc/>
-        public static bool operator !=(GpsLocation lhs, GpsLocation rhs)
-        {
-            return !(lhs == rhs);
-        }
+        public static bool operator !=(GpsLocation lhs, GpsLocation rhs)=> !(lhs == rhs);
 
         /// <summary>
         /// Return the approximate distance (as the crow flies) between two points in kilometers. Note that this is not an accurate distance 

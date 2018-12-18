@@ -6,11 +6,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using static Pangea.Domain.DefaultCurrencies;
 namespace Pangea.Domain.Tests
 {
     [TestClass]
-    public class CurrenciesTests
+    public class CurrencyCollectionTests
     {
         [TestMethod]
         public void Create_Empty_Currencies_Does_Not_Have_Any_Currencies_Registered()
@@ -30,7 +30,7 @@ namespace Pangea.Domain.Tests
         {
             var sut = new CurrencyCollection
             {
-                DefaultCurrencies.EUR
+                EUR
             };
 
             sut.Count.Should().Be(1);
@@ -41,36 +41,25 @@ namespace Pangea.Domain.Tests
         {
             var sut = new CurrencyCollection
             {
-                DefaultCurrencies.EUR,
-                DefaultCurrencies.EUR,
-                DefaultCurrencies.EUR
+                EUR,
+                EUR,
+                EUR
             };
 
             sut.Count.Should().Be(1);
         }
-
-        [TestMethod]
-        public void Create_Currencies_Using_Initialization_Accolades()
-        {
-            var sut = new CurrencyCollection
-            {
-                DefaultCurrencies.EUR
-            };
-
-            sut.Count.Should().Be(1);
-        }
-
+        
         [TestMethod]
         public void Remove_Currency_From_List()
         {
             var sut = new CurrencyCollection
             {
-                DefaultCurrencies.EUR
+                EUR
             };
 
             sut.Count.Should().Be(1);
 
-            sut.Remove(DefaultCurrencies.EUR);
+            sut.Remove(EUR);
 
             sut.Count.Should().Be(0);
         }
@@ -90,7 +79,7 @@ namespace Pangea.Domain.Tests
         {
             var sut = new CurrencyCollection
             {
-                DefaultCurrencies.EUR
+                EUR
             };
             Action action = () => sut.Remove(null);
             action.Should().Throw<ArgumentNullException>();
@@ -101,7 +90,7 @@ namespace Pangea.Domain.Tests
         {
             var sut = new CurrencyCollection
             {
-                DefaultCurrencies.EUR
+                EUR
             };
 
             sut.Remove(new Currency("AED", 123));
@@ -134,7 +123,7 @@ namespace Pangea.Domain.Tests
         {
             var sut = new CurrencyCollection
             {
-                DefaultCurrencies.EUR
+                EUR
             };
 
             using (new RegisterCurrencies(sut))
@@ -148,7 +137,7 @@ namespace Pangea.Domain.Tests
         {
             var sut = new CurrencyCollection
             {
-                DefaultCurrencies.EUR
+                EUR
             };
 
             using (new RegisterCurrencies(sut))
