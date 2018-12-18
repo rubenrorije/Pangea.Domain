@@ -161,5 +161,6 @@ namespace Pangea.Domain
                 throw new ArgumentOutOfRangeException(nameof(currency));
             }
         }
+        
     }
 }

@@ -202,70 +202,33 @@ namespace Pangea.Domain
         }
 
         /// <inheritdoc/>
-        public static bool operator ==(FileSize lhs, FileSize rhs)
-        {
-            return lhs.Equals(rhs);
-        }
-
+        public static bool operator ==(FileSize lhs, FileSize rhs) => lhs.Equals(rhs);
         /// <inheritdoc/>
-        public static bool operator !=(FileSize lhs, FileSize rhs)
-        {
-            return !lhs.Equals(rhs);
-        }
-
+        public static bool operator !=(FileSize lhs, FileSize rhs) => !lhs.Equals(rhs);
         /// <inheritdoc/>
-        public static bool operator >(FileSize lhs, FileSize rhs)
-        {
-            return lhs.CompareTo(rhs) > 0;
-        }
-
+        public static bool operator >(FileSize lhs, FileSize rhs) => lhs.CompareTo(rhs) > 0;
         /// <inheritdoc/>
-        public static bool operator <(FileSize lhs, FileSize rhs)
-        {
-            return lhs.CompareTo(rhs) < 0;
-        }
-
+        public static bool operator <(FileSize lhs, FileSize rhs) => lhs.CompareTo(rhs) < 0;
         /// <inheritdoc/>
-        public static bool operator >=(FileSize lhs, FileSize rhs)
-        {
-            return lhs.CompareTo(rhs) >= 0;
-        }
-
+        public static bool operator >=(FileSize lhs, FileSize rhs) => lhs.CompareTo(rhs) >= 0;
         /// <inheritdoc/>
-        public static bool operator <=(FileSize lhs, FileSize rhs)
-        {
-            return lhs.CompareTo(rhs) <= 0;
-        }
-
+        public static bool operator <=(FileSize lhs, FileSize rhs) => lhs.CompareTo(rhs) <= 0;
         /// <inheritdoc/>
-        public static bool operator >(FileSize lhs, long rhs)
-        {
-            return lhs.CompareTo(rhs) > 0;
-        }
-
+        public static bool operator >(FileSize lhs, long rhs) => lhs.CompareTo(rhs) > 0;
         /// <inheritdoc/>
-        public static bool operator <(FileSize lhs, long rhs)
-        {
-            return lhs.CompareTo(rhs) < 0;
-        }
-
+        public static bool operator <(FileSize lhs, long rhs) => lhs.CompareTo(rhs) < 0;
         /// <inheritdoc/>
-        public static bool operator >=(FileSize lhs, long rhs)
-        {
-            return lhs.CompareTo(rhs) >= 0;
-        }
-
+        public static bool operator >=(FileSize lhs, long rhs) => lhs.CompareTo(rhs) >= 0;
         /// <inheritdoc/>
-        public static bool operator <=(FileSize lhs, long rhs)
-        {
-            return lhs.CompareTo(rhs) <= 0;
-        }
-
+        public static bool operator <=(FileSize lhs, long rhs) => lhs.CompareTo(rhs) <= 0;
         /// <inheritdoc/>
-        public static FileSize operator +(FileSize lhs, FileSize rhs)
-        {
-            return lhs.Add(rhs);
-        }
+        public static FileSize operator +(FileSize lhs, FileSize rhs) => lhs.Add(rhs);
+        /// <inheritdoc/>
+        public static FileSize operator -(FileSize lhs, FileSize rhs) => lhs.Subtract(rhs);
+        /// <inheritdoc/>
+        public static FileSize operator *(FileSize lhs, long rhs) => lhs.Multiply(rhs);
+        /// <inheritdoc/>
+        public static FileSize operator /(FileSize lhs, long rhs) => lhs.Divide(rhs);
 
         /// <summary>
         /// Add the given file size to the current file size
@@ -277,24 +240,12 @@ namespace Pangea.Domain
             return new FileSize(TotalBytes + other.TotalBytes);
         }
 
-        /// <inheritdoc/>
-        public static FileSize operator -(FileSize lhs, FileSize rhs)
-        {
-            return lhs.Subtract(rhs);
-        }
-
         /// <summary>
         /// Subtract the given file size from this instance and return a new instance.
         /// </summary>
         public FileSize Subtract(FileSize other)
         {
             return new FileSize(TotalBytes - other.TotalBytes);
-        }
-
-        /// <inheritdoc/>
-        public static FileSize operator *(FileSize lhs, long rhs)
-        {
-            return lhs.Multiply(rhs);
         }
 
         /// <summary>
@@ -305,12 +256,6 @@ namespace Pangea.Domain
         public FileSize Multiply(long multiplier)
         {
             return new FileSize(TotalBytes * multiplier);
-        }
-
-        /// <inheritdoc/>
-        public static FileSize operator /(FileSize lhs, long rhs)
-        {
-            return lhs.Divide(rhs);
         }
 
         /// <summary>
@@ -326,18 +271,12 @@ namespace Pangea.Domain
         /// <summary>
         /// Cast file size to a long
         /// </summary>
-        public static explicit operator long(FileSize fileSize)
-        {
-            return fileSize.ToInt64();
-        }
+        public static explicit operator long(FileSize fileSize) => fileSize.ToInt64();
 
         /// <summary>
         /// Convert file size to a long
         /// </summary>
-        public long ToInt64()
-        {
-            return TotalBytes;
-        }
+        public long ToInt64() => TotalBytes;
 
         TypeCode IConvertible.GetTypeCode() => TypeCode.Object;
         bool IConvertible.ToBoolean(IFormatProvider provider) => Convert.ToBoolean(TotalBytes, provider);

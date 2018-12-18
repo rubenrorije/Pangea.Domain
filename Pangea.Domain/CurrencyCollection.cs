@@ -17,7 +17,6 @@ namespace Pangea.Domain
         /// </summary>
         private static Func<CurrencyCollection> _instanceProvider;
 
-
         /// <summary>
         /// Set the way to retrieve the global instance of the registered Currencies.
         /// A func is used to allow the end user (developer) to store the actual instance within the 
@@ -51,7 +50,6 @@ namespace Pangea.Domain
         /// </summary>
         public static bool ProviderIsRegistered => _instanceProvider != null;
 
-
         /// <summary>
         /// The registered instance will be returned using the provider function.
         /// </summary>
@@ -62,12 +60,12 @@ namespace Pangea.Domain
                 if (_instanceProvider == null)
                 {
                     throw new InvalidOperationException(
-                      "The provider function is not set. Use the SetProvider-function to register an instance. " +
-                      "Probably you want to create a Currencies instance once for your application in the bootstrapping code " +
-                      "and register it in your IoC-Container. After that you want to " +
-                      "call the SetProvider with a function to retrieve the instance from your IoC-container. " +
-                      "When you do not use an IoC-container in your application, you can create a new Currencies instance and use the " +
-                      "following call: Currencies.SetProvider(() => instance);");
+                      $"The provider function is not set. Use the {nameof(SetProvider)}-function to register an instance. " +
+                      $"Probably you want to create a {nameof(CurrencyCollection)} instance once for your application in the bootstrapping code " +
+                      $"and register it in your IoC-Container. After that you want to " +
+                      $"call the SetProvider with a function to retrieve the instance from your IoC-container. " +
+                      $"When you do not use an IoC-container in your application, you can create a new {nameof(CurrencyCollection)} instance and use the " +
+                      $"following call: {nameof(CurrencyCollection)}.{nameof(SetProvider)}(() => instance);");
                 }
                 return _instanceProvider();
             }
