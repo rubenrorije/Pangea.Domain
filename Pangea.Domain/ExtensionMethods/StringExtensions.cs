@@ -32,5 +32,21 @@ namespace Pangea.Domain.ExtensionMethods
                 .Insert(index, replacement);
         }
 
+        /// <summary>
+        /// Remove all occurrences of the given characters to remove and return the result
+        /// </summary>
+        /// <param name="text">The text to remove parts from</param>
+        /// <param name="partsToRemove">the parts to remove</param>
+        public static string RemoveAll(this string text, string[] partsToRemove)
+        {
+            if (string.IsNullOrEmpty(text)) return text;
+
+            var result = new StringBuilder(text);
+            foreach (var part in partsToRemove)
+            {
+                result.Replace(part, "");
+            }
+            return result.ToString();
+        }
     }
 }

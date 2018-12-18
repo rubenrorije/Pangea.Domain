@@ -14,9 +14,8 @@ using System.Xml.Serialization;
 namespace Pangea.Domain
 {
     /// <summary>
-    /// Represents an international phone number, including the country code and multiple ways to format the phone number.
-    /// It also allows local (national) phone numbers when the country code is specified. Useful for applications that are 
-    /// used within one country and therefore have an implicit country code for all phone numbers.
+    /// Represents an international phone number, including the country calling code. It has multiple ways to format a phone number.
+    /// It also allows local (national) phone numbers when the country code is specified. Separators allowed within phone numbers are: space, dot, slash and dash (' ', '.', '/', '-')
     /// </summary>
     [Serializable]
     public struct PhoneNumber
@@ -25,8 +24,12 @@ namespace Pangea.Domain
         , IFormattable
         , IXmlSerializable
     {
-        private static readonly Regex _internationalExpression = new Regex(@"^(00|\+)(?<numbers>(\d|\s)+)$", RegexOptions.Compiled | RegexOptions.Singleline);
-        private static readonly Regex _localExpression = new Regex(@"^0(?<numbers>(\d|\s)+)$", RegexOptions.Compiled | RegexOptions.Singleline);
+        /// <summary>
+        /// All separators that are allowed in between phone numbers
+        /// </summary>
+        internal static readonly string[] AllowedSeparators = new string[] { " ", ".", "-", "/" };
+        private static readonly Regex _internationalExpression = new Regex(@"^(00|\+)(?<numbers>(\d|(?:[\s-/\.]))+)$", RegexOptions.Compiled | RegexOptions.Singleline);
+        private static readonly Regex _localExpression = new Regex(@"^0(?<numbers>(\d|(?:[\s-/\.]))+)$", RegexOptions.Compiled | RegexOptions.Singleline);
 
         /// <summary>
         /// The string representation of the phone number, including the original spaces.
@@ -45,7 +48,7 @@ namespace Pangea.Domain
 
         /// <summary>
         /// Create a phone number based on the text representation of the phone number. 
-        /// Allowed formats are +31 12 34 56 789, 00 31 12 34 56 789, with or without spaces 
+        /// Allowed formats are +31 12 34 56 789, 00 31 12 34 56 789, with or without spaces, dashes, dots, slashes.
         /// </summary>
         /// <param name="text">the text to parse to a valid PhoneNumbe</param>
         /// <exception cref="FormatException">When the text cannot be parsed to a phone number</exception>
@@ -64,7 +67,7 @@ namespace Pangea.Domain
                 var numbers = result.Groups["numbers"].Value;
                 CountryCode = CountryCodes.Instance?.GetCountryCallingCodeFrom(numbers);
                 Text = numbers.ReplaceFirst(CountryCode?.ToString(CultureInfo.InvariantCulture), string.Empty);
-                Trimmed = Text.Replace(" ", "");
+                Trimmed = Text.RemoveAll(AllowedSeparators);
             }
         }
 
@@ -73,13 +76,13 @@ namespace Pangea.Domain
             if (!match.Success) throw new FormatException($"Invalid phone number");
             var numbers = match.Groups["numbers"].Value;
             Text = numbers;
-            Trimmed = Text.Replace(" ", "");
+            Trimmed = Text.RemoveAll(AllowedSeparators);
             CountryCode = CountryCodes.Instance?.GetCountryCallingCodeFrom(numbers);
         }
 
         /// <summary>
         /// Create a phone number from a text representation that is in a local format. That is
-        /// a number starting with a 0 without a country calling code. The country calling code is given.
+        /// a number starting with a 0 without a country calling code.
         /// </summary>
         /// <param name="countryCode">The country calling code</param>
         /// <param name="text">The local phone number, starting with a 0, which can include spaces</param>
@@ -101,7 +104,7 @@ namespace Pangea.Domain
                 if (!result.Success) throw new FormatException($"Invalid phone number");
                 var numbers = result.Groups["numbers"].Value;
                 Text = numbers;
-                Trimmed = Text?.Replace(" ", "");
+                Trimmed = Text?.RemoveAll(AllowedSeparators);
                 CountryCode = countryCode;
             }
         }
@@ -111,7 +114,7 @@ namespace Pangea.Domain
             if (!match.Success) throw new FormatException($"Invalid phone number");
             var numbers = match.Groups["numbers"].Value;
             Text = numbers;
-            Trimmed = Text?.Replace(" ", "");
+            Trimmed = Text?.RemoveAll(AllowedSeparators);
             CountryCode = countryCode;
         }
 
@@ -205,7 +208,6 @@ namespace Pangea.Domain
             return ToString(newFormat, (IFormatProvider)null);
 
         }
-
 
         /// <summary>
         /// The string representation of the phone number, given in the format specified. 
