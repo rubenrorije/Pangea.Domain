@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Pangea.Domain.Fluent;
 using Pangea.Domain.Tests.Util;
 using System;
 using System.Collections.Generic;
@@ -624,5 +625,26 @@ namespace Pangea.Domain.Tests
             sut.Start.Value.DayOfWeek.Should().Be(startingDay);
             sut.Start.Value.Should().Be(startDate);
         }
+
+        [TestMethod]
+        public void Fluent_Interface_Until_Creates_Correct_DateRange()
+        {
+            new DateTime(2018, 1, 1).Until(new DateTime(2018, 12, 31)).Should().Be(DateRange.Year(2018));
+        }
+
+        [TestMethod]
+        public void Fluent_Interface_Until_Inline_Date_Creates_Correct_DateRange()
+        {
+            new DateTime(2018, 1, 1).Until(2018, 12, 31).Should().Be(DateRange.Year(2018));
+        }
+
+        [TestMethod]
+        public void Fluent_Interface_Until_Forever_Creates_Correct_DateRange()
+        {
+            var sut = new DateTime(2018, 1, 1).UntilForever();
+            sut.Start.Should().Be(new DateTime(2018,1,1));
+            sut.End.Should().BeNull();
+        }
+
     }
 }

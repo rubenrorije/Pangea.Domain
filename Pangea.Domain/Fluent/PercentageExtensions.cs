@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Pangea.Domain.ExtensionMethods
+namespace Pangea.Domain.Fluent
 {
     /// <summary>
     /// Include this namespace to have a convenient way to create percentages.

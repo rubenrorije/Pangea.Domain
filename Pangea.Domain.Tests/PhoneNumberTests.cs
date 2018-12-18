@@ -54,6 +54,27 @@ namespace Pangea.Domain.Tests
         }
 
         [TestMethod]
+        public void Parse_International_PhoneNumber_With_Dashes()
+        {
+            var sut = new PhoneNumber("0031-1234-56789");
+            sut.ToString("g").Should().Be("+31123456789");
+        }
+
+        [TestMethod]
+        public void Parse_International_PhoneNumber_With_Dots()
+        {
+            var sut = new PhoneNumber("0031 12.34.56.789");
+            sut.ToString("g").Should().Be("+31123456789");
+        }
+
+        [TestMethod]
+        public void Parse_International_PhoneNumber_With_Slashes()
+        {
+            var sut = new PhoneNumber("0031/12/3456789");
+            sut.ToString("g").Should().Be("+31123456789");
+        }
+
+        [TestMethod]
         public void Country_Code_Can_Be_Resolved()
         {
             CountryCodes.SetProvider(() => new DefaultCountryProvider());

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,22 +9,30 @@ namespace Pangea.Domain
     /// <summary>
     /// A simple country code provider that only determines which country codes exist.
     /// </summary>
-    public class SimpleCountryCodeProvider : BaseCountryCodeProvider
+    public class SimpleCountryCodeProvider 
+        : BaseCountryCodeProvider
+        , IEnumerable<KeyValuePair<string,int>>
     {
         private readonly IDictionary<string, int> _countryCodes;
         /// <summary>
         /// the number of digits in the country code that is the largest
         /// </summary>
-        protected override int MaxCountryCodeLength { get; }
+        protected override int MaxCountryCodeLength
+        {
+            get
+            {
+                var maxValue = _countryCodes.Values.DefaultIfEmpty().Max();
+                if (maxValue == 0) return 0;
+                return (int)Math.Pow(maxValue, 1 / 10.0) + 1;
+            }
+        }
 
         /// <summary>
         /// Create a provider with an empty dictionary. Items can be added later
         /// </summary>
         public SimpleCountryCodeProvider() : this(new Dictionary<string, int>())
         {
-
         }
-
 
         /// <summary>
         /// Create a country calling code provider based on the given dictionary
@@ -32,11 +41,8 @@ namespace Pangea.Domain
         public SimpleCountryCodeProvider(IDictionary<string, int> countryCodes)
         {
             _countryCodes = countryCodes ?? throw new ArgumentNullException(nameof(countryCodes));
-
-            var maxValue = countryCodes.Values.DefaultIfEmpty().Max();
-            if (maxValue == 0) MaxCountryCodeLength = 0;
-            else MaxCountryCodeLength = (int)Math.Pow(maxValue, 1 / 10.0) + 1;
         }
+        
         /// <summary>
         /// Check a part of the phone number to see whether it is a country code
         /// </summary>
@@ -63,6 +69,17 @@ namespace Pangea.Domain
         public void Add(string isoTwoLetterCountryName, int code)
         {
             _countryCodes.Add(isoTwoLetterCountryName, code);
+        }
+
+        /// <inheritdoc />
+        public IEnumerator<KeyValuePair<string, int>> GetEnumerator()
+        {
+            return _countryCodes.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

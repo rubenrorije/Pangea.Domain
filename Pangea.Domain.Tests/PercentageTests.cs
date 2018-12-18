@@ -7,7 +7,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Pangea.Domain.Fluent;
 namespace Pangea.Domain.Tests
 {
     [TestClass]
@@ -331,6 +331,12 @@ namespace Pangea.Domain.Tests
             sut.Should().BeBinarySerializable();
             sut.Should().BeXmlSerializable();
             sut.Should().BeDataContractSerializable();
+        }
+
+        [TestMethod]
+        public void Fluent_Interface_Is_Equal_To_Constructor()
+        {
+            20.Percent().Should().Be(new Percentage(20));
         }
     }
 }
