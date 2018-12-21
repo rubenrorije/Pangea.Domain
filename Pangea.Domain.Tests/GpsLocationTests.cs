@@ -60,6 +60,18 @@ namespace Pangea.Domain.Tests
         }
 
         [TestMethod]
+        public void Latitude_Can_Be_Split_Into_Degrees_Minutes_And_Seconds()
+        {
+            var sut = Create(_athens);
+            sut.LatitudeDegrees.Should().Be(37);
+            sut.LatitudeMinutes.Should().Be(59);
+            sut.LatitudeSeconds.Should().BeApproximately(1.66,0.01);
+            sut.LongitudeDegrees.Should().Be(23);
+            sut.LongitudeMinutes.Should().Be(43);
+            sut.LongitudeSeconds.Should().BeApproximately(37.225,0.01);
+        }
+
+        [TestMethod]
         public void Default_ToString()
         {
             var sut = new GpsLocation(5, 10);
@@ -89,6 +101,13 @@ namespace Pangea.Domain.Tests
             text.Should().Contain(10.5555m.ToString("N2", CultureInfo.InvariantCulture));
         }
 
+        [TestMethod]
+        public void When_Using_DMS_Format_The_Result_Will_Be_DMS()
+        {
+            var sut = Create(_athens);
+            sut.ToString("DMS", CultureInfo.InvariantCulture).Should().Be("37°59'01.7\"N 23°43'37.2\"E");
+        }
+        
         [TestMethod]
         public void Approximate_Distance_Of_Two_Locations()
         {
