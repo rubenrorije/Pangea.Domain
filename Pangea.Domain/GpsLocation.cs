@@ -27,6 +27,64 @@ namespace Pangea.Domain
         public double Latitude { get; }
 
         /// <summary>
+        /// The degree part of the Latitude
+        /// </summary>
+        public int LatitudeDegrees => (int)Floor(Latitude);
+
+        /// <summary>
+        /// The minutes part of the Latitude
+        /// </summary>
+        public int LatitudeMinutes
+        {
+            get
+            {
+                return (int)Floor((Latitude - LatitudeDegrees) * 60);
+            }
+        }
+
+        /// <summary>
+        /// The seconds part of the Latitude
+        /// </summary>
+        public double LatitudeSeconds
+        {
+            get
+            {
+                var temp = (Latitude - LatitudeDegrees) * 60;
+                temp = temp - LatitudeMinutes;
+                return temp * 60;
+            }
+        }
+
+        /// <summary>
+        /// The degree part of the Longitude
+        /// </summary>
+        public int LongitudeDegrees => (int)Floor(Longitude);
+
+        /// <summary>
+        /// The minutes part of the Longitude
+        /// </summary>
+        public int LongitudeMinutes
+        {
+            get
+            {
+                return (int)Floor((Longitude - LongitudeDegrees) * 60);
+            }
+        }
+
+        /// <summary>
+        /// The seconds part of the Longitude
+        /// </summary>
+        public double LongitudeSeconds
+        {
+            get
+            {
+                var temp = (Longitude - LongitudeDegrees) * 60;
+                temp = temp - LongitudeMinutes;
+                return temp * 60;
+            }
+        }
+
+        /// <summary>
         /// An angle which ranges from -180° to 180° (west to east)
         /// The value represents the horizontal position on a map. ≈ X
         /// Denoted by λ (the greek letter lambda)
@@ -119,9 +177,9 @@ namespace Pangea.Domain
         }
 
         /// <inheritdoc/>
-        public static bool operator ==(GpsLocation lhs, GpsLocation rhs)=> lhs.Equals(rhs);
+        public static bool operator ==(GpsLocation lhs, GpsLocation rhs) => lhs.Equals(rhs);
         /// <inheritdoc/>
-        public static bool operator !=(GpsLocation lhs, GpsLocation rhs)=> !(lhs == rhs);
+        public static bool operator !=(GpsLocation lhs, GpsLocation rhs) => !(lhs == rhs);
 
         /// <summary>
         /// Return the approximate distance (as the crow flies) between two points in kilometers. Note that this is not an accurate distance 
@@ -175,6 +233,47 @@ namespace Pangea.Domain
         }
 
         /// <summary>
+        /// returns the textual representation of a GPS location in the given format for the current culture.
+        /// The Latitude and Longitude are separated with a space and will be represented with a 
+        /// negative value for South / West locations
+        /// </summary>
+        /// <returns>The textual representation of a GPS location</returns>
+        public string ToString(string format)
+        {
+            return ToString(format, null);
+        }
+
+        /// <summary>
+        /// returns the textual representation of a GPS location in the given format and the given format provider.
+        /// Allowed formats are <c>null, "G", "", "DMS", "DM"</c>
+        /// </summary>
+        /// <returns>The textual representation of a GPS location</returns>
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            if (format == "DMS")
+            {
+                return
+                    string.Concat(
+                        LatitudeDegrees, "°",
+                        LatitudeMinutes, "'",
+                        LatitudeSeconds.ToString("00.#", formatProvider), "\"",
+                        IsNorthernHemisphere ? "N" : "S",
+                        " ",
+                        LongitudeDegrees, "°",
+                        LongitudeMinutes, "'",
+                        LongitudeSeconds.ToString("00.#", formatProvider), "\"",
+                        IsEasternHemisphere ? "E" : "W");
+            }
+            else
+            {
+                return
+                    Latitude.ToString(format, formatProvider) +
+                    " " +
+                    Longitude.ToString(format, formatProvider);
+            }
+        }
+
+        /// <summary>
         /// Convert a textual representation of a GPS location to an actual GPS location.
         /// This will throw an exception when the text could not be parsed.
         /// When no format provider is specified, it is assumed that the decimal separator is a dot (.),
@@ -221,31 +320,6 @@ namespace Pangea.Domain
                 throw new ArgumentOutOfRangeException(nameof(text));
             }
             return result;
-        }
-
-        /// <summary>
-        /// returns the textual representation of a GPS location in the given format for the current culture.
-        /// The Latitude and Longitude are separated with a space and will be represented with a 
-        /// negative value for South / West locations
-        /// </summary>
-        /// <returns>The textual representation of a GPS location</returns>
-        public string ToString(string format)
-        {
-            return ToString(format, null);
-        }
-
-        /// <summary>
-        /// returns the textual representation of a GPS location in the given format and the given format provider.
-        /// The Latitude and Longitude are separated with a space and will be represented with a 
-        /// negative value for South / West locations
-        /// </summary>
-        /// <returns>The textual representation of a GPS location</returns>
-        public string ToString(string format, IFormatProvider formatProvider)
-        {
-            return
-                Latitude.ToString(format, formatProvider) +
-                " " +
-                Longitude.ToString(format, formatProvider);
         }
 
         /// <summary>
