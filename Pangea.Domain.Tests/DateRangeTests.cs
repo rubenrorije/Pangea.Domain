@@ -642,9 +642,41 @@ namespace Pangea.Domain.Tests
         public void Fluent_Interface_Until_Forever_Creates_Correct_DateRange()
         {
             var sut = new DateTime(2018, 1, 1).UntilForever();
-            sut.Start.Should().Be(new DateTime(2018,1,1));
+            sut.Start.Should().Be(new DateTime(2018, 1, 1));
             sut.End.Should().BeNull();
         }
 
+        [TestMethod]
+        public void Enumerable_Dates_Must_Be_Lazy()
+        {
+            var sut = DateRange.Always.Dates();
+            Action action = () => sut.Take(2).ToList();
+
+            action.ExecutionTime().Should().BeLessThan(TimeSpan.FromMilliseconds(100));
+        }
+
+        [TestMethod]
+        public void Enumerable_Dates_Returns_365_Dates_For_A_Year()
+        {
+            var sut = DateRange.Year(2018).Dates();
+            sut.ToList().Count().Should().Be(365);
+            sut.First().Should().Be(new DateTime(2018, 1, 1));
+            sut.Last().Should().Be(new DateTime(2018, 12, 31));
+        }
+
+        [TestMethod]
+        public void Enumerable_Dates_Returns_One_Date_For_One_Day()
+        {
+            var sut = DateRange.Today().Dates();
+            sut.ToList().Count().Should().Be(1);
+            sut.First().Should().Be(DateTime.Today);
+        }
+
+        [TestMethod]
+        public void Enumerable_Dates_Returns_0_Days_For_Never()
+        {
+            var sut = DateRange.Never.Dates();
+            sut.ToList().Count().Should().Be(0);
+        }
     }
 }

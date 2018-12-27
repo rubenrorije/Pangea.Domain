@@ -23,4 +23,6 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Maintainability", "AV1561:Signature contains more than 3 parameters", Justification = "<Pending>", Scope = "member", Target = "~M:Pangea.Domain.Fluent.DateRangeExtensions.Until(System.DateTime,System.Int32,System.Int32,System.Int32)~Pangea.Domain.DateRange")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:Identifiers should have correct suffix", Justification = "<Pending>", Scope = "type", Target = "~T:Pangea.Domain.DefaultCountryProvider")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:Identifiers should have correct suffix", Justification = "<Pending>", Scope = "type", Target = "~T:Pangea.Domain.SimpleCountryCodeProvider")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Member Design", "AV1130:Return type in method signature should be a collection interface instead of a concrete type", Justification = "<Pending>", Scope = "member", Target = "~M:Pangea.Domain.DateRange")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:Identifiers should have correct suffix", Justification = "<Pending>", Scope = "type", Target = "~T:Pangea.Domain.DateRange")]
 

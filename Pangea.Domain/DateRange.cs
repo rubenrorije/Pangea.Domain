@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -533,6 +534,22 @@ namespace Pangea.Domain
             var firstDay = dayWithinWeek.AddDays(-daysToSubtract);
 
             return new DateRange(firstDay, firstDay.AddDays((numberOfWeeks * 7) - 1));
+        }
+
+        /// <summary>
+        /// Return all the dates within the range.
+        /// </summary>
+        public IEnumerable<DateTime> Dates()
+        {
+            if (!_isFilled) yield break;
+
+            var currentDate = SafeStart;
+
+            while (currentDate <= SafeEnd)
+            {
+                yield return currentDate;
+                currentDate = currentDate.AddDays(1);
+            }
         }
     }
 }
