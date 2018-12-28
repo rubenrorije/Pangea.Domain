@@ -54,8 +54,11 @@ namespace Pangea.Domain.Tests.CrossCutting
             {
                 foreach (var ctor in constructors)
                 {
+
                     var type = ctor.DeclaringType;
                     var parameterType = ctor.GetParameters()[0].ParameterType;
+
+                    if (type == typeof(SmartFolder) && parameterType == typeof(Environment.SpecialFolder)) continue;
 
                     var castingOperators =
                         type

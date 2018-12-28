@@ -93,6 +93,7 @@
     <Compile Include="CrossCutting\NamespaceTests.cs" />
     <Compile Include="CrossCutting\OperatorTests.cs" />
     <Compile Include="PercentageTests.cs" />
+    <Compile Include="SmartFolderTests.cs" />
     <Compile Include="Util\AssemblyUnderTest.cs" />
     <Compile Include="Util\RegisterCurrencies.cs" />
     <Compile Include="SimpleCountryCodeProviderTests.cs" />

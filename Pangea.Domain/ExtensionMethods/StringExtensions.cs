@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 namespace Pangea.Domain.ExtensionMethods
@@ -47,6 +48,38 @@ namespace Pangea.Domain.ExtensionMethods
                 result.Replace(part, "");
             }
             return result.ToString();
+        }
+
+        /// <summary>
+        /// Returns whether the text contains any of the given characters
+        /// </summary>
+        /// <param name="text">The text to search in</param>
+        /// <param name="characters">The characters to search for</param>
+        public static bool ContainsAny(this string text, char[] characters)
+        {
+            return text.IndexOfAny(characters) >= 0;
+        }
+
+        /// <summary>
+        /// Does the specified string ends with the given character
+        /// </summary>
+        /// <param name="text">the text</param>
+        /// <param name="character">the character</param>
+        /// <returns>Whether text ends with character</returns>
+        public static bool EndsWith(this string text, char character)
+        {
+            return text.EndsWith(character.ToString(CultureInfo.CurrentCulture), StringComparison.CurrentCulture);
+        }
+
+        /// <summary>
+        /// Does the specified string start with the given character
+        /// </summary>
+        /// <param name="text">the text</param>
+        /// <param name="character">the character</param>
+        /// <returns>Whether text starts with character</returns>
+        public static bool StartsWith(this string text, char character)
+        {
+            return text.StartsWith(character.ToString(CultureInfo.CurrentCulture), StringComparison.CurrentCulture);
         }
     }
 }

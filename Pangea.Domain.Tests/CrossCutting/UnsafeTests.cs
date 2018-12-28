@@ -28,6 +28,7 @@ namespace Pangea.Domain.Tests.CrossCutting
                 foreach (var type in types)
                 {
                     if (type == typeof(PhoneNumber)) continue; // ignore
+                    if (type == typeof(SmartFolder)) continue; // ignore
 
                     var methods =
                         type
