@@ -67,6 +67,13 @@ namespace Pangea.Domain.Tests
         }
 
         [TestMethod]
+        public void Relative_Path_Does_Not_Start_With_A_Directory_Separator()
+        {
+            var sut = new SmartFolder("temp");
+            sut.ToString("R").Should().Be(@"temp\");
+        }
+
+        [TestMethod]
         public void Easy_Creation_Of_Path()
         {
             var sut = SmartFolder.Volume("C") + "Windows" + "Temp";
@@ -107,7 +114,7 @@ namespace Pangea.Domain.Tests
             var sut = new SmartFolder("%Temp%");
             sut.ToString("O").Should().Be("%Temp%");
         }
-
+        
         [TestMethod]
         public void ToString_With_E_Format_Returns_The_Escaped_Path()
         {
@@ -119,8 +126,15 @@ namespace Pangea.Domain.Tests
         public void ToString_With_R_Format_Returns_The_Relative_Path()
         {
             var sut = new SmartFolder("..");
-            sut.ToString("R").Should().Be("..");
+            sut.ToString("R").Should().Be(@"..\");
             sut.ToString("G").Should().NotBe("..");
+        }
+
+        [TestMethod]
+        public void ToString_With_R_Format_Returns_The_Relative_Path_And_Adds_A_Trailing_Directory_Separator()
+        {
+            var sut = new SmartFolder("..");
+            sut.ToString("R").Should().Be(@"..\");
         }
 
         [TestMethod]
@@ -244,6 +258,7 @@ namespace Pangea.Domain.Tests
             var sut = lhs - rhs;
             sut.ToString().Should().Be(@"C:\Windows\");
         }
+
         [TestMethod]
         public void Operator_Minus_Subtracts_Partial_Paths_From_Path()
         {
@@ -252,6 +267,38 @@ namespace Pangea.Domain.Tests
 
             var sut = lhs - rhs;
             sut.ToString().Should().Be(@"C:\");
+        }
+
+        [TestMethod]
+        public void Operator_Minus_Subtracts_Absolute_Paths_And_Gives_Partial_Path()
+        {
+            var lhs = new SmartFolder(@"C:\Windows\Temp");
+            var rhs = new SmartFolder(@"C:\Windows");
+
+            var sut = lhs - rhs;
+            sut.ToString("R").Should().Be(@"Temp\");
+        }
+
+        [TestMethod]
+        public void Operator_Minus_Subtracts_Absolute_Paths_Not_Allowed_When_The_Path_To_Subtract_Is_Too_Long()
+        {
+            var lhs = new SmartFolder(@"C:\Windows");
+            var rhs = new SmartFolder(@"C:\Windows\Temp");
+
+            Action action = () => { var sut = lhs - rhs; };
+
+            action.Should().Throw<ArgumentOutOfRangeException>();
+        }
+
+        [TestMethod]
+        public void Operator_Minus_Subtracts_Absolute_Paths_Not_Allowed_When_The_Paths_Do_Not_Match()
+        {
+            var lhs = new SmartFolder(@"C:\Windows\Temp");
+            var rhs = new SmartFolder(@"D:\Windows");
+
+            Action action = () => { var sut = lhs - rhs; };
+
+            action.Should().Throw<ArgumentOutOfRangeException>();
         }
 
         [TestMethod]
@@ -269,7 +316,7 @@ namespace Pangea.Domain.Tests
         }
 
         [TestMethod]
-        public void Operator_Minus_Throws_An_Exception_When_The_Path_To_Subtract_Is_Not_Relative()
+        public void Operator_Minus_Throws_An_Exception_When_The_Paths_Are_The_Same()
         {
             var lhs = new SmartFolder(@"C:\Windows\Temp\");
             var rhs = new SmartFolder(@"C:\Windows\Temp\");
@@ -310,7 +357,7 @@ namespace Pangea.Domain.Tests
         public void Add_Throws_Exception_When_The_Addition_Is_Null()
         {
             var temp = new SmartFolder(@"C:\Temp\");
-            Action action = () => { var _ = temp + null; };
+            Action action = () => { var _ = temp + (string)null; };
             action.Should().Throw<ArgumentNullException>();
         }
 
@@ -423,6 +470,23 @@ namespace Pangea.Domain.Tests
         {
             Action action = () => SmartFolder.CurrentDirectory.ToString("X");
             action.Should().Throw<FormatException>();
+        }
+
+        [TestMethod]
+        public void Adding_A_File_That_Is_Null_To_A_Folder_Throws_Exception()
+        {
+            var folder = SmartFolder.CurrentDirectory.ToAbsolute();
+            Action action = () => { var _ = folder + (FileInfo)null; };
+
+            action.Should().Throw<ArgumentNullException>();
+        }
+
+        [TestMethod]
+        public void Adding_A_File_To_A_Folder_Will_Return_The_FullPath()
+        {
+            var folder = SmartFolder.CurrentDirectory.ToAbsolute();
+            var path = folder + new FileInfo("test.txt");
+            path.Should().EndWith(@"\test.txt");
         }
     }
 }

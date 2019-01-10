@@ -153,6 +153,10 @@ namespace Pangea.Domain
         /// Combine the given paths
         /// </summary>
         public static SmartFolder operator +(SmartFolder lhs, string rhs) => lhs.Add(rhs);
+        /// <summary>
+        /// Add the file to the folder and return the full path
+        /// </summary>
+        public static string operator +(SmartFolder lhs, FileInfo rhs) => lhs.Add(rhs);
         /// <inheritdoc/>
         public static SmartFolder operator -(SmartFolder lhs, SmartFolder rhs) => lhs.Subtract(rhs);
         /// <inheritdoc/>
@@ -165,7 +169,42 @@ namespace Pangea.Domain
         /// <returns>The (shortened) folder path</returns>
         public SmartFolder Subtract(SmartFolder folder)
         {
-            return Subtract(folder._value);
+            if (folder == null) throw new ArgumentNullException(nameof(folder));
+            if (string.IsNullOrEmpty(folder._value)) return this;
+            if (folder == this) throw new ArgumentOutOfRangeException(nameof(folder), "Cannot subtract the path, because both paths are identical");
+            if (folder.IsAbsolute && !IsAbsolute) throw new ArgumentOutOfRangeException(nameof(folder), "The folder is absolute and cannot be subtracted from another path");
+
+            var current = (DirectoryInfo)this;
+            if (!folder.IsAbsolute)
+            {
+                var parts = folder._value.Split(new char[] { DirectorySeparatorChar });
+                foreach (var part in parts.Reverse())
+                {
+                    if (
+                        current.FullName.EndsWith(part, DefaultComparison) ||
+                        current.FullName.EndsWith(part + DirectorySeparatorChar, DefaultComparison))
+                    {
+                        current = current.Parent;
+                    }
+                    else
+                    {
+                        throw new ArgumentOutOfRangeException(nameof(folder), "Cannot subtract folder because they do not have a common ancestor directory");
+                    }
+                }
+                return new SmartFolder(current.FullName);
+            }
+            else if (current.FullName.StartsWith(folder.ToString() + DirectorySeparatorChar, DefaultComparison))
+            {
+                return new SmartFolder(current.FullName.Substring(folder._value.Length + 1));
+            }
+            else if (current.FullName.StartsWith(folder.ToString(), DefaultComparison))
+            {
+                return new SmartFolder(current.FullName.Substring(folder.ToString().Length));
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException(nameof(folder), "Cannot subtract folder because they do not have a common ancestor directory");
+            }
         }
 
         /// <summary>
@@ -177,27 +216,7 @@ namespace Pangea.Domain
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="folder"/> is absolute</exception>
         public SmartFolder Subtract(string folder)
         {
-            if (folder == null) throw new ArgumentNullException(nameof(folder));
-            if (string.IsNullOrEmpty(folder)) return this;
-            if (IsPathRooted(folder)) throw new ArgumentOutOfRangeException(nameof(folder), "The folder is absolute and cannot be subtracted from another path");
-
-            var current = (DirectoryInfo)this;
-            var parts = folder.Split(new char[] { DirectorySeparatorChar });
-
-            foreach (var part in parts.Reverse())
-            {
-                if (
-                    current.FullName.EndsWith(part, DefaultComparison) ||
-                    current.FullName.EndsWith(part + DirectorySeparatorChar, DefaultComparison))
-                {
-                    current = current.Parent;
-                }
-                else
-                {
-                    throw new ArgumentOutOfRangeException(nameof(folder), "Cannot subtract folder because they do not have a common ancestor directory");
-                }
-            }
-            return new SmartFolder(current.FullName);
+            return Subtract(new SmartFolder(folder));
         }
 
         /// <summary>
@@ -279,6 +298,13 @@ namespace Pangea.Domain
             if (IsPathRooted(safe)) throw new ArgumentOutOfRangeException(nameof(other), "The path could not be added, because it is absolute");
 
             return new SmartFolder(Combine(_value, safe));
+        }
+
+        private string Add(FileInfo file)
+        {
+            if (file == null) throw new ArgumentNullException(nameof(file));
+
+            return Combine(_value, file.Name);
         }
 
         /// <summary>
@@ -415,10 +441,15 @@ namespace Pangea.Domain
             if (format == "O") return _value;
 
             var expanded = ExpandEnvironmentVariables(_value);
+            if (!expanded.EndsWith(DirectorySeparatorChar))
+            {
+                expanded = expanded + DirectorySeparatorChar;
+            }
+
             if (format == "R") return expanded;
 
             var full = new DirectoryInfo(expanded).FullName;
-            if (!full.EndsWith(DirectorySeparatorChar)) full = full + DirectorySeparatorChar;
+
             switch (format)
             {
                 case "S":
