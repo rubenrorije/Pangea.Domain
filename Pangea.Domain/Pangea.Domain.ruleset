@@ -71,6 +71,7 @@
   <Rules AnalyzerId="CSharpGuidelinesAnalyzer" RuleNamespace="CSharpGuidelinesAnalyzer">
     <Rule Id="AV1500" Action="None" />
     <Rule Id="AV1535" Action="None" />
+    <Rule Id="AV1130" Action="None" />
   </Rules>
   <Rules AnalyzerId="Microsoft.NetFramework.Analyzers" RuleNamespace="Microsoft.NetFramework.Analyzers">
     <Rule Id="CA2235" Action="None" />
