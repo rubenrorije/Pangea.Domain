@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Xml;
@@ -13,7 +14,7 @@ namespace Pangea.Domain
     /// Representing a percentage, can be used for easy calculations with percentages.
     /// </summary>
     [Serializable]
-    public struct Percentage 
+    public struct Percentage
         : IFormattable
         , IEquatable<Percentage>
         , IComparable<int>
@@ -44,10 +45,8 @@ namespace Pangea.Domain
         /// Assumes the percentage given is the actual percentage, not the fraction
         /// </summary>
         /// <param name="percentage">The percentage, not the fraction</param>
-        ///<exception cref="ArgumentOutOfRangeException">When the given <paramref name="percentage"/> is negative</exception>
         public Percentage(decimal percentage)
         {
-            if (percentage < 0) throw new ArgumentOutOfRangeException(nameof(percentage));
             Value = percentage;
         }
 
@@ -56,10 +55,8 @@ namespace Pangea.Domain
         /// Assumes the percentage given is the actual percentage, not the fraction
         /// </summary>
         /// <param name="percentage">The percentage, not the fraction</param>
-        ///<exception cref="ArgumentOutOfRangeException">When the given <paramref name="percentage"/> is negative</exception>
         public Percentage(double percentage)
         {
-            if (percentage < 0) throw new ArgumentOutOfRangeException(nameof(percentage));
             Value = Convert.ToDecimal(percentage);
         }
 
@@ -68,10 +65,8 @@ namespace Pangea.Domain
         /// Assumes the percentage given is the actual percentage, not the fraction
         /// </summary>
         /// <param name="percentage">The percentage, not the fraction</param>
-        ///<exception cref="ArgumentOutOfRangeException">When the given <paramref name="percentage"/> is negative</exception>
         public Percentage(int percentage)
         {
-            if (percentage < 0) throw new ArgumentOutOfRangeException(nameof(percentage));
             Value = percentage;
         }
 
@@ -80,7 +75,6 @@ namespace Pangea.Domain
         /// </summary>
         /// <param name="fraction">The fraction that represents the percentage</param>
         /// <returns>The percentage</returns>
-        ///<exception cref="ArgumentOutOfRangeException">When the given <paramref name="fraction"/> is negative</exception>
         public static Percentage FromFraction(double fraction)
         {
             return new Percentage(fraction * 100);
@@ -91,7 +85,6 @@ namespace Pangea.Domain
         /// </summary>
         /// <param name="fraction">The fraction that represents the percentage</param>
         /// <returns>The percentage</returns>
-        ///<exception cref="ArgumentOutOfRangeException">When the given <paramref name="fraction"/> is negative</exception>
         public static Percentage FromFraction(decimal fraction)
         {
             return new Percentage(fraction * 100);
@@ -115,7 +108,12 @@ namespace Pangea.Domain
         /// <returns>The string representation of the percentage</returns>
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            return Value.ToString(format, formatProvider) + " %";
+            var safeFormat = format;
+            if (string.IsNullOrEmpty(format))
+            {
+                safeFormat = "0.#########";
+            }
+            return Value.ToString(safeFormat, formatProvider) + "%";
         }
 
         /// <summary>
@@ -137,95 +135,51 @@ namespace Pangea.Domain
         /// <param name="nominator">the current index</param>
         /// <param name="denominator">the total count</param>
         /// <returns>The percentage</returns>
-        /// <exception cref="ArgumentOutOfRangeException">The <paramref name="nominator"/> or <paramref name="denominator"/> are non-positive</exception>
         public static Percentage From(int nominator, int denominator)
         {
-            if (nominator <= 0) throw new ArgumentOutOfRangeException(nameof(nominator));
             if (denominator <= 0) throw new ArgumentOutOfRangeException(nameof(denominator));
             return FromFraction(nominator / (denominator * 1m));
         }
 
         /// <inheritdoc />
-        public static bool operator ==(Percentage lhs, Percentage rhs)
-        {
-            return lhs.Value == rhs.Value;
-        }
+        public static bool operator ==(Percentage lhs, Percentage rhs) => lhs.Value == rhs.Value;
 
         /// <inheritdoc />
-        public static bool operator !=(Percentage lhs, Percentage rhs)
-        {
-            return !(lhs == rhs);
-        }
+        public static bool operator !=(Percentage lhs, Percentage rhs) => !(lhs == rhs);
 
         /// <inheritdoc />
-        public static bool operator ==(Percentage lhs, int rhs)
-        {
-            return lhs.Value == rhs;
-        }
+        public static bool operator ==(Percentage lhs, int rhs) => lhs.Value == rhs;
 
         /// <inheritdoc />
-        public static bool operator !=(Percentage lhs, int rhs)
-        {
-            return lhs.Value != rhs;
-        }
+        public static bool operator !=(Percentage lhs, int rhs) => lhs.Value != rhs;
 
         /// <inheritdoc />
-        public static bool operator ==(int lhs, Percentage rhs)
-        {
-            return lhs == rhs.Value;
-        }
+        public static bool operator ==(int lhs, Percentage rhs) => lhs == rhs.Value;
 
         /// <inheritdoc />
-        public static bool operator !=(int lhs, Percentage rhs)
-        {
-            return lhs != rhs.Value;
-        }
+        public static bool operator !=(int lhs, Percentage rhs) => lhs != rhs.Value;
         /// <inheritdoc />
-        public static bool operator ==(Percentage lhs, decimal rhs)
-        {
-            return lhs.Value == rhs;
-        }
+        public static bool operator ==(Percentage lhs, decimal rhs) => lhs.Value == rhs;
 
         /// <inheritdoc />
-        public static bool operator !=(Percentage lhs, decimal rhs)
-        {
-            return lhs.Value != rhs;
-        }
+        public static bool operator !=(Percentage lhs, decimal rhs) => lhs.Value != rhs;
 
         /// <inheritdoc />
-        public static bool operator ==(decimal lhs, Percentage rhs)
-        {
-            return lhs == rhs.Value;
-        }
+        public static bool operator ==(decimal lhs, Percentage rhs) => lhs == rhs.Value;
 
         /// <inheritdoc />
-        public static bool operator !=(decimal lhs, Percentage rhs)
-        {
-            return lhs != rhs.Value;
-        }
+        public static bool operator !=(decimal lhs, Percentage rhs) => lhs != rhs.Value;
         /// <inheritdoc />
-        public static bool operator ==(Percentage lhs, double rhs)
-        {
-            return lhs.Value == Convert.ToDecimal(rhs);
-        }
+        public static bool operator ==(Percentage lhs, double rhs) => lhs.Value == Convert.ToDecimal(rhs);
 
         /// <inheritdoc />
-        public static bool operator !=(Percentage lhs, double rhs)
-        {
-            return lhs.Value != Convert.ToDecimal(rhs);
-        }
+        public static bool operator !=(Percentage lhs, double rhs) => lhs.Value != Convert.ToDecimal(rhs);
 
         /// <inheritdoc />
-        public static bool operator ==(double lhs, Percentage rhs)
-        {
-            return Convert.ToDecimal(lhs) == rhs.Value;
-        }
+        public static bool operator ==(double lhs, Percentage rhs) => Convert.ToDecimal(lhs) == rhs.Value;
 
         /// <inheritdoc />
-        public static bool operator !=(double lhs, Percentage rhs)
-        {
-            return Convert.ToDecimal(lhs) != rhs.Value;
-        }
+        public static bool operator !=(double lhs, Percentage rhs) => Convert.ToDecimal(lhs) != rhs.Value;
 
         /// <summary>
         /// Add the percentage to the given value. E.g. 1 + 10% = 1.1
@@ -233,10 +187,7 @@ namespace Pangea.Domain
         /// <param name="value">the number to add the percentage to</param>
         /// <param name="percentage">The percentage to add</param>
         /// <returns>The result</returns>
-        public static decimal operator +(int value, Percentage percentage)
-        {
-            return value * (1 + percentage.Fraction);
-        }
+        public static decimal operator +(int value, Percentage percentage) => value * (1 + percentage.Fraction);
 
         /// <summary>
         /// Add the percentage to the given value. E.g. 1 + 10% = 1.1
@@ -244,20 +195,14 @@ namespace Pangea.Domain
         /// <param name="value">the number to add the percentage to</param>
         /// <param name="percentage">The percentage to add</param>
         /// <returns>The result</returns>
-        public static decimal operator +(decimal value, Percentage percentage)
-        {
-            return percentage.Add(value);
-        }
+        public static decimal operator +(decimal value, Percentage percentage) => percentage.Add(value);
 
         /// <summary>
         /// Add the percentage to the given value. E.g. 1 + 10% = 1.1
         /// </summary>
         /// <param name="value">the number to add the percentage to</param>
         /// <returns>The result</returns>
-        public decimal Add(decimal value)
-        {
-            return value * (1 + Fraction);
-        }
+        public decimal Add(decimal value) => value * (1 + Fraction);
 
         /// <summary>
         /// Add the percentage to the given value. E.g. 1 + 10% = 1.1
@@ -265,10 +210,7 @@ namespace Pangea.Domain
         /// <param name="value">the number to add the percentage to</param>
         /// <param name="percentage">The percentage to add</param>
         /// <returns>The result</returns>
-        public static double operator +(double value, Percentage percentage)
-        {
-            return value * (1 + (Convert.ToDouble(percentage.Fraction)));
-        }
+        public static double operator +(double value, Percentage percentage) => value * (1 + Convert.ToDouble(percentage.Fraction));
 
         /// <summary>
         /// Subtract the percentage from the given value. E.g. 5 - 10% = 4.5
@@ -276,20 +218,14 @@ namespace Pangea.Domain
         /// <param name="value">The value to subtract the percentage from</param>
         /// <param name="percentage">the percentage to subtract</param>
         /// <returns>The result, converted to decimal</returns>
-        public static decimal operator -(int value, Percentage percentage)
-        {
-            return percentage.Subtract(value);
-        }
+        public static decimal operator -(int value, Percentage percentage) => percentage.Subtract(value);
 
         /// <summary>
         /// Subtract the percentage from the given value. E.g. 5 - 10% = 4.5
         /// </summary>
         /// <param name="value">The value to subtract the percentage from</param>
         /// <returns>The result, converted to decimal</returns>
-        public decimal Subtract(int value)
-        {
-            return value * (1 - Fraction);
-        }
+        public decimal Subtract(int value) => value * (1 - Fraction);
 
         /// <summary>
         /// Subtract the percentage from the given value. E.g. 5 - 10% = 4.5
@@ -297,10 +233,7 @@ namespace Pangea.Domain
         /// <param name="value">The value to subtract the percentage from</param>
         /// <param name="percentage">the percentage to subtract</param>
         /// <returns>The result</returns>
-        public static decimal operator -(decimal value, Percentage percentage)
-        {
-            return value * (1 - percentage.Fraction);
-        }
+        public static decimal operator -(decimal value, Percentage percentage) => value * (1 - percentage.Fraction);
 
         /// <summary>
         /// Subtract the percentage from the given value. E.g. 5 - 10% = 4.5
@@ -308,27 +241,46 @@ namespace Pangea.Domain
         /// <param name="value">The value to subtract the percentage from</param>
         /// <param name="percentage">the percentage to subtract</param>
         /// <returns>The result</returns>
-        public static double operator -(double value, Percentage percentage)
+        public static double operator -(double value, Percentage percentage) => value * (1 - Convert.ToDouble(percentage.Fraction));
+
+
+        /// <summary>
+        /// Negates the given percentage
+        /// </summary>
+        /// <param name="percentage">The percentage to negate</param>
+        /// <returns>The negated percentage</returns>
+        public static Percentage operator -(Percentage percentage) => FromFraction(-percentage.Fraction);
+
+        /// <summary>
+        /// Create the negative of the current percentage
+        /// </summary>
+        /// <returns></returns>
+        public Percentage Negate()
         {
-            return value * (1 - Convert.ToDouble(percentage.Fraction));
+            return FromFraction(-Fraction);
+        }
+
+        /// <summary>
+        /// Returns the absolute (positive) percentage. 
+        /// </summary>
+        /// <param name="percentage">The percentage</param>
+        /// <returns>The positive percentage</returns>
+        public static Percentage Abs(Percentage percentage)
+        {
+            if (percentage.Fraction >= 0) return percentage;
+            return -percentage;
         }
 
         /// <summary>
         /// Calculate the result of the percentage of a given value. E.g. 200 * 10% = 20 and 
         /// convert the result to a decimal
         /// </summary>
-        public static decimal operator *(int value, Percentage percentage)
-        {
-            return value * percentage.Fraction;
-        }
+        public static decimal operator *(int value, Percentage percentage) => value * percentage.Fraction;
 
         /// <summary>
         /// Calculate the result of the percentage of a given value. E.g. 200 * 10% = 20
         /// </summary>
-        public static decimal operator *(decimal value, Percentage percentage)
-        {
-            return percentage.Multiply(value);
-        }
+        public static decimal operator *(decimal value, Percentage percentage) => percentage.Multiply(value);
 
         /// <summary>
         /// Calculate the result of the percentage of a given value. E.g. 200 * 10% = 20
@@ -339,220 +291,188 @@ namespace Pangea.Domain
         }
 
         /// <summary>
+        /// Combine the given percentages into a single percentage that will be the same as applying the percentages sequentially. 
+        /// </summary>
+        /// <param name="percentages">The percentages to combine</param>
+        /// <returns>One percentage reflecting the combination of all the given percentages</returns>
+        public static Percentage Compounded(params Percentage[] percentages)
+        {
+            if (percentages == null) throw new ArgumentNullException(nameof(percentages));
+            if (percentages.Length == 0) throw new ArgumentOutOfRangeException(nameof(percentages));
+
+            var result = percentages[0];
+
+            foreach (var current in percentages.Skip(1))
+            {
+                result = FromFraction((1 + result.Fraction) * (1 + current.Fraction) - 1);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Rounds a percentage value to the nearest integral value.
+        /// </summary>
+        /// <returns>The integer nearest to the percentage value. If the fractional component of d is halfway
+        /// between two integers, one of which is even and the other odd, the even number is returned.
+        ///</returns>
+        public Percentage Round()
+        {
+            return new Percentage(Math.Round(Value));
+        }
+
+        /// <summary>
+        /// Rounds a decimal value to a specified number of fractional digits.
+        /// </summary>
+        /// <param name="mode">Specification for how to round d if it is midway between two other numbers.</param>
+        /// <returns>The number nearest to d that contains a number of fractional digits equal to decimals.</returns>
+        public Percentage Round(MidpointRounding mode)
+        {
+            return new Percentage(Math.Round(Value, mode));
+        }
+
+        /// <summary>
+        /// Rounds a decimal value to a specified number of fractional digits.
+        /// </summary>
+        /// <param name="decimals">The number of decimal places in the return value.</param>
+        /// <returns>The number nearest to d that contains a number of fractional digits equal to decimals.</returns>
+        public Percentage Round(int decimals)
+        {
+            return new Percentage(Math.Round(Value, decimals));
+        }
+        /// <summary>
+        /// Rounds a decimal value to a specified number of fractional digits.
+        /// </summary>
+        /// <param name="decimals">The number of decimal places in the return value.</param>
+        /// <param name="mode">Specification for how to round d if it is midway between two other numbers.</param>
+        /// <returns>The number nearest to d that contains a number of fractional digits equal to decimals.</returns>
+        public Percentage Round(int decimals, MidpointRounding mode)
+        {
+            return new Percentage(Math.Round(Value, decimals, mode));
+        }
+
+        /// <summary>
+        /// Returns the largest integer less than or equal to the specified decimal number.
+        /// </summary>
+        public Percentage Floor()
+        {
+            return new Percentage(Math.Floor(Value));
+        }
+
+        /// <summary>
+        /// Returns the smallest integral value that is greater than or equal to the specified decimal number.
+        /// </summary>
+        public Percentage Ceiling()
+        {
+            return new Percentage(Math.Ceiling(Value));
+        }
+
+        /// <summary>
         /// Calculate the result of the percentage of a given value. E.g. 200 * 10% = 20
         /// </summary>
-        public static double operator *(double value, Percentage percentage)
-        {
-            return value * Convert.ToDouble(percentage.Fraction);
-        }
+        public static double operator *(double value, Percentage percentage) => value * Convert.ToDouble(percentage.Fraction);
 
         ///<inheritdoc/>
-        public static bool operator >(Percentage lhs, Percentage rhs)
-        {
-            return lhs.Value > rhs.Value;
-        }
+        public static bool operator >(Percentage lhs, Percentage rhs) => lhs.Value > rhs.Value;
 
         ///<inheritdoc/>
-        public static bool operator <(Percentage lhs, Percentage rhs)
-        {
-            return lhs.Value < rhs.Value;
-        }
+        public static bool operator <(Percentage lhs, Percentage rhs) => lhs.Value < rhs.Value;
 
         ///<inheritdoc/>
-        public static bool operator >(Percentage lhs, int rhs)
-        {
-            return lhs.Value > rhs;
-        }
+        public static bool operator >(Percentage lhs, int rhs) => lhs.Value > rhs;
 
         ///<inheritdoc/>
-        public static bool operator <(Percentage lhs, int rhs)
-        {
-            return lhs.Value < rhs;
-        }
+        public static bool operator <(Percentage lhs, int rhs) => lhs.Value < rhs;
 
         ///<inheritdoc/>
-        public static bool operator >(Percentage lhs, decimal rhs)
-        {
-            return lhs.Value > rhs;
-        }
+        public static bool operator >(Percentage lhs, decimal rhs) => lhs.Value > rhs;
 
         ///<inheritdoc/>
-        public static bool operator <(Percentage lhs, decimal rhs)
-        {
-            return lhs.Value < rhs;
-        }
+        public static bool operator <(Percentage lhs, decimal rhs) => lhs.Value < rhs;
 
         ///<inheritdoc/>
-        public static bool operator >(Percentage lhs, double rhs)
-        {
-            return lhs.Value > Convert.ToDecimal(rhs);
-        }
+        public static bool operator >(Percentage lhs, double rhs) => lhs.Value > Convert.ToDecimal(rhs);
 
         ///<inheritdoc/>
-        public static bool operator <(Percentage lhs, double rhs)
-        {
-            return lhs.Value < Convert.ToDecimal(rhs);
-        }
+        public static bool operator <(Percentage lhs, double rhs) => lhs.Value < Convert.ToDecimal(rhs);
         ///<inheritdoc/>
-        public static bool operator >(int lhs, Percentage rhs)
-        {
-            return lhs > rhs.Value;
-        }
+        public static bool operator >(int lhs, Percentage rhs) => lhs > rhs.Value;
 
         ///<inheritdoc/>
-        public static bool operator <(int lhs, Percentage rhs)
-        {
-            return lhs < rhs.Value;
-        }
+        public static bool operator <(int lhs, Percentage rhs) => lhs < rhs.Value;
 
         ///<inheritdoc/>
-        public static bool operator >(decimal lhs, Percentage rhs)
-        {
-            return lhs > rhs.Value;
-        }
+        public static bool operator >(decimal lhs, Percentage rhs) => lhs > rhs.Value;
 
         ///<inheritdoc/>
-        public static bool operator <(decimal lhs, Percentage rhs)
-        {
-            return lhs < rhs.Value;
-        }
+        public static bool operator <(decimal lhs, Percentage rhs) => lhs < rhs.Value;
 
         ///<inheritdoc/>
-        public static bool operator >(double lhs, Percentage rhs)
-        {
-            return Convert.ToDecimal(lhs) > rhs.Value;
-        }
+        public static bool operator >(double lhs, Percentage rhs) => Convert.ToDecimal(lhs) > rhs.Value;
 
         ///<inheritdoc/>
-        public static bool operator <(double lhs, Percentage rhs)
-        {
-            return Convert.ToDecimal(lhs) < rhs.Value;
-        }
+        public static bool operator <(double lhs, Percentage rhs) => Convert.ToDecimal(lhs) < rhs.Value;
 
         ///<inheritdoc/>
-        public static bool operator >=(Percentage lhs, Percentage rhs)
-        {
-            return lhs.Value >= rhs.Value;
-        }
+        public static bool operator >=(Percentage lhs, Percentage rhs) => lhs.Value >= rhs.Value;
 
         ///<inheritdoc/>
-        public static bool operator <=(Percentage lhs, Percentage rhs)
-        {
-            return lhs.Value <= rhs.Value;
-        }
+        public static bool operator <=(Percentage lhs, Percentage rhs) => lhs.Value <= rhs.Value;
 
         ///<inheritdoc/>
-        public static bool operator >=(Percentage lhs, int rhs)
-        {
-            return lhs.Value >= rhs;
-        }
+        public static bool operator >=(Percentage lhs, int rhs) => lhs.Value >= rhs;
 
         ///<inheritdoc/>
-        public static bool operator <=(Percentage lhs, int rhs)
-        {
-            return lhs.Value <= rhs;
-        }
+        public static bool operator <=(Percentage lhs, int rhs) => lhs.Value <= rhs;
 
         ///<inheritdoc/>
-        public static bool operator >=(Percentage lhs, decimal rhs)
-        {
-            return lhs.Value >= rhs;
-        }
+        public static bool operator >=(Percentage lhs, decimal rhs) => lhs.Value >= rhs;
 
         ///<inheritdoc/>
-        public static bool operator <=(Percentage lhs, decimal rhs)
-        {
-            return lhs.Value <= rhs;
-        }
+        public static bool operator <=(Percentage lhs, decimal rhs) => lhs.Value <= rhs;
 
         ///<inheritdoc/>
-        public static bool operator >=(Percentage lhs, double rhs)
-        {
-            return lhs.Value >= Convert.ToDecimal(rhs);
-        }
+        public static bool operator >=(Percentage lhs, double rhs) => lhs.Value >= Convert.ToDecimal(rhs);
 
         ///<inheritdoc/>
-        public static bool operator <=(Percentage lhs, double rhs)
-        {
-            return lhs.Value <= Convert.ToDecimal(rhs);
-        }
+        public static bool operator <=(Percentage lhs, double rhs) => lhs.Value <= Convert.ToDecimal(rhs);
         ///<inheritdoc/>
-        public static bool operator >=(int lhs, Percentage rhs)
-        {
-            return lhs >= rhs.Value;
-        }
+        public static bool operator >=(int lhs, Percentage rhs) => lhs >= rhs.Value;
 
         ///<inheritdoc/>
-        public static bool operator <=(int lhs, Percentage rhs)
-        {
-            return lhs <= rhs.Value;
-        }
+        public static bool operator <=(int lhs, Percentage rhs) => lhs <= rhs.Value;
 
         ///<inheritdoc/>
-        public static bool operator >=(decimal lhs, Percentage rhs)
-        {
-            return lhs >= rhs.Value;
-        }
+        public static bool operator >=(decimal lhs, Percentage rhs) => lhs >= rhs.Value;
 
         ///<inheritdoc/>
-        public static bool operator <=(decimal lhs, Percentage rhs)
-        {
-            return lhs <= rhs.Value;
-        }
+        public static bool operator <=(decimal lhs, Percentage rhs) => lhs <= rhs.Value;
 
         ///<inheritdoc/>
-        public static bool operator >=(double lhs, Percentage rhs)
-        {
-            return Convert.ToDecimal(lhs) >= rhs.Value;
-        }
+        public static bool operator >=(double lhs, Percentage rhs) => Convert.ToDecimal(lhs) >= rhs.Value;
 
         ///<inheritdoc/>
-        public static bool operator <=(double lhs, Percentage rhs)
-        {
-            return Convert.ToDecimal(lhs) <= rhs.Value;
-        }
+        public static bool operator <=(double lhs, Percentage rhs) => Convert.ToDecimal(lhs) <= rhs.Value;
 
         /// <inheritdoc />
-        public override bool Equals(object obj)
-        {
-            return Equals((Percentage)obj);
-        }
+        public override bool Equals(object obj) => Equals((Percentage)obj);
 
         /// <inheritdoc />
-        public override int GetHashCode()
-        {
-            return Value.GetHashCode();
-        }
+        public override int GetHashCode() => Value.GetHashCode();
 
         /// <inheritdoc />
-        public bool Equals(Percentage other)
-        {
-            return Value.Equals(other.Value);
-        }
+        public bool Equals(Percentage other) => Value.Equals(other.Value);
 
         /// <inheritdoc/>
-        public int CompareTo(int other)
-        {
-            return Value.CompareTo(other);
-        }
+        public int CompareTo(int other) => Value.CompareTo(other);
 
         /// <inheritdoc/>
-        public int CompareTo(decimal other)
-        {
-            return Value.CompareTo(other);
-        }
+        public int CompareTo(decimal other) => Value.CompareTo(other);
 
         /// <inheritdoc/>
-        public int CompareTo(double other)
-        {
-            return Value.CompareTo(Convert.ToDecimal(other));
-        }
+        public int CompareTo(double other) => Value.CompareTo(Convert.ToDecimal(other));
 
         /// <inheritdoc/>
-        public int CompareTo(Percentage other)
-        {
-            return Value.CompareTo(other.Value);
-        }
+        public int CompareTo(Percentage other) => Value.CompareTo(other.Value);
 
         /// <inheritdoc/>
         public int CompareTo(object obj)
