@@ -18,8 +18,10 @@ namespace Pangea.Domain
     public struct Isbn
         : IEquatable<Isbn>
         , IConvertible
+        , IFormattable
         , IXmlSerializable
     {
+        private readonly string _text;
         private readonly string _isbn;
 
         private readonly string _prefix;
@@ -38,6 +40,15 @@ namespace Pangea.Domain
         /// </summary>
         public string IdentifierGroup => _identifierGroup;
 
+
+        private Isbn(string text, string isbn)
+        {
+            _text = text;
+            _isbn = isbn;
+            _prefix = isbn.Length == 10 ? null : isbn.Substring(0, 3);
+            _identifierGroup = isbn.Substring(isbn.Length - 10);
+        }
+
         /// <summary>
         /// Create a new Isbn based on the given text.
         /// </summary>
@@ -46,7 +57,8 @@ namespace Pangea.Domain
         {
             if (string.IsNullOrEmpty(isbn))
             {
-                _isbn = isbn;
+                _text = isbn;
+                _isbn = null;
                 _prefix = null;
                 _identifierGroup = null;
             }
@@ -55,12 +67,14 @@ namespace Pangea.Domain
                 var match = _isbnExpression.Match(isbn);
                 if (match.Success)
                 {
-                    var numbers = match.Groups["numbers"].Value?.Replace("-", "");
-                    if (numbers.Length == 10 || numbers.Length == 13)
+
+                    var digits = match.Groups["numbers"].Value?.Replace("-", "");
+                    if (digits.Length == 10 || digits.Length == 13)
                     {
-                        _isbn = isbn;
-                        _prefix = numbers.Length == 10 ? null : numbers.Substring(0, 3);
-                        _identifierGroup = ExtractIdentifierGroup(numbers.Substring(numbers.Length - 10));
+                        _isbn = digits;
+                        _text = isbn;
+                        _prefix = digits.Length == 10 ? null : digits.Substring(0, 3);
+                        _identifierGroup = ExtractIdentifierGroup(digits.Substring(digits.Length - 10));
                     }
                     else
                     {
@@ -106,7 +120,7 @@ namespace Pangea.Domain
         public override int GetHashCode() => _isbn?.GetHashCode() ?? 0;
 
         /// <inheritdoc/>
-        public override string ToString() => _isbn;
+        public override string ToString() => ToString(null, null);
 
         /// <inheritdoc/>
         public static bool operator ==(Isbn lhs, Isbn rhs) => lhs.Equals(rhs);
@@ -116,7 +130,7 @@ namespace Pangea.Domain
         /// <summary>
         /// Cast the Isbn to a string
         /// </summary>
-        public static explicit operator string(Isbn isbn) => isbn.ToString();
+        public static explicit operator string(Isbn isbn) => isbn.ToString(null, null);
 
         /// <inheritdoc />
         XmlSchema IXmlSerializable.GetSchema() => null;
@@ -145,7 +159,7 @@ namespace Pangea.Domain
         {
             if (writer == null) throw new ArgumentNullException(nameof(writer));
 
-            if (!string.IsNullOrEmpty(_isbn)) writer.WriteAttributeString("value", _isbn);
+            if (!string.IsNullOrEmpty(_text)) writer.WriteAttributeString("value", _text);
         }
 
         /// <summary>
@@ -174,22 +188,72 @@ namespace Pangea.Domain
         }
 
         TypeCode IConvertible.GetTypeCode() => TypeCode.Object;
-        bool IConvertible.ToBoolean(IFormatProvider provider) => Convert.ToBoolean(_isbn, provider);
-        byte IConvertible.ToByte(IFormatProvider provider) => Convert.ToByte(_isbn, provider);
-        char IConvertible.ToChar(IFormatProvider provider) => Convert.ToChar(_isbn, provider);
-        DateTime IConvertible.ToDateTime(IFormatProvider provider) => Convert.ToDateTime(_isbn, provider);
-        decimal IConvertible.ToDecimal(IFormatProvider provider) => Convert.ToDecimal(_isbn, provider);
-        double IConvertible.ToDouble(IFormatProvider provider) => Convert.ToDouble(_isbn, provider);
-        short IConvertible.ToInt16(IFormatProvider provider) => Convert.ToInt16(_isbn, provider);
-        int IConvertible.ToInt32(IFormatProvider provider) => Convert.ToInt32(_isbn, provider);
-        long IConvertible.ToInt64(IFormatProvider provider) => Convert.ToInt64(_isbn, provider);
-        sbyte IConvertible.ToSByte(IFormatProvider provider) => Convert.ToSByte(_isbn, provider);
-        float IConvertible.ToSingle(IFormatProvider provider) => Convert.ToSingle(_isbn, provider);
-        string IConvertible.ToString(IFormatProvider provider) => Convert.ToString(_isbn, provider);
-        object IConvertible.ToType(Type conversionType, IFormatProvider provider) => Convert.ChangeType(_isbn, conversionType, provider);
-        ushort IConvertible.ToUInt16(IFormatProvider provider) => Convert.ToUInt16(_isbn, provider);
-        uint IConvertible.ToUInt32(IFormatProvider provider) => Convert.ToUInt32(_isbn, provider);
-        ulong IConvertible.ToUInt64(IFormatProvider provider) => Convert.ToUInt64(_isbn, provider);
+        bool IConvertible.ToBoolean(IFormatProvider provider) => Convert.ToBoolean(_text, provider);
+        byte IConvertible.ToByte(IFormatProvider provider) => Convert.ToByte(_text, provider);
+        char IConvertible.ToChar(IFormatProvider provider) => Convert.ToChar(_text, provider);
+        DateTime IConvertible.ToDateTime(IFormatProvider provider) => Convert.ToDateTime(_text, provider);
+        decimal IConvertible.ToDecimal(IFormatProvider provider) => Convert.ToDecimal(_text, provider);
+        double IConvertible.ToDouble(IFormatProvider provider) => Convert.ToDouble(_text, provider);
+        short IConvertible.ToInt16(IFormatProvider provider) => Convert.ToInt16(_text, provider);
+        int IConvertible.ToInt32(IFormatProvider provider) => Convert.ToInt32(_text, provider);
+        long IConvertible.ToInt64(IFormatProvider provider) => Convert.ToInt64(_text, provider);
+        sbyte IConvertible.ToSByte(IFormatProvider provider) => Convert.ToSByte(_text, provider);
+        float IConvertible.ToSingle(IFormatProvider provider) => Convert.ToSingle(_text, provider);
+        string IConvertible.ToString(IFormatProvider provider) => Convert.ToString(_text, provider);
+        object IConvertible.ToType(Type conversionType, IFormatProvider provider) => Convert.ChangeType(_text, conversionType, provider);
+        ushort IConvertible.ToUInt16(IFormatProvider provider) => Convert.ToUInt16(_text, provider);
+        uint IConvertible.ToUInt32(IFormatProvider provider) => Convert.ToUInt32(_text, provider);
+        ulong IConvertible.ToUInt64(IFormatProvider provider) => Convert.ToUInt64(_text, provider);
 
+        /// <summary>
+        /// Returns the string representation of the ISBN. 
+        /// </summary>
+        /// <param name="format">Allowed formats are: <c>B</c>, bare and <c>null</c>, <c>G</c> or <c>O</c> for the original representation.</param>
+        /// <param name="formatProvider">The format provider</param>
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            switch (format)
+            {
+                case "B": return _isbn.ToString(formatProvider);
+                case null:
+                case "G":
+                case "O":
+                case "":
+                    return _text;
+                default:
+                    throw new FormatException();
+            }
+        }
+
+        /// <summary>
+        /// Returns the string representation of the ISBN. Overload to prevent from passing the format when not used.
+        /// </summary>
+        /// <param name="formatProvider">The format provider</param>
+        public string ToString(IFormatProvider formatProvider)
+        {
+            return ToString(null, formatProvider);
+        }
+
+        /// <summary>
+        /// Returns the string representation of the ISBN. 
+        /// </summary>
+        /// <param name="format">Allowed formats are: <c>B</c>, bare and <c>null</c>, <c>G</c> or <c>O</c> for the original representation.</param>
+        public string ToString(string format)
+        {
+            return ToString(format, null);
+        }
+
+        /// <summary>
+        /// Create a new ISBN based on the given text bypassing all validity checks. Use this method when you know the text
+        /// is a valid ISBN. 
+        /// </summary>
+        /// <param name="text">the already validated correct ISBN</param>
+        /// <returns>The ISBN representation of the text</returns>
+        public static Isbn Unsafe(string text)
+        {
+            if (string.IsNullOrEmpty(text)) return new Isbn();
+            var digits = text.Replace("-", "");
+            return new Isbn(text, digits);
+        }
     }
 }

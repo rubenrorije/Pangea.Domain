@@ -94,6 +94,80 @@ namespace Pangea.Domain.Tests
             new Isbn(null).ToString().Should().BeNull();
         }
 
+        [TestMethod]
+        public void Prefix_Of_A_10_Digit_Isbn_Is_Null()
+        {
+            var sut = new Isbn("0-123456789");
+            sut.Prefix.Should().BeNull();
+        }
 
+        [TestMethod]
+        public void Prefix_Of_A_13_Digit_Isbn_Is_Defined()
+        {
+            var sut = new Isbn("978-0-123456789");
+            sut.Prefix.Should().Be("978");
+        }
+
+
+        [TestMethod]
+        public void The_Hyphens_In_An_Isbn_Do_Not_Affect_Equality()
+        {
+            var one = new Isbn("978-0-123456789");
+            var other = new Isbn("9780123456789");
+
+            one.Equals(other).Should().BeTrue();
+            (one == other).Should().BeTrue();
+        }
+        [TestMethod]
+        public void The_Hyphens_In_An_Isbn_Do_Not_Affect_Hashcode()
+        {
+            var one = new Isbn("978-0-123456789");
+            var other = new Isbn("9780123456789");
+
+            one.GetHashCode().Equals(other.GetHashCode()).Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void ToString_Bare_Returns_Without_Hyphens()
+        {
+            var sut = new Isbn("978-0-123456789");
+            sut.ToString("B").Should().Be("9780123456789");
+        }
+
+        [TestMethod]
+        public void ToString_With_Original_Format()
+        {
+            var sut = new Isbn("978-0-123456789");
+            sut.ToString("O").Should().Be("978-0-123456789");
+            sut.ToString("G").Should().Be("978-0-123456789");
+            sut.ToString("").Should().Be("978-0-123456789");
+            sut.ToString((string)null).Should().Be("978-0-123456789");
+        }
+
+        [TestMethod]
+        public void ToString_With_Invalid_Format_Throws_FormatException()
+        {
+            var sut = new Isbn("978-0-123456789");
+            Action action = () => sut.ToString("X");
+
+            action.Should().Throw<FormatException>();
+        }
+
+        [TestMethod]
+        public void ToString_With_Invalid_Format_By_Case_Throws_FormatException()
+        {
+            var sut = new Isbn("978-0-123456789");
+            Action action = () => sut.ToString("o");
+
+            action.Should().Throw<FormatException>();
+        }
+
+        [TestMethod]
+        public void Creating_An_Unsafe_ISBN_Does_Not_Throw_Exception_On_Invalid_ISBN()
+        {
+            Action action = () => Isbn.Unsafe("978B0X123456789");
+
+            action.Should().NotThrow<ArgumentOutOfRangeException>();
+        }
     }
 }
