@@ -92,6 +92,7 @@
     <Compile Include="IbanTests.cs" />
     <Compile Include="CrossCutting\NamespaceTests.cs" />
     <Compile Include="CrossCutting\OperatorTests.cs" />
+    <Compile Include="IsbnTests.cs" />
     <Compile Include="PercentageTests.cs" />
     <Compile Include="SmartFolderTests.cs" />
     <Compile Include="Util\AssemblyUnderTest.cs" />
