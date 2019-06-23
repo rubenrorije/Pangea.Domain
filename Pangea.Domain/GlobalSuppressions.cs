@@ -26,4 +26,7 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Member Design", "AV1130:Return type in method signature should be a collection interface instead of a concrete type", Justification = "<Pending>", Scope = "member", Target = "~M:Pangea.Domain.DateRange")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:Identifiers should have correct suffix", Justification = "<Pending>", Scope = "type", Target = "~T:Pangea.Domain.DateRange")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Maintainability", "AV1551:Method overload should call another overload", Justification = "<Pending>", Scope = "member", Target = "~M:Pangea.Domain.Isbn.ToString(System.IFormatProvider)~System.String")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Maintainability", "AV1551:Method overload should call another overload", Justification = "<Pending>", Scope = "member", Target = "~M:Pangea.Domain.Percentage.Round~Pangea.Domain.Percentage")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Maintainability", "AV1551:Method overload should call another overload", Justification = "<Pending>", Scope = "member", Target = "~M:Pangea.Domain.Percentage.Round(System.Int32)~Pangea.Domain.Percentage")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Maintainability", "AV1551:Method overload should call another overload", Justification = "<Pending>", Scope = "member", Target = "~M:Pangea.Domain.Percentage.Round(System.MidpointRounding)~Pangea.Domain.Percentage")]
 
