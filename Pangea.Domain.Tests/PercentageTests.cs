@@ -28,13 +28,13 @@ namespace Pangea.Domain.Tests
         [TestMethod]
         public void ToString_By_Default_Returns_Percent()
         {
-            new Percentage(5).ToString().Should().Be("5 %");
+            new Percentage(5).ToString().Should().Be("5%");
         }
 
         [TestMethod]
         public void ToString_Formats_The_Number_Correctly()
         {
-            new Percentage(5).ToString("N2", CultureInfo.InvariantCulture).Should().Be("5.00 %");
+            new Percentage(5).ToString("N2", CultureInfo.InvariantCulture).Should().Be("5.00%");
         }
 
         [TestMethod]
@@ -61,13 +61,6 @@ namespace Pangea.Domain.Tests
         {
             var percentage = Percentage.FromFraction(0.05m);
             percentage.Value.Should().Be(5);
-        }
-
-        [TestMethod]
-        public void Create_Percentage_FromFraction_Cannot_Be_Negative()
-        {
-            Action action = () => Percentage.FromFraction(-0.01);
-            action.Should().Throw<ArgumentOutOfRangeException>();
         }
 
         [TestMethod]
@@ -243,13 +236,6 @@ namespace Pangea.Domain.Tests
         }
 
         [TestMethod]
-        public void Creating_A_Negative_Percentage_Throws_ArgumentOutOfRangeException()
-        {
-            Action action = () => new Percentage(-1);
-            action.Should().Throw<ArgumentOutOfRangeException>();
-        }
-
-        [TestMethod]
         public void Create_A_Percentage_From_A_Given_Nominator_And_Denominator()
         {
             var sut = Percentage.From(1, 10);
@@ -267,13 +253,6 @@ namespace Pangea.Domain.Tests
         public void When_The_Denominator_Is_Less_Than_Zero_Throw_ArgumentOutOfRangeException()
         {
             Action action = () => Percentage.From(1, -1);
-            action.Should().ThrowExactly<ArgumentOutOfRangeException>();
-        }
-
-        [TestMethod]
-        public void When_The_Nominator_Is_Less_Than_Zero_Throw_ArgumentOutOfRangeException()
-        {
-            Action action = () => Percentage.From(-1, 1);
             action.Should().ThrowExactly<ArgumentOutOfRangeException>();
         }
 
@@ -319,18 +298,8 @@ namespace Pangea.Domain.Tests
         [TestMethod]
         public void Binary_Serializable()
         {
-            var sut = new Iban("BE71 0961 2345 6769");
+            var sut = new Percentage(5);
             sut.Should().BeBinarySerializable();
-        }
-
-        [TestMethod]
-        public void Invalid_Iban_Must_Be_Serializable_And_Not_Throw_On_Deserialization()
-        {
-            var sut = Iban.Unsafe("BE71 0962 2345 6769"); // invalid check digit
-
-            sut.Should().BeBinarySerializable();
-            sut.Should().BeXmlSerializable();
-            sut.Should().BeDataContractSerializable();
         }
 
         [TestMethod]
@@ -338,5 +307,128 @@ namespace Pangea.Domain.Tests
         {
             20.Percent().Should().Be(new Percentage(20));
         }
+
+        [TestMethod]
+        public void Compounded_Percentages_Should_Have_An_Array_Of_Percentages()
+        {
+            Action action = () => Percentage.Compounded(null);
+            action.Should().Throw<ArgumentNullException>();
+        }
+
+        [TestMethod]
+        public void Compounded_Percentages_Should_Have_An_Array_Of_Percentages_Of_At_Least_One()
+        {
+            Action action = () => Percentage.Compounded(new Percentage[] { });
+            action.Should().Throw<ArgumentOutOfRangeException>();
+        }
+
+        [TestMethod]
+        public void Compounded_Percentages_When_Only_One_Percentage_Returns_The_Parameter()
+        {
+            var sut = Percentage.Compounded(20.Percent());
+            sut.Should().Be(20.Percent());
+        }
+
+        [TestMethod]
+        public void Compounded_Percentages_Is_Not_The_Same_As_Adding_The_Percentages()
+        {
+            var sut = Percentage.Compounded(20.Percent(), 5.Percent());
+            sut.Should().NotBe(25.Percent());
+        }
+
+        [TestMethod]
+        public void Compound_Percentages_Will_Return_The_Compounded_Result()
+        {
+            var sut = Percentage.Compounded(20.Percent(), 5.Percent());
+            sut.Should().Be(26.Percent());
+        }
+
+        [TestMethod]
+        public void Compound_Percentages_Will_Return_The_Compounded_Result_For_Multiple_Percentages()
+        {
+            var sut = Percentage.Compounded(10.Percent(), 10.Percent(), 10.Percent());
+            sut.Should().Be(33.1.Percent());
+        }
+
+        [TestMethod]
+        public void Compound_Percentages_Can_Be_Negative()
+        {
+            var sut = Percentage.Compounded(10.Percent(), (-10).Percent());
+            sut.Should().Be((-1).Percent());
+        }
+
+        [TestMethod]
+        public void Default_ToString_No_Trailing_Zeros()
+        {
+            var one = new Percentage(33.10000m);
+            var other = new Percentage(33.1m);
+            one.ToString().Should().Be(other.ToString());
+        }
+
+        [TestMethod]
+        public void Create_Negative_Percentage()
+        {
+            var sut = new Percentage(-5);
+            sut.ToString().Should().Be("-5%");
+        }
+
+        [TestMethod]
+        public void Negate_Percentage()
+        {
+            var sut = -new Percentage(10);
+            sut.Should().Be(new Percentage(-10));
+        }
+
+        [TestMethod]
+        public void Absolute_Percentage_Returns_The_Original_When_Positive()
+        {
+            var sut = Percentage.Abs(new Percentage(10));
+            sut.Value.Should().Be(10);
+        }
+
+        [TestMethod]
+        public void Absolute_Percentage_Returns_The_Negated_When_Negative()
+        {
+            var sut = Percentage.Abs(new Percentage(-10));
+            sut.Value.Should().Be(10);
+        }
+
+        [TestMethod]
+        public void Maximum_Percentage_Returns_Correct_Result()
+        {
+            new Percentage[] { new Percentage(5), new Percentage(10) }.Max().Should().Be(new Percentage(10));
+            new Percentage[] { new Percentage(10), new Percentage(5) }.Max().Should().Be(new Percentage(10));
+        }
+
+        [TestMethod]
+        public void Minimum_Percentage_Returns_Correct_Result()
+        {
+            new[] { new Percentage(5), new Percentage(10) }.Min().Should().Be(new Percentage(5));
+            new[] { new Percentage(10), new Percentage(5) }.Min().Should().Be(new Percentage(5));
+        }
+
+        [TestMethod]
+        public void Round_The_Percentage()
+        {
+            var sut = new Percentage(4.6);
+            sut.Round().Should().Be(new Percentage(5));
+            sut.Round(1).Should().Be(new Percentage(4.6));
+        }
+
+        [TestMethod]
+        public void Floor_The_Percentage()
+        {
+            var sut = new Percentage(4.9);
+            sut.Floor().Should().Be(new Percentage(4));
+        }
+
+        [TestMethod]
+        public void Ceiling_The_Percentage()
+        {
+            var sut = new Percentage(4.01);
+            sut.Ceiling().Should().Be(new Percentage(5));
+        }
+
+
     }
 }
