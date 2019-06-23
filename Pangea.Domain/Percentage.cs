@@ -339,6 +339,7 @@ namespace Pangea.Domain
         {
             return new Percentage(Math.Round(Value, decimals));
         }
+
         /// <summary>
         /// Rounds a decimal value to a specified number of fractional digits.
         /// </summary>
