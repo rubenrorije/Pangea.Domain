@@ -471,6 +471,14 @@ namespace Pangea.Domain
         }
 
         /// <summary>
+        /// All environment variables are expanded into absolute paths. 
+        /// </summary>
+        public SmartFolder Expand()
+        {
+            return new SmartFolder(ExpandEnvironmentVariables(_value));
+        }
+
+        /// <summary>
         /// Create a relative paths from all the folders given
         /// </summary>
         /// <param name="paths">A list of paths</param>
