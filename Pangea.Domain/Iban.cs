@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Pangea.Domain.Properties;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
@@ -58,7 +59,7 @@ namespace Pangea.Domain
             BasicBankAccountNumber = parsed.BasicAccountNumber;
             if (!IbanParser.Validate(parsed))
             {
-                throw new ArgumentOutOfRangeException(nameof(iban), "The entered Iban is incorrect.");
+                throw new ArgumentOutOfRangeException(nameof(iban), Resources.Iban_EnteredIncorrect);
             }
         }
 

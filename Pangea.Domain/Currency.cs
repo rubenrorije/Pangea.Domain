@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Pangea.Domain.Properties;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -95,7 +96,7 @@ namespace Pangea.Domain
                 case "S":
                     return Symbol;
                 default:
-                    throw new FormatException(nameof(format));
+                    throw new FormatException(Resources.Currency_InvalidFormat);
             }
         }
 

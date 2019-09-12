@@ -11,6 +11,8 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 using static System.Environment;
 using static System.IO.Path;
+using Pangea.Domain.Properties;
+
 namespace Pangea.Domain
 {
     /// <summary>
@@ -171,8 +173,8 @@ namespace Pangea.Domain
         {
             if (folder == null) throw new ArgumentNullException(nameof(folder));
             if (string.IsNullOrEmpty(folder._value)) return this;
-            if (folder == this) throw new ArgumentOutOfRangeException(nameof(folder), "Cannot subtract the path, because both paths are identical");
-            if (folder.IsAbsolute && !IsAbsolute) throw new ArgumentOutOfRangeException(nameof(folder), "The folder is absolute and cannot be subtracted from another path");
+            if (folder == this) throw new ArgumentOutOfRangeException(nameof(folder), Resources.SmartFolder_SubtractIdentical);
+            if (folder.IsAbsolute && !IsAbsolute) throw new ArgumentOutOfRangeException(nameof(folder), Resources.SmartFolder_SubtractAbsolute);
 
             var current = (DirectoryInfo)this;
             if (!folder.IsAbsolute)
@@ -188,7 +190,7 @@ namespace Pangea.Domain
                     }
                     else
                     {
-                        throw new ArgumentOutOfRangeException(nameof(folder), "Cannot subtract folder because they do not have a common ancestor directory");
+                        throw new ArgumentOutOfRangeException(nameof(folder), Resources.SmartFolder_SubtractNoCommonAncestor);
                     }
                 }
                 return new SmartFolder(current.FullName);
@@ -203,7 +205,7 @@ namespace Pangea.Domain
             }
             else
             {
-                throw new ArgumentOutOfRangeException(nameof(folder), "Cannot subtract folder because they do not have a common ancestor directory");
+                throw new ArgumentOutOfRangeException(nameof(folder), Resources.SmartFolder_SubtractNoCommonAncestor);
             }
         }
 
@@ -295,7 +297,7 @@ namespace Pangea.Domain
             {
                 safe = safe.Substring(1);
             }
-            if (IsPathRooted(safe)) throw new ArgumentOutOfRangeException(nameof(other), "The path could not be added, because it is absolute");
+            if (IsPathRooted(safe)) throw new ArgumentOutOfRangeException(nameof(other), Resources.SmartFolder_CannotAddAbsolute);
 
             return new SmartFolder(Combine(_value, safe));
         }
@@ -331,6 +333,11 @@ namespace Pangea.Domain
                 result = new SmartFolder(folderPath);
                 return true;
             }
+            else if (folderPath == null)
+            {
+                result = default;
+                return true;
+            }
             else
             {
                 result = default;
@@ -353,7 +360,7 @@ namespace Pangea.Domain
         public static SmartFolder Volume(string volume)
         {
             if (volume == null) throw new ArgumentNullException(nameof(volume));
-            if (string.IsNullOrEmpty(volume)) throw new ArgumentException("volume cannot be empty", nameof(volume));
+            if (string.IsNullOrEmpty(volume)) throw new ArgumentException(Resources.SmartFolder_VolumeCannotBeEmpty, nameof(volume));
             return new SmartFolder(volume + VolumeSeparatorChar + DirectorySeparatorChar);
         }
 
@@ -365,7 +372,7 @@ namespace Pangea.Domain
         public static SmartFolder FromEnvironmentVariable(string variable)
         {
             if (variable == null) throw new ArgumentNullException(nameof(variable));
-            if (string.IsNullOrEmpty(variable)) throw new ArgumentException("variable cannot be empty", nameof(variable));
+            if (string.IsNullOrEmpty(variable)) throw new ArgumentException(Resources.SmartFolder_VariableCannotBeEmpty, nameof(variable));
 
             return new SmartFolder("%" + variable + "%");
         }
@@ -493,6 +500,7 @@ namespace Pangea.Domain
         /// <param name="file">The file that specifies the current folder</param>
         public static SmartFolder FromFile(FileInfo file)
         {
+            if (file == null) throw new ArgumentNullException(nameof(file));
             return new SmartFolder(file.Directory);
         }
 

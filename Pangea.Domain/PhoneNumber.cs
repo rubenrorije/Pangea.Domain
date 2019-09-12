@@ -1,5 +1,6 @@
 ﻿using Pangea.Domain.ExtensionMethods;
 using Pangea.Domain.Formatters;
+using Pangea.Domain.Properties;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -63,7 +64,7 @@ namespace Pangea.Domain
             else
             {
                 var result = _internationalExpression.Match(text);
-                if (!result.Success) throw new FormatException($"Invalid phone number");
+                if (!result.Success) throw new ArgumentOutOfRangeException(nameof(text), Resources.PhoneNumber_Invalid);
                 var numbers = result.Groups["numbers"].Value;
                 CountryCode = CountryCodes.Instance?.GetCountryCallingCodeFrom(numbers);
                 Text = numbers.ReplaceFirst(CountryCode?.ToString(CultureInfo.InvariantCulture), string.Empty);
@@ -73,7 +74,7 @@ namespace Pangea.Domain
 
         private PhoneNumber(Match match)
         {
-            if (!match.Success) throw new FormatException($"Invalid phone number");
+            if (!match.Success) throw new FormatException(Resources.PhoneNumber_Invalid);
             var numbers = match.Groups["numbers"].Value;
             Text = numbers;
             Trimmed = Text.RemoveAll(AllowedSeparators);
@@ -101,7 +102,7 @@ namespace Pangea.Domain
             else
             {
                 var result = _localExpression.Match(text);
-                if (!result.Success) throw new FormatException($"Invalid phone number");
+                if (!result.Success) throw new FormatException(Resources.PhoneNumber_Invalid);
                 var numbers = result.Groups["numbers"].Value;
                 Text = numbers;
                 Trimmed = Text?.RemoveAll(AllowedSeparators);
@@ -111,7 +112,7 @@ namespace Pangea.Domain
 
         private PhoneNumber(int countryCode, Match match)
         {
-            if (!match.Success) throw new FormatException($"Invalid phone number");
+            if (!match.Success) throw new FormatException(Resources.PhoneNumber_Invalid);
             var numbers = match.Groups["numbers"].Value;
             Text = numbers;
             Trimmed = Text?.RemoveAll(AllowedSeparators);

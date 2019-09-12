@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CreditCard_InvalidChecksum" xml:space="preserve">
+    <value>The creditcard is invalid because the checksum is incorrect</value>
+  </data>
+  <data name="CreditCard_LessThan20Characters" xml:space="preserve">
+    <value>A credit card must be less than 20 characters</value>
+  </data>
+  <data name="CreditCard_MoreThan8Characters" xml:space="preserve">
+    <value>A credit card must be at least 8 characters</value>
+  </data>
+  <data name="CreditCard_OnlyDigits" xml:space="preserve">
+    <value>A credit card can only contain digits or spaces</value>
+  </data>
+  <data name="CurrencyCollection_NotInitialized" xml:space="preserve">
+    <value>The provider function is not set. Use the SetProvider-function to register an instance. Probably you want to create a CurrencyCollection instance once for your application in the bootstrapping code and register it in your IoC-Container. After that you want to call the SetProvider with a function to retrieve the instance from your IoC-container. When you do not use an IoC-container in your application, you can create a new CurrencyCollection instance and use the following call: CurrencyCollection.SetProvider(() =&gt; instance);</value>
+  </data>
+  <data name="Currency_InvalidFormat" xml:space="preserve">
+    <value>Invalid format string</value>
+  </data>
+  <data name="DateRangeCollection_NoRanges" xml:space="preserve">
+    <value>No ranges are specified</value>
+  </data>
+  <data name="DateRange_EndDateBeforeStartDate" xml:space="preserve">
+    <value>Cannot create a date range with a smaller end date than the start date</value>
+  </data>
+  <data name="DateRange_RangesNotAdjacent" xml:space="preserve">
+    <value>Cannot combine the ranges because the ranges are not adjacent</value>
+  </data>
+  <data name="DateRange_SubtractEndDatesDontMatch" xml:space="preserve">
+    <value>Cannot subtract the ranges, because the end dates do not match</value>
+  </data>
+  <data name="EmojiFlag_LessThan2Characters" xml:space="preserve">
+    <value>Should have 2 characters, but has less characters</value>
+  </data>
+  <data name="EmojiFlag_MoreThan2Characters" xml:space="preserve">
+    <value>Should have 2 characters, but has more characters</value>
+  </data>
+  <data name="ExchangeRate_SameCurrency" xml:space="preserve">
+    <value>It is not possible to create an exchange rate within the same currency</value>
+  </data>
+  <data name="Iban_2CheckDigits" xml:space="preserve">
+    <value>The country code should be followed by 2 check digits (0-9)</value>
+  </data>
+  <data name="Iban_EnteredIncorrect" xml:space="preserve">
+    <value>The entered Iban is incorrect</value>
+  </data>
+  <data name="Iban_LessThan5Characters" xml:space="preserve">
+    <value>the Iban must be at least 5 characters. 2 for the country code, 2 check digits and at least 1 for the country specific account number</value>
+  </data>
+  <data name="Iban_MoreThan34Characters" xml:space="preserve">
+    <value>the Iban can be at most 34 characters. 2 for the country code, 2 check digits and 30 for the country specific account number</value>
+  </data>
+  <data name="Iban_OnlyLettersAndDigits" xml:space="preserve">
+    <value>The Iban can only contain letters (A-Z) and digits (0-9)</value>
+  </data>
+  <data name="Iban_StartWithIso" xml:space="preserve">
+    <value>The Iban should start with the ISO country code (ALPHA-2)</value>
+  </data>
+  <data name="PhoneNumberFormatterWrapper_InvalidFormat" xml:space="preserve">
+    <value>Invalid format string</value>
+  </data>
+  <data name="PhoneNumber_Invalid" xml:space="preserve">
+    <value>Invalid phone number</value>
+  </data>
+  <data name="SmartFolder_CannotAddAbsolute" xml:space="preserve">
+    <value>The path could not be added, because it is absolute</value>
+  </data>
+  <data name="SmartFolder_SubtractAbsolute" xml:space="preserve">
+    <value>The folder is absolute and cannot be subtracted from another path</value>
+  </data>
+  <data name="SmartFolder_SubtractIdentical" xml:space="preserve">
+    <value>Cannot subtract the path, because both paths are identical</value>
+  </data>
+  <data name="SmartFolder_SubtractNoCommonAncestor" xml:space="preserve">
+    <value>Cannot subtract folder because they do not have a common ancestor directory</value>
+  </data>
+  <data name="SmartFolder_VariableCannotBeEmpty" xml:space="preserve">
+    <value>Variable cannot be empty</value>
+  </data>
+  <data name="SmartFolder_VolumeCannotBeEmpty" xml:space="preserve">
+    <value>Volume cannot be empty</value>
+  </data>
+</root>

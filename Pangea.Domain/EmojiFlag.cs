@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Pangea.Domain.Properties;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -28,6 +29,7 @@ namespace Pangea.Domain
         /// <param name="culture">the culture</param>
         public static string Create(CultureInfo culture)
         {
+            if (culture == null) throw new ArgumentNullException(nameof(culture));
             return Create(culture.LCID);
         }
 
@@ -37,6 +39,7 @@ namespace Pangea.Domain
         /// <param name="region">the region (country)</param>
         public static string Create(RegionInfo region)
         {
+            if (region == null) throw new ArgumentNullException(nameof(region));
             return Create(region.TwoLetterISORegionName);
         }
 
@@ -47,8 +50,8 @@ namespace Pangea.Domain
         public static string Create(string isoTwoLetterName)
         {
             if (isoTwoLetterName == null) return null;
-            if (isoTwoLetterName.Length < 2) throw new FormatException($"{nameof(isoTwoLetterName)} should have 2 characters, but has less characters");
-            if (isoTwoLetterName.Length > 2) throw new FormatException($"{nameof(isoTwoLetterName)} should have 2 characters, but has more characters");
+            if (isoTwoLetterName.Length < 2) throw new ArgumentOutOfRangeException(nameof(isoTwoLetterName), Resources.EmojiFlag_LessThan2Characters);
+            if (isoTwoLetterName.Length > 2) throw new ArgumentOutOfRangeException(nameof(isoTwoLetterName), Resources.EmojiFlag_MoreThan2Characters);
             return
                 string.Concat(
                     isoTwoLetterName

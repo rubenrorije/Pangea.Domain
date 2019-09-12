@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Pangea.Domain.Properties;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -38,7 +39,7 @@ namespace Pangea.Domain
         {
             if (from == null) throw new ArgumentNullException(nameof(from));
             if (to == null) throw new ArgumentNullException(nameof(to));
-            if (from.Equals(to)) throw new ArgumentException("It is not possible to create an exchange rate within the same currency");
+            if (from.Equals(to)) throw new ArgumentException(Resources.ExchangeRate_SameCurrency);
             if (rate <= 0) throw new ArgumentOutOfRangeException(nameof(rate));
 
             From = from;
@@ -102,6 +103,7 @@ namespace Pangea.Domain
         /// <returns>The converted amount in the To currency</returns>
         public static decimal operator *(decimal amount, ExchangeRate rate)
         {
+            if (rate == null) throw new ArgumentNullException(nameof(rate));
             return rate.Multiply(amount);
         }
 
@@ -123,6 +125,7 @@ namespace Pangea.Domain
         /// <returns>The converted amount in the FROM currency</returns>
         public static decimal operator /(decimal amount, ExchangeRate rate)
         {
+            if (rate == null) throw new ArgumentNullException(nameof(rate));
             return rate.Divide(amount);
         }
 

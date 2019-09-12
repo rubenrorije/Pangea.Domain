@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Pangea.Domain.Properties;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -96,7 +97,7 @@ namespace Pangea.Domain
         /// </summary>
         public bool IsSingleChain()
         {
-            if (Count <= 1) throw new InvalidOperationException("No ranges are specified");
+            if (Count <= 1) throw new InvalidOperationException(Resources.DateRangeCollection_NoRanges);
 
             var ordered = _ranges.OrderBy(rng => rng, new DateRangeComparer()).ToList();
             for (var index = 0; index < ordered.Count - 1; index++)

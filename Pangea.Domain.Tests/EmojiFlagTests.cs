@@ -22,14 +22,14 @@ namespace Pangea.Domain.Tests
         public void When_Country_Is_Less_Than_Two_Characters_Throw_FormatException()
         {
             Action action = () => EmojiFlag.Create("a");
-            action.Should().Throw<FormatException>();
+            action.Should().Throw<ArgumentOutOfRangeException>();
         }
 
         [TestMethod]
         public void When_Country_Is_More_Than_Two_Characters_Throw_FormatException()
         {
             Action action = () => EmojiFlag.Create("abc");
-            action.Should().Throw<FormatException>();
+            action.Should().Throw<ArgumentOutOfRangeException>();
         }
 
         [TestMethod]

@@ -300,6 +300,7 @@ namespace Pangea.Domain
         /// <returns>a valid GPS location. When the text could not be parsed an exception is thrown</returns>
         public static GpsLocation Parse(string text, CultureInfo culture)
         {
+            if (culture == null) throw new ArgumentNullException(nameof(culture));
             return Parse(text, culture.NumberFormat);
         }
 
@@ -342,6 +343,7 @@ namespace Pangea.Domain
         /// <returns>whether the parsing was successful</returns>
         public static bool TryParse(string text, CultureInfo culture, out GpsLocation result)
         {
+            if (culture == null) throw new ArgumentNullException(nameof(culture));
             return TryParse(text, culture.NumberFormat, out result);
         }
 
