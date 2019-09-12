@@ -1,4 +1,5 @@
 ﻿using Pangea.Domain.Checksums;
+using Pangea.Domain.Properties;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -114,9 +115,9 @@ namespace Pangea.Domain
             var toParse = (text ?? string.Empty).Replace(" ", "").Replace("\t", "").ToUpper(CultureInfo.InvariantCulture);
             if (toParse.Length == 0) return new ParsingResult();
             if (toParse.Length > 34)
-                return ParsingResult.Invalid("the Iban can be at most 34 characters. 2 for the country code, 2 check digits and 30 for the country specific account number");
+                return ParsingResult.Invalid(Resources.Iban_MoreThan34Characters);
             if (toParse.Length <= 4)
-                return ParsingResult.Invalid("the Iban must be at least 5 characters. 2 for the country code, 2 check digits and at least 1 for the country specific account number");
+                return ParsingResult.Invalid(Resources.Iban_LessThan5Characters);
 
             var result = new ParsingResult
             {
@@ -125,9 +126,9 @@ namespace Pangea.Domain
                 BasicAccountNumber = toParse.Substring(4, toParse.Length - 4)
             };
 
-            if (!result.CountryCode.All(chr => char.IsUpper(chr))) return ParsingResult.Invalid("The Iban should start with the ISO country code (ALPHA-2)");
-            if (!result.CheckDigits.All(chr => char.IsDigit(chr))) return ParsingResult.Invalid("The country code should be followed by 2 check digits (0-9)");
-            if (!result.BasicAccountNumber.All(chr => char.IsLetterOrDigit(chr))) return ParsingResult.Invalid("The iban can only contain letters (A-Z) and digits (0-9)");
+            if (!result.CountryCode.All(chr => char.IsUpper(chr))) return ParsingResult.Invalid(Resources.Iban_StartWithIso);
+            if (!result.CheckDigits.All(chr => char.IsDigit(chr))) return ParsingResult.Invalid(Resources.Iban_2CheckDigits);
+            if (!result.BasicAccountNumber.All(chr => char.IsLetterOrDigit(chr))) return ParsingResult.Invalid(Resources.Iban_OnlyLettersAndDigits);
 
             return result;
         }

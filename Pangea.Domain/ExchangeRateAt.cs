@@ -64,6 +64,7 @@ namespace Pangea.Domain
         /// <returns>the converted amount</returns>
         public static decimal operator *(decimal amount, ExchangeRateAt rate)
         {
+            if (rate == null) throw new ArgumentNullException(nameof(rate));
             return rate.Multiply(amount);
         }
 
@@ -85,6 +86,7 @@ namespace Pangea.Domain
         /// <returns>The converted amount in the FROM currency</returns>
         public static decimal operator /(decimal amount, ExchangeRateAt rate)
         {
+            if (rate == null) throw new ArgumentNullException(nameof(rate));
             return rate.Divide(amount);
         }
 

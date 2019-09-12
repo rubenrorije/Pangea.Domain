@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Pangea.Domain.Properties;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -71,7 +72,7 @@ namespace Pangea.Domain
         /// </summary>
         public DateRange(DateTime? start, DateTime? end)
         {
-            if (start != null && end != null && end < start) throw new ArgumentOutOfRangeException(nameof(end), "Cannot create a date range with a smaller end date than the start date");
+            if (start != null && end != null && end < start) throw new ArgumentOutOfRangeException(nameof(end), Resources.DateRange_EndDateBeforeStartDate);
             Start = start?.Date;
             End = end?.Date;
             _isFilled = true;
@@ -84,7 +85,7 @@ namespace Pangea.Domain
         /// <param name="end">The end of the range</param>
         public DateRange(DateTime start, DateTime end)
         {
-            if (end < start) throw new ArgumentOutOfRangeException(nameof(end), "Cannot create a date range with a smaller end date than the start date");
+            if (end < start) throw new ArgumentOutOfRangeException(nameof(end), Resources.DateRange_EndDateBeforeStartDate);
             Start = start.Date;
             End = end.Date;
             _isFilled = true;
@@ -240,7 +241,7 @@ namespace Pangea.Domain
             }
             else
             {
-                throw new ArgumentOutOfRangeException(nameof(other), "Cannot combine the ranges because the ranges are not adjacent");
+                throw new ArgumentOutOfRangeException(nameof(other), Resources.DateRange_RangesNotAdjacent);
             }
         }
 
@@ -264,7 +265,7 @@ namespace Pangea.Domain
             if (End == other.End) return new DateRange(Start, other.Start.Value.AddDays(-1));
             if (Start == other.Start) return new DateRange(other.End.Value.AddDays(1), End);
 
-            throw new ArgumentOutOfRangeException(nameof(other), "Cannot subtract the ranges, because the end dates do not match");
+            throw new ArgumentOutOfRangeException(nameof(other), Resources.DateRange_SubtractEndDatesDontMatch);
         }
 
         /// <summary>
@@ -454,6 +455,7 @@ namespace Pangea.Domain
         /// <param name="culture">The culture to determine the first day of the week</param>
         public static DateRange Week(DateTime dayWithinWeek, CultureInfo culture)
         {
+            if (culture == null) throw new ArgumentNullException(nameof(culture));
             return Weeks(dayWithinWeek, 1, culture.DateTimeFormat);
         }
 
@@ -464,6 +466,7 @@ namespace Pangea.Domain
         /// <param name="format">The date time format to determine the first day of the week</param>
         public static DateRange Week(DateTime dayWithinWeek, DateTimeFormatInfo format)
         {
+            if (format == null) throw new ArgumentNullException(nameof(format));
             return Weeks(dayWithinWeek, 1, format.FirstDayOfWeek);
         }
 
@@ -495,6 +498,7 @@ namespace Pangea.Domain
         /// <param name="culture">The culture to determine the first day of the week</param>
         public static DateRange Weeks(DateTime dayWithinWeek, int numberOfWeeks, CultureInfo culture)
         {
+            if (culture == null) throw new ArgumentNullException(nameof(culture));
             return Weeks(dayWithinWeek, numberOfWeeks, culture.DateTimeFormat);
         }
 
@@ -506,6 +510,7 @@ namespace Pangea.Domain
         /// <param name="format">The date time format to determine the first day of the week</param>
         public static DateRange Weeks(DateTime dayWithinWeek, int numberOfWeeks, DateTimeFormatInfo format)
         {
+            if (format == null) throw new ArgumentNullException(nameof(format));
             return Weeks(dayWithinWeek, numberOfWeeks, format.FirstDayOfWeek);
         }
 

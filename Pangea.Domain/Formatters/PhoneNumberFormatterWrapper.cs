@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Pangea.Domain.Properties;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -34,7 +35,7 @@ namespace Pangea.Domain.Formatters
             {
                 case "L": return _formatter.GetLocalFormat(phoneNumber);
                 case "G":return _formatter.GetGlobalFormat(phoneNumber);
-                default: throw new FormatException(nameof(format));
+                default: throw new FormatException(Resources.PhoneNumberFormatterWrapper_InvalidFormat);
             }
         }
 

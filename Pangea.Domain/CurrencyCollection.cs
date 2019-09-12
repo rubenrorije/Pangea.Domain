@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Pangea.Domain.Properties;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -59,13 +60,7 @@ namespace Pangea.Domain
             {
                 if (_instanceProvider == null)
                 {
-                    throw new InvalidOperationException(
-                      $"The provider function is not set. Use the {nameof(SetProvider)}-function to register an instance. " +
-                      $"Probably you want to create a {nameof(CurrencyCollection)} instance once for your application in the bootstrapping code " +
-                      $"and register it in your IoC-Container. After that you want to " +
-                      $"call the SetProvider with a function to retrieve the instance from your IoC-container. " +
-                      $"When you do not use an IoC-container in your application, you can create a new {nameof(CurrencyCollection)} instance and use the " +
-                      $"following call: {nameof(CurrencyCollection)}.{nameof(SetProvider)}(() => instance);");
+                    throw new InvalidOperationException(Resources.CurrencyCollection_NotInitialized);
                 }
                 return _instanceProvider();
             }
@@ -107,6 +102,7 @@ namespace Pangea.Domain
         /// <param name="currencies">the currencies to add</param>
         public void AddRange(IEnumerable<Currency> currencies)
         {
+            if (currencies == null) throw new ArgumentNullException(nameof(currencies));
             foreach (var currency in currencies)
             {
                 Add(currency);

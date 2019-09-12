@@ -29,7 +29,7 @@ namespace Pangea.Domain.Tests
         public void Invalid_PhoneNumber_Throws_Exception()
         {
             Action action = () => new PhoneNumber("abc");
-            action.Should().Throw<FormatException>();
+            action.Should().Throw<ArgumentOutOfRangeException>();
         }
 
         [TestMethod]
