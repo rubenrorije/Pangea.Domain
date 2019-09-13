@@ -84,6 +84,7 @@
     <Compile Include="DefaultCurrenciesTests.cs" />
     <Compile Include="EmojiFlagTests.cs" />
     <Compile Include="ExchangeRateAtTests.cs" />
+    <Compile Include="ExchangeRateCollectionTests.cs" />
     <Compile Include="ExchangeRateTests.cs" />
     <Compile Include="Formatters\PhoneNumberAggregateFormatterTests.cs" />
     <Compile Include="Formatters\PhoneNumberBEFormatterTests.cs" />
