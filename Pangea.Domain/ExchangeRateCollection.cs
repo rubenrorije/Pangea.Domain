@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Pangea.Domain.Properties;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,8 +56,37 @@ namespace Pangea.Domain
         public void Add(ExchangeRate rate)
         {
             if (rate == null) throw new ArgumentNullException(nameof(rate));
-            if (Contains(rate))throw new ArgumentException(Resources ,nameof(rate))
+            if (Contains(rate.From, rate.To)) throw new ArgumentException(Resources.ExchangeRateCollection_RateIsAlreadyAdded, nameof(rate));
             _exchangeRates.Add(rate);
+        }
+
+        /// <summary>
+        /// Returns the exchange rate for the given currencies when it exists
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <returns></returns>
+        public ExchangeRate this[Currency from, Currency to]
+        {
+            get
+            {
+                if (from == null) throw new ArgumentNullException(nameof(from));
+                if (to == null) throw new ArgumentNullException(nameof(to));
+
+                var result = _exchangeRates.FirstOrDefault(rate => rate.From == from && rate.To == to);
+                if (result != null)
+                {
+                    return result;
+                }
+                else if (ConversionType == ExchangeRateConversionType.SameRateBothWays)
+                {
+                    return _exchangeRates.FirstOrDefault(rate => rate.To == from && rate.From == to);
+                }
+                else
+                {
+                    throw new ArgumentOutOfRangeException(Resources.ExchangeRateCollection_CannotFindExchangeRateForCurrencies);
+                }
+            }
         }
 
         /// <summary>

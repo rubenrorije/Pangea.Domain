@@ -62,6 +62,17 @@ namespace Pangea.Domain.Tests
         }
 
         [TestMethod]
+        public void Indexed_()
+        {
+            var sut = new ExchangeRateCollection(ExchangeRateConversionType.SameRateBothWays)
+            {
+                new ExchangeRate(EUR, USD, 5m),
+            };
+
+            sut[EUR, USD].Should().NotBeNull();
+        }
+
+        [TestMethod]
         public void Contains_For_Currencies_When_Using_Same_Rates_Both_Ways()
         {
             var sut = new ExchangeRateCollection(ExchangeRateConversionType.SameRateBothWays)

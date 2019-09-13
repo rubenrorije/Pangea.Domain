@@ -153,6 +153,12 @@
   <data name="EmojiFlag_MoreThan2Characters" xml:space="preserve">
     <value>Should have 2 characters, but has more characters</value>
   </data>
+  <data name="ExchangeRateCollection_CannotFindExchangeRateForCurrencieExchangeRateCollection_CannotFindExchangeRateForCurrencies" xml:space="preserve">
+    <value>Cannot find exchange rate for the given currencies</value>
+  </data>
+  <data name="ExchangeRateCollection_RateIsAlreadyAdded" xml:space="preserve">
+    <value>Exchange rate is already added to the collection</value>
+  </data>
   <data name="ExchangeRate_SameCurrency" xml:space="preserve">
     <value>It is not possible to create an exchange rate within the same currency</value>
   </data>

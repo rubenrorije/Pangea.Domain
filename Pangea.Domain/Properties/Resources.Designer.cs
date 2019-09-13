@@ -178,6 +178,25 @@ namespace Pangea.Domain.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot find exchange rate for the given currencies.
+        /// </summary>
+        internal static string ExchangeRateCollection_CannotFindExchangeRateForCurrencies {
+            get {
+                return ResourceManager.GetString("ExchangeRateCollection_CannotFindExchangeRateForCurrencieExchangeRateCollection_C" +
+                        "annotFindExchangeRateForCurrencies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exchange rate is already added to the collection.
+        /// </summary>
+        internal static string ExchangeRateCollection_RateIsAlreadyAdded {
+            get {
+                return ResourceManager.GetString("ExchangeRateCollection_RateIsAlreadyAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The country code should be followed by 2 check digits (0-9).
         /// </summary>
         internal static string Iban_2CheckDigits {
