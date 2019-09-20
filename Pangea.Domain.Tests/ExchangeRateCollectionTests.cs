@@ -62,7 +62,7 @@ namespace Pangea.Domain.Tests
         }
 
         [TestMethod]
-        public void Indexed_()
+        public void Indexed_Returns_Rate()
         {
             var sut = new ExchangeRateCollection(ExchangeRateConversionType.SameRateBothWays)
             {
@@ -70,6 +70,30 @@ namespace Pangea.Domain.Tests
             };
 
             sut[EUR, USD].Should().NotBeNull();
+        }
+
+        [TestMethod]
+        public void Indexed_Returns_No_Rate_When_Reversed_And_Different_Rates()
+        {
+            var sut = new ExchangeRateCollection(ExchangeRateConversionType.InverseRateIsDifferent)
+            {
+                new ExchangeRate(EUR, USD, 5m),
+            };
+            Action action = () => { var result = sut[USD, EUR]; };
+            action.Should().Throw<KeyNotFoundException>();
+        }
+
+        [TestMethod]
+        public void Indexed_Returns_Rate_Reversed_When_Both_Ways()
+        {
+            var sut = new ExchangeRateCollection(ExchangeRateConversionType.SameRateBothWays)
+            {
+                new ExchangeRate(EUR, USD, 5m),
+            };
+
+            var result = sut[USD, EUR];
+            result.From.Should().Be(USD);
+            result.To.Should().Be(EUR);
         }
 
         [TestMethod]
@@ -104,5 +128,8 @@ namespace Pangea.Domain.Tests
             };
             action.Should().Throw<ArgumentException>();
         }
+
+
+
     }
 }

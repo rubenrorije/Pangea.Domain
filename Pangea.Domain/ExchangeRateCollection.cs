@@ -61,7 +61,8 @@ namespace Pangea.Domain
         }
 
         /// <summary>
-        /// Returns the exchange rate for the given currencies when it exists
+        /// Returns the exchange rate for the given currencies when it exists.
+        /// It will only return the 
         /// </summary>
         /// <param name="from"></param>
         /// <param name="to"></param>
@@ -80,11 +81,12 @@ namespace Pangea.Domain
                 }
                 else if (ConversionType == ExchangeRateConversionType.SameRateBothWays)
                 {
-                    return _exchangeRates.FirstOrDefault(rate => rate.To == from && rate.From == to);
+                    result =  _exchangeRates.FirstOrDefault(rate => rate.To == from && rate.From == to);
+                    return result.Invert();
                 }
                 else
                 {
-                    throw new ArgumentOutOfRangeException(Resources.ExchangeRateCollection_CannotFindExchangeRateForCurrencies);
+                    throw new KeyNotFoundException(Resources.ExchangeRateCollection_CannotFindExchangeRateForCurrencies);
                 }
             }
         }
