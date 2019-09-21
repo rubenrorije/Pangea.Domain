@@ -67,6 +67,7 @@
     <Compile Include="AssemblyInformationTests.cs" />
     <Compile Include="Checksums\LuhnChecksumCalculatorTests.cs" />
     <Compile Include="Checksums\ModChecksumCalculatorTests.cs" />
+    <Compile Include="CurrenciesTests.cs" />
     <Compile Include="CurrencyCollectionTests.cs" />
     <Compile Include="DateRangeComparerTests.cs" />
     <Compile Include="CountryCodesTests.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="CrossCutting\NamespaceTests.cs" />
     <Compile Include="CrossCutting\OperatorTests.cs" />
     <Compile Include="IsbnTests.cs" />
+    <Compile Include="MoneyTests.cs" />
     <Compile Include="PercentageTests.cs" />
     <Compile Include="SmartFolderTests.cs" />
     <Compile Include="Util\AssemblyUnderTest.cs" />

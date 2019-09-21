@@ -15,22 +15,9 @@ namespace Pangea.Domain.Tests
         [TestMethod]
         public void Register_All_Top_10_Currencies_Directly()
         {
-            DefaultCurrencies.Register();
+            var sut = DefaultCurrencies.Register();
 
-            CurrencyCollection.Instance.Count.Should().Be(10);
+            sut.Count.Should().Be(10);
         }
-
-        [TestMethod]
-        public void Register_All_Top_10_Currencies_To_A_Given_Instance()
-        {
-            var sut = new CurrencyCollection();
-            using (new RegisterCurrencies(sut))
-            {
-                DefaultCurrencies.Register();
-
-                sut.Count.Should().Be(10);
-            }
-        }
-
     }
 }

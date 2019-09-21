@@ -12,55 +12,53 @@ namespace Pangea.Domain
         /// <summary>
         /// Australian dollar: AUD, 036, $
         /// </summary>
-        public static readonly Currency AUD = new Currency("AUD", 036, "$");
+        public static readonly Currency AUD = new Currency("AUD", "$");
         /// <summary>
         /// Canadian dollar: CAD, 124, $ 
         /// </summary>
-        public static readonly Currency CAD = new Currency("CAD", 124, "$");
+        public static readonly Currency CAD = new Currency("CAD", "$");
         /// <summary>
         /// Swiss franc: CHF, 756
         /// </summary>
-        public static readonly Currency CHF = new Currency("CHF", 756);
+        public static readonly Currency CHF = new Currency("CHF");
         /// <summary>
         /// Renminbi (Chinese) yuan: CNY, 156, ¥
         /// </summary>
-        public static readonly Currency CNY = new Currency("CNY", 156, "¥");
+        public static readonly Currency CNY = new Currency("CNY", "¥");
         /// <summary>
         /// Euro: EUR, 978, €
         /// </summary>
-        public static readonly Currency EUR = new Currency("EUR", 978, "€");
+        public static readonly Currency EUR = new Currency("EUR", "€");
         /// <summary>
         /// Pound Sterling: GBP, 826, £
         /// </summary>
-        public static readonly Currency GBP = new Currency("GBP", 826, "£");
+        public static readonly Currency GBP = new Currency("GBP", "£");
         /// <summary>
         /// Japanese Yen: JPY, 392, ¥
         /// </summary>
-        public static readonly Currency JPY = new Currency("JPY", 392, "¥");
+        public static readonly Currency JPY = new Currency("JPY", "¥");
         /// <summary>
         /// New Zealand Dollar: NZD, 554, $
         /// </summary>
-        public static readonly Currency NZD = new Currency("NZD", 554, "$");
+        public static readonly Currency NZD = new Currency("NZD", "$");
         /// <summary>
         /// Swedish krona: SEK, 752, kr
         /// </summary>
-        public static readonly Currency SEK = new Currency("SEK", 752, "kr");
+        public static readonly Currency SEK = new Currency("SEK", "kr");
         /// <summary>
         /// United States dollar: 840, $
         /// </summary>
-        public static readonly Currency USD = new Currency("USD", 840, "$");
+        public static readonly Currency USD = new Currency("USD", "$");
 
         /// <summary>
         /// Use these default currencies, the most traded currencies as the list of currencies to register.
         /// If no 
         /// </summary>
-        public static void Register()
+        public static CurrencyCollection Register()
         {
-            if (!CurrencyCollection.ProviderIsRegistered)
-            {
-                CurrencyCollection.SetEmptyProvider();
-            }
-            CurrencyCollection.Instance.AddRange(AUD, CAD, CHF, CNY, EUR, GBP, JPY, NZD, SEK, USD);
+            return 
+                Currencies
+                .Initialize(AUD, CAD, CHF, CNY, EUR, GBP, JPY, NZD, SEK, USD);
         }
 
     }

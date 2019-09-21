@@ -16,12 +16,12 @@ namespace Pangea.Domain.Tests.Util
         public RegisterCurrencies(CurrencyCollection instance)
         {
             _instance = instance;
-            CurrencyCollection.SetProvider(() => _instance);
+            Currencies.SetProvider(() => _instance);
         }
 
         public void Dispose()
         {
-            CurrencyCollection.SetProvider(null);
+            Currencies.SetProvider(null);
         }
     }
 }
