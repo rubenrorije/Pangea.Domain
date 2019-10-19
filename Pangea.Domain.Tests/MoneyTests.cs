@@ -15,7 +15,7 @@ namespace Pangea.Domain.Tests
     public class MoneyTests
     {
         [TestMethod]
-        public void Currency_Must_Be_Specified()
+        public void Currency_Must_Be_Specified_When_Creating_A_Money_Object()
         {
             Action action = () => new Money(null, 5);
             action.Should().Throw<ArgumentNullException>();
@@ -28,7 +28,7 @@ namespace Pangea.Domain.Tests
         }
 
         [TestMethod]
-        public void Create_Euro()
+        public void Create_A_Money_Object_For_A_Certain_Currency()
         {
             var sut = new Money(EUR, 5);
 
@@ -223,7 +223,7 @@ namespace Pangea.Domain.Tests
         }
 
         [TestMethod]
-        public void Multiply_Money()
+        public void Multiply_Money_For_A_Number_Of_Times()
         {
             var sut = new Money(EUR, 6);
             (sut * 2).Should().Be(new Money(EUR, 12));
@@ -244,7 +244,7 @@ namespace Pangea.Domain.Tests
         }
 
         [TestMethod]
-        public void Add_Percentage()
+        public void Add_Percentage_To_A_Money_Object()
         {
             var sut = new Money(EUR, 6);
             (sut + 10.Percent()).Should().Be(new Money(EUR, 6.6m));
