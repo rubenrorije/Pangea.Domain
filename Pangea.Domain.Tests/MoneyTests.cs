@@ -215,6 +215,14 @@ namespace Pangea.Domain.Tests
         }
 
         [TestMethod]
+        public void Divide_Money_By_Zero()
+        {
+            var sut = new Money(EUR, 6);
+            Action action = () => { var _ = (sut / 0); };
+            action.Should().Throw<DivideByZeroException>();
+        }
+
+        [TestMethod]
         public void Multiply_Money()
         {
             var sut = new Money(EUR, 6);
