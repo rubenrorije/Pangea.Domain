@@ -186,11 +186,22 @@ namespace Pangea.Domain
         /// </summary>
         public static Money operator /(Money lhs, int times) => lhs.Divide(times);
 
+
+        /// <summary>
+        /// Multiply the money
+        /// </summary>
+        public static Money operator *(Money lhs, int times) => lhs.Multiply(times);
+        
         /// <summary>
         /// Divide the money into equal parts
         /// </summary>
         public Money Divide(int times) => new Money(_currency, Amount / times);
 
+        /// <summary>
+        /// Divide the money into equal parts
+        /// </summary>
+        public Money Multiply(int times) => new Money(_currency, Amount * times);
+        
         /// <summary>
         /// Negate the amount of money
         /// </summary>

@@ -215,6 +215,13 @@ namespace Pangea.Domain.Tests
         }
 
         [TestMethod]
+        public void Multiply_Money()
+        {
+            var sut = new Money(EUR, 6);
+            (sut * 2).Should().Be(new Money(EUR, 12));
+        }
+
+        [TestMethod]
         public void Fluent_Creation_Of_Money_In_Decimals()
         {
             5m.AustralianDollars().Should().Be(new Money(AUD, 5));
@@ -253,7 +260,6 @@ namespace Pangea.Domain.Tests
             sut.Min().Should().Be(1.Euros());
             sut.Sum().Should().Be(15.Euros());
             sut.Average().Should().Be(3.Euros());
-
         }
 
     }
