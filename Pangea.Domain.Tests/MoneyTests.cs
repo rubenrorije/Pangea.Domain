@@ -178,7 +178,7 @@ namespace Pangea.Domain.Tests
         [TestMethod]
         public void Compare_To_Default_Money_Throws_Exeption()
         {
-            Action action = () => new Money(EUR, 5).CompareTo(default);
+            Action action = () => new Money(EUR, 5).CompareTo(default(Money));
             action.Should().Throw<ArgumentOutOfRangeException>();
         }
 
@@ -240,7 +240,7 @@ namespace Pangea.Domain.Tests
         public void Add_Percentage_To_Default_Returns_Default()
         {
             var sut = default(Money);
-            (sut + 10.Percent()).Should().Be(default);
+            (sut + 10.Percent()).Should().Be(default(Money));
         }
 
         [TestMethod]
@@ -315,7 +315,7 @@ namespace Pangea.Domain.Tests
             var sut = default(Money);
             var rate = new ExchangeRate(USD, EUR, 2);
 
-            (sut * rate).Should().Be(default);
+            (sut * rate).Should().Be(default(Money));
         }
 
         [TestMethod]
