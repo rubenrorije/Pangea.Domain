@@ -222,6 +222,13 @@ namespace Pangea.Domain.Tests
         }
 
         [TestMethod]
+        public void Multiply_With_Percentage()
+        {
+            var sut = new Money(EUR, 6);
+            (sut * 150.Percent()).Should().Be(new Money(EUR, 9));
+        }
+
+        [TestMethod]
         public void Fluent_Creation_Of_Money_In_Decimals()
         {
             5m.AustralianDollars().Should().Be(new Money(AUD, 5));
