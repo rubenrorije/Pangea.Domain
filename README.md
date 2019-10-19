@@ -16,6 +16,16 @@ public class Customer
 	public Currency Currency { get; set; }
 	public Iban BankAccount { get; set; }
 }
+
+public class Order
+{
+	public Money TotalAmountInUSD { get; set; }
+	public Percentage VatPercentage { get; set; }
+	public ExchangeRate USD_EUR_Rate { get; set; }
+
+	public Money TotalAmountInEUR => TotalAmountInUSD * USD_EUR_Rate;
+	public Money VatAmount => TotalAmount * VatPercentage;
+}
 ````
 
 The example above makes it much easier to work with the domain entities and encapsulates much more information than standard .Net types. 
