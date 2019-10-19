@@ -21,7 +21,10 @@ namespace Pangea.Domain
         , IComparable
         , IComparable<Money>
     {
-        private readonly Currency _currency;
+        /// <summary>
+        /// The Currency   
+        /// </summary>
+        public Currency Currency { get; }
 
         /// <summary>
         /// The actual amount
@@ -33,7 +36,7 @@ namespace Pangea.Domain
         /// </summary>
         public Money(Currency currency, decimal amount)
         {
-            _currency = currency ?? throw new ArgumentNullException(nameof(currency));
+            Currency = currency ?? throw new ArgumentNullException(nameof(currency));
             Amount = amount;
         }
 
@@ -51,7 +54,7 @@ namespace Pangea.Domain
         public bool Equals(Money other)
         {
             return
-                _currency == other._currency &&
+                Currency == other.Currency &&
                 Amount == other.Amount;
         }
 
@@ -61,7 +64,7 @@ namespace Pangea.Domain
             unchecked
             {
                 var hash = 17;
-                hash = hash * 23 + _currency?.GetHashCode() ?? 0;
+                hash = hash * 23 + Currency?.GetHashCode() ?? 0;
                 hash = hash * 23 + Amount.GetHashCode();
                 return hash;
             }
@@ -110,7 +113,7 @@ namespace Pangea.Domain
             if (writer == null) throw new ArgumentNullException(nameof(writer));
 
             writer.WriteAttributeString("amount", Amount.ToString("G", CultureInfo.InvariantCulture));
-            writer.WriteAttributeString("currency", _currency?.Code);
+            writer.WriteAttributeString("currency", Currency?.Code);
         }
 
         private NumberFormatInfo GetNumberFormat(IFormatProvider provider, bool useSymbol)
@@ -134,7 +137,7 @@ namespace Pangea.Domain
             }
 
             result = (NumberFormatInfo)result.Clone();
-            result.CurrencySymbol = useSymbol ? _currency.Symbol : _currency.Code;
+            result.CurrencySymbol = useSymbol ? Currency.Symbol : Currency.Code;
             return result;
         }
 
@@ -163,7 +166,7 @@ namespace Pangea.Domain
         /// <inheritdoc/>
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            if (_currency == null) return string.Empty;
+            if (Currency == null) return string.Empty;
 
             var safeFormat = GetFormat(format);
             var nfi = GetNumberFormat(formatProvider, !format?.Contains("C") ?? true);
@@ -180,7 +183,7 @@ namespace Pangea.Domain
         /// Adds the money objects. 
         /// </summary>
         public static Money operator +(Money lhs, Money rhs) => lhs.Add(rhs);
-        
+
         /// <summary>
         /// Adds a percentage to the money
         /// </summary>
@@ -205,17 +208,17 @@ namespace Pangea.Domain
         /// <summary>
         /// Divide the money into equal parts
         /// </summary>
-        public Money Divide(int times) => new Money(_currency, Amount / times);
+        public Money Divide(int times) => new Money(Currency, Amount / times);
 
         /// <summary>
         /// Multiply the money
         /// </summary>
-        public Money Multiply(int times) => new Money(_currency, Amount * times);
+        public Money Multiply(int times) => new Money(Currency, Amount * times);
 
         /// <summary>
         /// Multiply the money with the percentage
         /// </summary>
-        public Money Multiply(Percentage percentage) => new Money(_currency, Amount * percentage);
+        public Money Multiply(Percentage percentage) => new Money(Currency, Amount * percentage);
 
         /// <summary>
         /// Negate the amount of money
@@ -224,7 +227,7 @@ namespace Pangea.Domain
         public static Money Negate(Money money)
         {
             if (money == default) return money;
-            return new Money(money._currency, -money.Amount);
+            return new Money(money.Currency, -money.Amount);
         }
 
         /// <summary>
@@ -236,8 +239,8 @@ namespace Pangea.Domain
         {
             if (this == default) return other;
             else if (other == default) return this;
-            else if (_currency != other._currency) throw new ArgumentOutOfRangeException(nameof(other), Resources.Money_CannotAddDifferentCurrencies);
-            else return new Money(_currency, Amount + other.Amount);
+            else if (Currency != other.Currency) throw new ArgumentOutOfRangeException(nameof(other), Resources.Money_CannotAddDifferentCurrencies);
+            else return new Money(Currency, Amount + other.Amount);
         }
 
         /// <summary>
@@ -246,7 +249,7 @@ namespace Pangea.Domain
         public Money Add(Percentage percentage)
         {
             if (this == default) return default;
-            else return new Money(_currency, Amount + percentage);
+            else return new Money(Currency, Amount + percentage);
         }
 
         /// <summary>
@@ -273,7 +276,7 @@ namespace Pangea.Domain
         /// <exception cref="ArgumentException">The money instances are not of the same currency</exception>
         public int CompareTo(Money other)
         {
-            if (_currency != other._currency) throw new ArgumentOutOfRangeException(nameof(other), Resources.Money_CannotCompareDifferentCurrencies);
+            if (Currency != other.Currency) throw new ArgumentOutOfRangeException(nameof(other), Resources.Money_CannotCompareDifferentCurrencies);
             return Amount.CompareTo(other.Amount);
         }
 
