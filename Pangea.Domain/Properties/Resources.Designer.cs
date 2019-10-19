@@ -268,6 +268,15 @@ namespace Pangea.Domain.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot convert money into other currency using the exchange rate, because the currency of the money is not found in the exchange rate.
+        /// </summary>
+        internal static string Money_CannotConvertWithExchangeRate {
+            get {
+                return ResourceManager.GetString("Money_CannotConvertWithExchangeRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Only NumberFormatInfo and CultureInfo are supported formatproviders.
         /// </summary>
         internal static string Money_InvalidFormatProvider {

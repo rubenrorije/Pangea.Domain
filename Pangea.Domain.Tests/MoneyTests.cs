@@ -291,5 +291,51 @@ namespace Pangea.Domain.Tests
             sut.Average().Should().Be(3.Euros());
         }
 
+        [TestMethod]
+        public void Multiply_By_Exchange_Rate_Forward()
+        {
+            var sut = 5.Euros();
+            var rate = new ExchangeRate(EUR, USD, 2);
+
+            (sut * rate).Should().Be(10.Dollars());
+        }
+
+        [TestMethod]
+        public void Multiply_By_Exchange_Rate_Backward()
+        {
+            var sut = 6.Euros();
+            var rate = new ExchangeRate(USD, EUR, 2);
+
+            (sut * rate).Should().Be(3.Dollars());
+        }
+
+        [TestMethod]
+        public void Multiply_By_Exchange_Rate_For_Default_Money_Returns_The_Default()
+        {
+            var sut = default(Money);
+            var rate = new ExchangeRate(USD, EUR, 2);
+
+            (sut * rate).Should().Be(default);
+        }
+
+        [TestMethod]
+        public void Multiply_By_Exchange_Rate_When_One_Of_The_Currencies_Does_Not_Match_Throw_Exception()
+        {
+            var sut = 6.Euros();
+            var rate = new ExchangeRate(USD, CAD, 2);
+
+            Action action = () => { var _ = sut * rate; };
+
+            action.Should().Throw<ArgumentOutOfRangeException>();
+        }
+
+        [TestMethod]
+        public void Multiply_By_Exchange_Rate_When_The_Rate_Is_Null_Throws_Exception()
+        {
+            var sut = 6.Euros();
+            Action action = () => { var _ = sut * null; };
+
+            action.Should().Throw<ArgumentNullException>();
+        }
     }
 }

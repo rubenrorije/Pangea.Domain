@@ -186,6 +186,9 @@
   <data name="Money_CannotCompareDifferentCurrencies" xml:space="preserve">
     <value>Cannot compare these money instances because they do not have the same currency</value>
   </data>
+  <data name="Money_CannotConvertWithExchangeRate" xml:space="preserve">
+    <value>Cannot convert money into other currency using the exchange rate, because the currency of the money is not found in the exchange rate</value>
+  </data>
   <data name="Money_InvalidFormatProvider" xml:space="preserve">
     <value>Only NumberFormatInfo and CultureInfo are supported formatproviders</value>
   </data>

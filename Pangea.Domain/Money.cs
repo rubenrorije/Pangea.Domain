@@ -199,6 +199,10 @@ namespace Pangea.Domain
         /// </summary>
         public static Money operator *(Money lhs, int times) => lhs.Multiply(times);
 
+        /// <summary>
+        /// Multiply the money
+        /// </summary>
+        public static Money operator *(Money lhs, ExchangeRate rate) => lhs.Multiply(rate);
 
         /// <summary>
         /// Multiply the money
@@ -219,6 +223,34 @@ namespace Pangea.Domain
         /// Multiply the money with the percentage
         /// </summary>
         public Money Multiply(Percentage percentage) => new Money(Currency, Amount * percentage);
+
+        /// <summary>
+        /// Multiply the money with the given exchange rate. 
+        /// The result will be the converted money in the other currency
+        /// </summary>
+        public Money Multiply(ExchangeRate rate)
+        {
+            if (rate == null)
+            {
+                throw new ArgumentNullException(nameof(rate));
+            }
+            else if (this == default)
+            {
+                return default;
+            }
+            else if (rate.From == Currency)
+            {
+                return new Money(rate.To, Amount * rate.Rate);
+            }
+            else if (rate.To == Currency)
+            {
+                return new Money(rate.From, Amount / rate.Rate);
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException(nameof(rate), Resources.Money_CannotConvertWithExchangeRate);
+            }
+        }
 
         /// <summary>
         /// Negate the amount of money
