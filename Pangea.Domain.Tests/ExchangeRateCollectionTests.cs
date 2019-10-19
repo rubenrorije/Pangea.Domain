@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static Pangea.Domain.DefaultCurrencies;
+using Pangea.Domain.Fluent;
 namespace Pangea.Domain.Tests
 {
     [TestClass]
@@ -31,7 +32,7 @@ namespace Pangea.Domain.Tests
             var sut = new ExchangeRateCollection
             {
                 new ExchangeRate(EUR, USD, 5m),
-                new ExchangeRate(EUR,AUD,10m)
+                new ExchangeRate(EUR, AUD, 10m)
             };
 
             sut.Count.Should().Be(2);
@@ -92,8 +93,20 @@ namespace Pangea.Domain.Tests
             };
 
             var result = sut[USD, EUR];
-            result.From.Should().Be(USD);
-            result.To.Should().Be(EUR);
+            result.From.Should().Be(EUR);
+            result.To.Should().Be(USD);
+        }
+
+        [TestMethod]
+        public void Indexed_Throws_Exception_When_Both_Ways_No_Rate_Found()
+        {
+            var sut = new ExchangeRateCollection(ExchangeRateConversionType.SameRateBothWays)
+            {
+                new ExchangeRate(EUR, USD, 5m),
+            };
+
+            Action action = () => { var _ = sut[USD, CAD]; };
+            action.Should().Throw<KeyNotFoundException>();
         }
 
         [TestMethod]
@@ -129,6 +142,34 @@ namespace Pangea.Domain.Tests
             action.Should().Throw<ArgumentException>();
         }
 
+        [TestMethod]
+        public void Convert_Money_Into_Different_Currency_When_Rate_Exists()
+        {
+            var euros = new Money(EUR, 6);
+            var sut = new ExchangeRateCollection(ExchangeRateConversionType.SameRateBothWays)
+            {
+                new ExchangeRate(EUR, USD, 5m),
+            };
+
+            var result = sut.Convert(euros, USD);
+
+            result.Amount.Should().Be(30);
+            result.Currency.Should().Be(USD);
+        }
+
+        [TestMethod]
+        public void Convert_Money_Into_Different_Currency_When_Rate_Exists_Backward()
+        {
+            var euros = new Money(EUR, 6);
+            var sut = new ExchangeRateCollection(ExchangeRateConversionType.SameRateBothWays)
+            {
+                new ExchangeRate(USD, EUR, 5m),
+            };
+
+            var result = sut.Convert(euros, USD);
+            result.Amount.Should().Be(1.2m);
+            result.Currency.Should().Be(USD);
+        }
 
 
     }

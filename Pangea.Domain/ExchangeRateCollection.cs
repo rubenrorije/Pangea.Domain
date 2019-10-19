@@ -61,12 +61,10 @@ namespace Pangea.Domain
         }
 
         /// <summary>
-        /// Returns the exchange rate for the given currencies when it exists.
-        /// It will only return the 
+        /// Returns the exchange rate for the given currencies when it exists. 
+        /// When the inverse exists and the rates are the same both ways the rate is inverted and returned.
+        /// When a result is found, the 
         /// </summary>
-        /// <param name="from"></param>
-        /// <param name="to"></param>
-        /// <returns></returns>
         public ExchangeRate this[Currency from, Currency to]
         {
             get
@@ -75,19 +73,15 @@ namespace Pangea.Domain
                 if (to == null) throw new ArgumentNullException(nameof(to));
 
                 var result = _exchangeRates.FirstOrDefault(rate => rate.From == from && rate.To == to);
-                if (result != null)
+                if (result != null) return result;
+
+                if (ConversionType == ExchangeRateConversionType.SameRateBothWays)
                 {
-                    return result;
+                    result = _exchangeRates.FirstOrDefault(rate => rate.To == from && rate.From == to);
+                    if (result != null) return result;
                 }
-                else if (ConversionType == ExchangeRateConversionType.SameRateBothWays)
-                {
-                    result =  _exchangeRates.FirstOrDefault(rate => rate.To == from && rate.From == to);
-                    return result.Invert();
-                }
-                else
-                {
-                    throw new KeyNotFoundException(Resources.ExchangeRateCollection_CannotFindExchangeRateForCurrencies);
-                }
+
+                throw new KeyNotFoundException(Resources.ExchangeRateCollection_CannotFindExchangeRateForCurrencies);
             }
         }
 
@@ -123,6 +117,19 @@ namespace Pangea.Domain
         /// </summary>
         public IEnumerator<ExchangeRate> GetEnumerator() => _exchangeRates.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        /// <summary>
+        /// Convert the given money into the other currency, using one of the
+        /// exchange rates in this collection.
+        /// </summary>
+        /// <param name="money">The amount to convert</param>
+        /// <param name="to">The target currency</param>
+        public Money Convert(Money money, Currency to)
+        {
+            var rate = this[money.Currency, to];
+            return money * rate;
+        }
+
         /// <inheritdoc/>
         public void Clear() => _exchangeRates.Clear();
 
