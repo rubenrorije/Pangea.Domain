@@ -3,15 +3,21 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 
 namespace Pangea.Domain
 {
     /// <summary>
     /// Representation of a currency
     /// </summary>
+    [Serializable]
     public sealed class Currency
         : IEquatable<Currency>
+        , IXmlSerializable
     {
         /// <summary>
         /// the ISO 4217 code of the given currency
@@ -107,6 +113,38 @@ namespace Pangea.Domain
         {
             if (other == null) return false;
             return Code.Equals(other.Code, StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        /// <inheritdoc/>
+        XmlSchema IXmlSerializable.GetSchema() => null;
+
+        /// <inheritdoc/>
+        void IXmlSerializable.ReadXml(XmlReader reader)
+        {
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+
+            var codeValue = reader.MoveToAttribute("code") ? reader.Value : null;
+            var symbolValue = reader.MoveToAttribute("symbol") ? reader.Value : null;
+
+
+            if (string.IsNullOrEmpty(codeValue))
+            {
+                Unsafe.AsRef(this) = default;
+            }
+            else
+            {
+                Unsafe.AsRef(this) = new Currency(codeValue, symbolValue);
+            }
+            reader.Skip();
+        }
+
+        /// <inheritdoc/>
+        void IXmlSerializable.WriteXml(XmlWriter writer)
+        {
+            if (writer == null) throw new ArgumentNullException(nameof(writer));
+
+            writer.WriteAttributeString("code", Code);
+            writer.WriteAttributeString("symbol", Symbol);
         }
     }
 }

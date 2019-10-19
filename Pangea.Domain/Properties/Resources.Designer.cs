@@ -182,8 +182,7 @@ namespace Pangea.Domain.Properties {
         /// </summary>
         internal static string ExchangeRateCollection_CannotFindExchangeRateForCurrencies {
             get {
-                return ResourceManager.GetString("ExchangeRateCollection_CannotFindExchangeRateForCurrencieExchangeRateCollection_C" +
-                        "annotFindExchangeRateForCurrencies", resourceCulture);
+                return ResourceManager.GetString("ExchangeRateCollection_CannotFindExchangeRateForCurrencies", resourceCulture);
             }
         }
         
@@ -247,6 +246,33 @@ namespace Pangea.Domain.Properties {
         internal static string Iban_StartWithIso {
             get {
                 return ResourceManager.GetString("Iban_StartWithIso", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot add two money objects with different currencies.
+        /// </summary>
+        internal static string Money_CannotAddDifferentCurrencies {
+            get {
+                return ResourceManager.GetString("Money_CannotAddDifferentCurrencies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot compare these money instances because they do not have the same currency.
+        /// </summary>
+        internal static string Money_CannotCompareDifferentCurrencies {
+            get {
+                return ResourceManager.GetString("Money_CannotCompareDifferentCurrencies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only NumberFormatInfo and CultureInfo are supported formatproviders.
+        /// </summary>
+        internal static string Money_InvalidFormatProvider {
+            get {
+                return ResourceManager.GetString("Money_InvalidFormatProvider", resourceCulture);
             }
         }
         

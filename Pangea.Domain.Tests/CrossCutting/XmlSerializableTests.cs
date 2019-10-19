@@ -20,6 +20,7 @@ namespace Pangea.Domain.Tests.CrossCutting
             AssemblyUnderTest
             .Instance
             .Types()
+            .Where(t => t.IsValueType)
             .ThatImplement<IXmlSerializable>();
 
         [TestMethod]
@@ -66,6 +67,6 @@ namespace Pangea.Domain.Tests.CrossCutting
                 }
             }
         }
-        
+
     }
 }

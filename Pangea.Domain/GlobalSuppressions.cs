@@ -33,4 +33,5 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Maintainability", "AV1551:Method overload should call another overload", Justification = "<Pending>", Scope = "member", Target = "~M:Pangea.Domain.ExchangeRateCollection.Contains(Pangea.Domain.ExchangeRate)~System.Boolean")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Maintainability", "AV1551:Method overload should call another overload", Justification = "<Pending>", Scope = "member", Target = "~M:Pangea.Domain.Isbn.TryParse(System.String,Pangea.Domain.Isbn@)~System.Boolean")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>", Scope = "member", Target = "~M:Pangea.Domain.Isbn.TryParse(System.String,System.Globalization.CultureInfo,Pangea.Domain.Isbn@)~System.Boolean")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Maintainability", "AV1551:Method overload should call another overload", Justification = "<Pending>", Scope = "member", Target = "~M:Pangea.Domain.Money.ToString(System.IFormatProvider)~System.String")]
 
