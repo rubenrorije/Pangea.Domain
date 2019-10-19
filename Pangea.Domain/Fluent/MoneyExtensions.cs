@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using static Pangea.Domain.DefaultCurrencies;
 namespace Pangea.Domain.Fluent
@@ -33,7 +34,7 @@ namespace Pangea.Domain.Fluent
         /// Create a money instance that represents the amount in Euro (EUR).
         /// </summary>
         public static Money Euros(this decimal amount) => new Money(EUR, amount);
-        
+
         /// <summary>
         /// Create a money instance that represents the amount in Brittish Pounds (GBP).
         /// </summary>
@@ -108,5 +109,37 @@ namespace Pangea.Domain.Fluent
         /// </summary>
         public static Money Dollars(this int amount) => new Money(USD, amount);
 
+        /// <summary>
+        /// Sum all items
+        /// </summary>
+        public static Money Sum(this IEnumerable<Money> items)
+        {
+            if (items == null) return default;
+            if (!items.Any()) return default;
+
+            var result = default(Money);
+            foreach (var item in items)
+            {
+                result += item;
+            }
+            return result;
+        }
+        /// <summary>
+        /// Average of all items
+        /// </summary>
+        public static Money Average(this IEnumerable<Money> items)
+        {
+            if (items == null) return default;
+            if (!items.Any()) return default;
+
+            var count = 0;
+            var result = default(Money);
+            foreach (var item in items)
+            {
+                result += item;
+                count++;
+            }
+            return result / count;
+        }
     }
 }

@@ -182,6 +182,16 @@ namespace Pangea.Domain
         public static Money operator +(Money lhs, Money rhs) => lhs.Add(rhs);
 
         /// <summary>
+        /// Divide the money into equal parts
+        /// </summary>
+        public static Money operator /(Money lhs, int times) => lhs.Divide(times);
+
+        /// <summary>
+        /// Divide the money into equal parts
+        /// </summary>
+        public Money Divide(int times) => new Money(_currency, Amount / times);
+
+        /// <summary>
         /// Negate the amount of money
         /// </summary>
         /// <returns>The negated money amount.</returns>

@@ -208,6 +208,13 @@ namespace Pangea.Domain.Tests
         }
 
         [TestMethod]
+        public void Divide_Money_Into_Parts()
+        {
+            var sut = new Money(EUR,6);
+            (sut / 2).Should().Be(new Money(EUR, 3)); 
+        }
+
+        [TestMethod]
         public void Fluent_Creation_Of_Money_In_Decimals()
         {
             5m.AustralianDollars().Should().Be(new Money(AUD, 5));
@@ -235,6 +242,18 @@ namespace Pangea.Domain.Tests
             5.NewZealandDollars().Should().Be(new Money(NZD, 5));
             5.SwedishKrona().Should().Be(new Money(SEK, 5));
             5.Dollars().Should().Be(new Money(USD, 5));
+        }
+
+        [TestMethod]
+        public void Linq_Methods_On_Money_Objects()
+        {
+            var sut = new[] { 2, 4, 3, 5, 1 }.Select(i => i.Euros()).ToList();
+
+            sut.Max().Should().Be(5.Euros());
+            sut.Min().Should().Be(1.Euros());
+            sut.Sum().Should().Be(15.Euros());
+            sut.Average().Should().Be(3.Euros());
+
         }
 
     }
