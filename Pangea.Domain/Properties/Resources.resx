@@ -153,6 +153,12 @@
   <data name="EmojiFlag_MoreThan2Characters" xml:space="preserve">
     <value>Should have 2 characters, but has more characters</value>
   </data>
+  <data name="ExchangeRateCollection_CannotFindExchangeRateForCurrencies" xml:space="preserve">
+    <value>Cannot find exchange rate for the given currencies</value>
+  </data>
+  <data name="ExchangeRateCollection_RateIsAlreadyAdded" xml:space="preserve">
+    <value>Exchange rate is already added to the collection</value>
+  </data>
   <data name="ExchangeRate_SameCurrency" xml:space="preserve">
     <value>It is not possible to create an exchange rate within the same currency</value>
   </data>
@@ -173,6 +179,18 @@
   </data>
   <data name="Iban_StartWithIso" xml:space="preserve">
     <value>The Iban should start with the ISO country code (ALPHA-2)</value>
+  </data>
+  <data name="Money_CannotAddDifferentCurrencies" xml:space="preserve">
+    <value>Cannot add two money objects with different currencies</value>
+  </data>
+  <data name="Money_CannotCompareDifferentCurrencies" xml:space="preserve">
+    <value>Cannot compare these money instances because they do not have the same currency</value>
+  </data>
+  <data name="Money_CannotConvertWithExchangeRate" xml:space="preserve">
+    <value>Cannot convert money into other currency using the exchange rate, because the currency of the money is not found in the exchange rate</value>
+  </data>
+  <data name="Money_InvalidFormatProvider" xml:space="preserve">
+    <value>Only NumberFormatInfo and CultureInfo are supported formatproviders</value>
   </data>
   <data name="PhoneNumberFormatterWrapper_InvalidFormat" xml:space="preserve">
     <value>Invalid format string</value>

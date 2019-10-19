@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static Pangea.Domain.DefaultCurrencies;
+
 namespace Pangea.Domain.Tests
 {
     [TestClass]
@@ -19,12 +20,6 @@ namespace Pangea.Domain.Tests
             sut.Count.Should().Be(0);
         }
 
-        [TestMethod]
-        public void Provider_Is_Registered_Must_Be_False_Initially()
-        {
-            CurrencyCollection.ProviderIsRegistered.Should().BeFalse();
-        }
-        
         [TestMethod]
         public void Add_A_Currency_Must_Increment_Count()
         {
@@ -48,7 +43,7 @@ namespace Pangea.Domain.Tests
 
             sut.Count.Should().Be(1);
         }
-        
+
         [TestMethod]
         public void Remove_Currency_From_List()
         {
@@ -93,7 +88,7 @@ namespace Pangea.Domain.Tests
                 EUR
             };
 
-            sut.Remove(new Currency("AED", 123));
+            sut.Remove(new Currency("AED"));
 
             sut.Count.Should().Be(1);
         }
@@ -103,48 +98,17 @@ namespace Pangea.Domain.Tests
         {
             var sut = new CurrencyCollection
             {
-                new Currency("AED", 123)
+                new Currency("AED")
             };
-            sut.Remove(new Currency("AED", 456));
+            sut.Remove(new Currency("AED"));
 
             sut.Count.Should().Be(0);
         }
-
         [TestMethod]
-        public void When_Provider_Function_Is_Not_Called_Yet_Throw_An_Explicit_Exception_That_Shows_What_To_Do()
+        public void Find_Returns_Null_When_Not_Found()
         {
-            Action action = () => { var c = CurrencyCollection.Instance; };
-
-            action.Should().Throw<InvalidOperationException>();
+            var sut = Currencies.Initialize();
+            sut.Find("AED").Should().BeNull();
         }
-
-        [TestMethod]
-        public void Use_The_Registered_Instance_For_Currency_Resolution_By_Code()
-        {
-            var sut = new CurrencyCollection
-            {
-                EUR
-            };
-
-            using (new RegisterCurrencies(sut))
-            {
-                CurrencyCollection.Find("EUR").Should().NotBeNull();
-            }
-        }
-
-        [TestMethod]
-        public void Use_The_Registered_Instance_For_Currency_Resolution_By_Numeric_Code()
-        {
-            var sut = new CurrencyCollection
-            {
-                EUR
-            };
-
-            using (new RegisterCurrencies(sut))
-            {
-                CurrencyCollection.Find(978).Should().NotBeNull();
-            }
-        }
-
     }
 }

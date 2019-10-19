@@ -3,25 +3,26 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 
 namespace Pangea.Domain
 {
     /// <summary>
     /// Representation of a currency
     /// </summary>
-    public sealed class Currency 
-        : IEquatable<Currency> 
+    [Serializable]
+    public sealed class Currency
+        : IEquatable<Currency>
+        , IXmlSerializable
     {
         /// <summary>
         /// the ISO 4217 code of the given currency
         /// </summary>
         public string Code { get; }
-     
-        /// <summary>
-        /// The numeric code for the given currency
-        /// </summary>
-        public int Numeric { get; }
 
         /// <summary>
         /// Optional symbol for the given currency
@@ -32,19 +33,16 @@ namespace Pangea.Domain
         /// Create a currency based on the given ISO 4217 code and the numeric value
         /// </summary>
         /// <param name="code">The ISO 4217 code (uppercase)</param>
-        /// <param name="numeric">the numeric value</param>
         /// <param name="symbol">the (optional) symbol for the currency</param>
         /// <exception cref="ArgumentNullException"><paramref name="code"/> is null</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="code"/> is not 3 characters, not uppercase, or <paramref name="numeric"/> is 0 or less</exception>
-        public Currency(string code, int numeric, string symbol)
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="code"/> is not 3 characters, not uppercase</exception>
+        public Currency(string code, string symbol)
         {
             if (code == null) throw new ArgumentNullException(nameof(code));
             if (code.Length != 3) throw new ArgumentOutOfRangeException(nameof(code));
-            if (code.Any(chr => Char.IsLower(chr))) throw new ArgumentOutOfRangeException(nameof(code));
-            if (numeric < 0) throw new ArgumentOutOfRangeException(nameof(numeric));
+            if (code.Any(chr => char.IsLower(chr))) throw new ArgumentOutOfRangeException(nameof(code));
 
             Code = code;
-            Numeric = numeric;
             Symbol = symbol;
         }
 
@@ -52,8 +50,7 @@ namespace Pangea.Domain
         /// Create a currency based on the given ISO 4217 code and the numeric value
         /// </summary>
         /// <param name="code">The ISO 4217 code (uppercase)</param>
-        /// <param name="numeric">the numeric value</param>
-        public Currency(string code, int numeric) : this(code, numeric, null)
+        public Currency(string code) : this(code, null)
         {
         }
 
@@ -72,7 +69,6 @@ namespace Pangea.Domain
         /// <item>null: see G</item>
         /// <item>G: General format, returns the Code of the currency</item>
         /// <item>S: returns the Symbol of the currency, when the symbol is null, the code will be returned</item>
-        /// <item>N: returns the Numeric of the currency</item>
         /// </list>
         /// </summary>
         /// <param name="format">Specifies the format of the string representation to return. Allowed formats are:
@@ -80,7 +76,6 @@ namespace Pangea.Domain
         /// <item>null: see G</item>
         /// <item>G: General format, returns the Code of the currency</item>
         /// <item>S: returns the Symbol of the currency, when the symbol is null, the code will be returned</item>
-        /// <item>N: returns the Numeric of the currency</item>
         /// </list>
         ///</param>
         /// <returns>The string representation of the Currency for the given format, a FormatException otherwise</returns>
@@ -91,8 +86,6 @@ namespace Pangea.Domain
                 case null:
                 case "G":
                     return Code;
-                case "N":
-                    return Numeric.ToString(CultureInfo.InvariantCulture);
                 case "S":
                     return Symbol;
                 default:
@@ -120,6 +113,38 @@ namespace Pangea.Domain
         {
             if (other == null) return false;
             return Code.Equals(other.Code, StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        /// <inheritdoc/>
+        XmlSchema IXmlSerializable.GetSchema() => null;
+
+        /// <inheritdoc/>
+        void IXmlSerializable.ReadXml(XmlReader reader)
+        {
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+
+            var codeValue = reader.MoveToAttribute("code") ? reader.Value : null;
+            var symbolValue = reader.MoveToAttribute("symbol") ? reader.Value : null;
+
+
+            if (string.IsNullOrEmpty(codeValue))
+            {
+                Unsafe.AsRef(this) = default;
+            }
+            else
+            {
+                Unsafe.AsRef(this) = new Currency(codeValue, symbolValue);
+            }
+            reader.Skip();
+        }
+
+        /// <inheritdoc/>
+        void IXmlSerializable.WriteXml(XmlWriter writer)
+        {
+            if (writer == null) throw new ArgumentNullException(nameof(writer));
+
+            writer.WriteAttributeString("code", Code);
+            writer.WriteAttributeString("symbol", Symbol);
         }
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -12,59 +13,6 @@ namespace Pangea.Domain
     /// </summary>
     public class CurrencyCollection : IEnumerable<Currency>
     {
-        /// <summary>
-        /// A private field to store a way to retrieve the Currencies instance.
-        /// This allows the end user to store the Currencies instance for instance in an IoC-container
-        /// </summary>
-        private static Func<CurrencyCollection> _instanceProvider;
-
-        /// <summary>
-        /// Set the way to retrieve the global instance of the registered Currencies.
-        /// A func is used to allow the end user (developer) to store the actual instance within the 
-        /// IoC-container if applicable. 
-        /// </summary>
-        /// <param name="functionToRetrieveTheInstance">The way to retrieve the instance</param>
-        public static void SetProvider(Func<CurrencyCollection> functionToRetrieveTheInstance)
-        {
-            _instanceProvider = functionToRetrieveTheInstance;
-        }
-
-        /// <summary>
-        /// Set a default provider
-        /// </summary>
-        public static void SetEmptyProvider()
-        {
-            var instance = new CurrencyCollection();
-            SetProvider(() => instance);
-        }
-
-        /// <summary>
-        /// Remove the registered provider
-        /// </summary>
-        public static void ClearProvider()
-        {
-            SetProvider(null);
-        }
-
-        /// <summary>
-        /// Is a provider function registered?
-        /// </summary>
-        public static bool ProviderIsRegistered => _instanceProvider != null;
-
-        /// <summary>
-        /// The registered instance will be returned using the provider function.
-        /// </summary>
-        public static CurrencyCollection Instance
-        {
-            get
-            {
-                if (_instanceProvider == null)
-                {
-                    throw new InvalidOperationException(Resources.CurrencyCollection_NotInitialized);
-                }
-                return _instanceProvider();
-            }
-        }
 
         private Dictionary<string, Currency> _currencies;
 
@@ -119,26 +67,6 @@ namespace Pangea.Domain
         }
 
         /// <summary>
-        /// Try to find the Currency within the registered currencies by the given code.
-        /// </summary>
-        /// <param name="code">the ISO 4217 code</param>
-        /// <returns>Either the currency that is found, or null when the currency could not be found</returns>
-        public static Currency Find(string code)
-        {
-            return Instance._currencies[code];
-        }
-
-        /// <summary>
-        /// Try to find the Currency within the registered currencies by the given code.
-        /// </summary>
-        /// <param name="numeric">the numeric code of the currency</param>
-        /// <returns>Either the currency that is found, or null when the currency could not be found</returns>
-        public static Currency Find(int numeric)
-        {
-            return Instance._currencies.Values.FirstOrDefault(currency => currency.Numeric == numeric);
-        }
-
-        /// <summary>
         /// Remove a registered currency
         /// </summary>
         /// <param name="currency">The currency to remove</param>
@@ -147,6 +75,24 @@ namespace Pangea.Domain
             if (currency == null) throw new ArgumentNullException(nameof(currency));
             _currencies.Remove(currency.Code);
         }
+
+        /// <summary>
+        /// Try to find the Currency within the registered currencies by the given code.
+        /// </summary>
+        /// <param name="code">the ISO 4217 code</param>
+        /// <returns>Either the currency that is found, or null when the currency could not be found</returns>
+        public Currency Find(string code)
+        {
+            Currency result;
+            if (_currencies.TryGetValue(code, out result)) return result;
+            return null;
+        }
+
+        /// <summary>
+        /// Get the currency based on the given code, a <see cref="KeyNotFoundException"/> when not found.
+        /// </summary>
+        public Currency this[string code] => _currencies[code];
+        
 
         /// <summary>
         /// Return a list of currencies.

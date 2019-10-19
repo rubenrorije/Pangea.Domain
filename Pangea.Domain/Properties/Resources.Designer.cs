@@ -178,6 +178,24 @@ namespace Pangea.Domain.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot find exchange rate for the given currencies.
+        /// </summary>
+        internal static string ExchangeRateCollection_CannotFindExchangeRateForCurrencies {
+            get {
+                return ResourceManager.GetString("ExchangeRateCollection_CannotFindExchangeRateForCurrencies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exchange rate is already added to the collection.
+        /// </summary>
+        internal static string ExchangeRateCollection_RateIsAlreadyAdded {
+            get {
+                return ResourceManager.GetString("ExchangeRateCollection_RateIsAlreadyAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The country code should be followed by 2 check digits (0-9).
         /// </summary>
         internal static string Iban_2CheckDigits {
@@ -228,6 +246,42 @@ namespace Pangea.Domain.Properties {
         internal static string Iban_StartWithIso {
             get {
                 return ResourceManager.GetString("Iban_StartWithIso", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot add two money objects with different currencies.
+        /// </summary>
+        internal static string Money_CannotAddDifferentCurrencies {
+            get {
+                return ResourceManager.GetString("Money_CannotAddDifferentCurrencies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot compare these money instances because they do not have the same currency.
+        /// </summary>
+        internal static string Money_CannotCompareDifferentCurrencies {
+            get {
+                return ResourceManager.GetString("Money_CannotCompareDifferentCurrencies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot convert money into other currency using the exchange rate, because the currency of the money is not found in the exchange rate.
+        /// </summary>
+        internal static string Money_CannotConvertWithExchangeRate {
+            get {
+                return ResourceManager.GetString("Money_CannotConvertWithExchangeRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only NumberFormatInfo and CultureInfo are supported formatproviders.
+        /// </summary>
+        internal static string Money_InvalidFormatProvider {
+            get {
+                return ResourceManager.GetString("Money_InvalidFormatProvider", resourceCulture);
             }
         }
         

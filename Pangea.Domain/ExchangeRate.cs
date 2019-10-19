@@ -27,11 +27,11 @@ namespace Pangea.Domain
         public decimal Rate { get; }
 
         /// <summary>
-        /// Create an exchange rate for the given currencies.
+        /// Create an exchange rate for the given currencies. 1 FROM = &lt;rate&gt; TO
         /// </summary>
         /// <param name="from">the currency that will be used to convert a money amount from</param>
         /// <param name="to">the currency that will be used to convert a money amount to</param>
-        /// <param name="rate">The actual rate to convert the currencies</param>
+        /// <param name="rate">The actual rate to convert the currencies. 1 FROM = &lt;rate&gt; TO</param>
         /// <exception cref="ArgumentNullException">The <paramref name="from"/> or <paramref name="to"/> currency is <c>null</c></exception>
         /// <exception cref="ArgumentOutOfRangeException">The <paramref name="rate"/>is non-positive</exception>
         /// <exception cref="ArgumentException">The <paramref name="from"/> is equal to <paramref name="to"/></exception>
