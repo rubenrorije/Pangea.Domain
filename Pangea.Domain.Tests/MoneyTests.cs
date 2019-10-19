@@ -237,6 +237,20 @@ namespace Pangea.Domain.Tests
         }
 
         [TestMethod]
+        public void Add_Percentage_To_Default_Returns_Default()
+        {
+            var sut = default(Money);
+            (sut + 10.Percent()).Should().Be(default);
+        }
+
+        [TestMethod]
+        public void Add_Percentage()
+        {
+            var sut = new Money(EUR, 6);
+            (sut + 10.Percent()).Should().Be(new Money(EUR, 6.6m));
+        }
+
+        [TestMethod]
         public void Fluent_Creation_Of_Money_In_Decimals()
         {
             5m.AustralianDollars().Should().Be(new Money(AUD, 5));

@@ -180,6 +180,11 @@ namespace Pangea.Domain
         /// Adds the money objects. 
         /// </summary>
         public static Money operator +(Money lhs, Money rhs) => lhs.Add(rhs);
+        
+        /// <summary>
+        /// Adds a percentage to the money
+        /// </summary>
+        public static Money operator +(Money lhs, Percentage percentage) => lhs.Add(percentage);
 
         /// <summary>
         /// Divide the money into equal parts
@@ -233,6 +238,15 @@ namespace Pangea.Domain
             else if (other == default) return this;
             else if (_currency != other._currency) throw new ArgumentOutOfRangeException(nameof(other), Resources.Money_CannotAddDifferentCurrencies);
             else return new Money(_currency, Amount + other.Amount);
+        }
+
+        /// <summary>
+        /// Adds the money objects. 
+        /// </summary>
+        public Money Add(Percentage percentage)
+        {
+            if (this == default) return default;
+            else return new Money(_currency, Amount + percentage);
         }
 
         /// <summary>
