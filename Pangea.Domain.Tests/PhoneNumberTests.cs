@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Pangea.Domain.Tests.Util;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -84,10 +85,11 @@ namespace Pangea.Domain.Tests
         [TestMethod]
         public void Country_Code_Can_Be_Resolved()
         {
-            CountryCodes.SetProvider(() => new DefaultCountryProvider());
-            var sut = new PhoneNumber("+31123456789");
-            sut.CountryCode.Should().Be(31);
-            CountryCodes.ClearProvider();
+            using (new RegisterCountryCodes(new DefaultCountryProvider()))
+            {
+                var sut = new PhoneNumber("+31123456789");
+                sut.CountryCode.Should().Be(31);
+            }
         }
 
         [TestMethod]
@@ -134,19 +136,21 @@ namespace Pangea.Domain.Tests
         [TestMethod]
         public void ToString_l_Returns_The_Representation_Of_The_PhoneNumber_Excluding_The_Original_Spaces()
         {
-            CountryCodes.SetProvider(() => new DefaultCountryProvider());
-            var sut = new PhoneNumber("+31 12 345 6789");
-            sut.ToString("l").Should().Be("0123456789");
-            CountryCodes.ClearProvider();
+            using (new RegisterCountryCodes(new DefaultCountryProvider()))
+            {
+                var sut = new PhoneNumber("+31 12 345 6789");
+                sut.ToString("l").Should().Be("0123456789");
+            }
         }
 
         [TestMethod]
         public void ToString_L_Returns_The_Representation_Of_The_PhoneNumber_Excluding_The_Original_Spaces()
         {
-            CountryCodes.SetProvider(() => new DefaultCountryProvider());
-            var sut = new PhoneNumber("+31 12 345 6789");
-            sut.ToString("L").Should().Be("0 12 345 6789");
-            CountryCodes.ClearProvider();
+            using (new RegisterCountryCodes(new DefaultCountryProvider()))
+            {
+                var sut = new PhoneNumber("+31 12 345 6789");
+                sut.ToString("L").Should().Be("0 12 345 6789");
+            }
         }
 
         [TestMethod]
@@ -199,7 +203,7 @@ namespace Pangea.Domain.Tests
             Action action = () => new PhoneNumber(0, null);
             action.Should().Throw<ArgumentOutOfRangeException>();
         }
-        
+
         [TestMethod]
         public void DataContract_Serializable()
         {
