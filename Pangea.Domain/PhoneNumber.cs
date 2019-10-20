@@ -28,8 +28,8 @@ namespace Pangea.Domain
         /// <summary>
         /// All separators that are allowed in between phone numbers
         /// </summary>
-        internal static readonly string[] AllowedSeparators = new string[] { " ", ".", "-", "/" };
-        private static readonly Regex _internationalExpression = new Regex(@"^(00|\+)(?<numbers>(\d|(?:[\s-/\.]))+)$", RegexOptions.Compiled | RegexOptions.Singleline);
+        internal static readonly string[] AllowedSeparators = new string[] { " ", ".", "-", "/", "(0)" };
+        private static readonly Regex _internationalExpression = new Regex(@"^(00|\+)(?<numbers>(\(0\)|[\d\s-/\.])+)$", RegexOptions.Compiled | RegexOptions.Singleline);
         private static readonly Regex _localExpression = new Regex(@"^0(?<numbers>(\d|(?:[\s-/\.]))+)$", RegexOptions.Compiled | RegexOptions.Singleline);
 
         /// <summary>
@@ -133,19 +133,13 @@ namespace Pangea.Domain
         /// Check whether the given objects represent the same phone number
         /// </summary>
         /// <returns>True when representing the same phone numbers, False otherwise</returns>
-        public static bool operator ==(PhoneNumber lhs, PhoneNumber rhs)
-        {
-            return lhs.Equals(rhs);
-        }
+        public static bool operator ==(PhoneNumber lhs, PhoneNumber rhs)=> lhs.Equals(rhs);
 
         /// <summary>
         /// Check whether the given objects do not represent the same phone number
         /// </summary>
         /// <returns>False when representing the same phone numbers, True otherwise</returns>
-        public static bool operator !=(PhoneNumber lhs, PhoneNumber rhs)
-        {
-            return !lhs.Equals(rhs);
-        }
+        public static bool operator !=(PhoneNumber lhs, PhoneNumber rhs)=> !lhs.Equals(rhs);
 
         /// <summary>
         /// The hashcode of the phone number

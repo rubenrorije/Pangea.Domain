@@ -75,6 +75,13 @@ namespace Pangea.Domain.Tests
         }
 
         [TestMethod]
+        public void Parse_International_PhoneNumber_With_Parentheses()
+        {
+            var sut = new PhoneNumber("+31(0)12 3456789");
+            sut.ToString("g").Should().Be("+31123456789");
+        }
+
+        [TestMethod]
         public void Country_Code_Can_Be_Resolved()
         {
             CountryCodes.SetProvider(() => new DefaultCountryProvider());

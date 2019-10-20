@@ -29,15 +29,6 @@ namespace Pangea.Domain
         }
 
         /// <summary>
-        /// Set a default provider
-        /// </summary>
-        public static void SetEmptyProvider()
-        {
-            var instance = new CurrencyCollection();
-            SetProvider(() => instance);
-        }
-
-        /// <summary>
         /// The registered instance will be returned using the provider function.
         /// </summary>
         private static CurrencyCollection Instance
