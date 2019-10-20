@@ -23,9 +23,12 @@ namespace Pangea.Domain
         /// IoC-container if applicable. 
         /// </summary>
         /// <param name="functionToRetrieveTheInstance">The way to retrieve the instance</param>
-        public static void SetProvider(Func<CurrencyCollection> functionToRetrieveTheInstance)
+        public static CurrencyCollection SetProvider(Func<CurrencyCollection> functionToRetrieveTheInstance)
         {
+            if (functionToRetrieveTheInstance == null) throw new ArgumentNullException(nameof(functionToRetrieveTheInstance));
+            
             _instanceProvider = functionToRetrieveTheInstance;
+            return _instanceProvider();
         }
 
         /// <summary>

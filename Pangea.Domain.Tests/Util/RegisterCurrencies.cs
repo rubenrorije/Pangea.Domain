@@ -21,7 +21,7 @@ namespace Pangea.Domain.Tests.Util
 
         public void Dispose()
         {
-            Currencies.SetProvider(null);
+            Currencies.SetProvider(() => null);
         }
     }
 }

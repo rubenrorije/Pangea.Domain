@@ -27,6 +27,13 @@ namespace Pangea.Domain.Tests
         }
 
         [TestMethod]
+        public void Registering_Null_Throws_ArgumentNullException()
+        {
+            Action action = () => Currencies.SetProvider(null);
+            action.Should().Throw<ArgumentNullException>();
+        }
+
+        [TestMethod]
         public void Use_The_Registered_Instance_For_Currency_Resolution_By_Code()
         {
             var sut = new CurrencyCollection

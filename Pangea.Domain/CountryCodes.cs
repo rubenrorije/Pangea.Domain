@@ -26,11 +26,12 @@ namespace Pangea.Domain
         /// </summary>
         /// <param name="countryCodeProviderFunc">a func to get the country code provider to be used to get the country code.</param>
         /// <exception cref="ArgumentNullException">When the <paramref name="countryCodeProviderFunc"/> is <c>null</c></exception>
-        public static void SetProvider(Func<ICountryCodeProvider> countryCodeProviderFunc)
+        public static ICountryCodeProvider SetProvider(Func<ICountryCodeProvider> countryCodeProviderFunc)
         {
             _instanceProvider =
                 countryCodeProviderFunc ??
                 throw new ArgumentNullException(nameof(countryCodeProviderFunc));
+            return _instanceProvider();
         }
 
         /// <summary>
