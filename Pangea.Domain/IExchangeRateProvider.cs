@@ -1,22 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Text;
 
 namespace Pangea.Domain
 {
     /// <summary>
-    /// Interface to get the exchange rate from an external source
+    /// Way to convert money from one currency to another using some internal exchange rates
     /// </summary>
     public interface IExchangeRateProvider
     {
         /// <summary>
-        /// Get the latest exchange rate to convert 'from' to 'to'
+        /// Try to get the exchange rate SOURCE->TARGET
         /// </summary>
-        ExchangeRateAt Latest(Currency fromCurrency, Currency toCurrency);
-
-        /// <summary>
-        /// Returns the exchange rate at a given date to convert 'from' to 'to'
-        /// </summary>
-        ExchangeRateAt Historical(Currency fromCurrency, Currency toCurrency, DateTime exchangeRateDate);
+        /// <param name="sourceCurrency">The currency to convert from</param>
+        /// <param name="targetCurrency">The currency to convert to</param>
+        /// <returns>Either the exchange rate, or null when not found</returns>
+        ExchangeRate TryGet(Currency sourceCurrency, Currency targetCurrency);
     }
 }
