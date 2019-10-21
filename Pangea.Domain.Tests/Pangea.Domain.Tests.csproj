@@ -90,10 +90,6 @@
     <Compile Include="ExchangeRateBothWaysWrapperTests.cs" />
     <Compile Include="ExchangeRateCollectionTests.cs" />
     <Compile Include="ExchangeRateTests.cs" />
-    <Compile Include="Formatters\PhoneNumberAggregateFormatterTests.cs" />
-    <Compile Include="Formatters\PhoneNumberBEFormatterTests.cs" />
-    <Compile Include="Formatters\PhoneNumberNLFormatterTests.cs" />
-    <Compile Include="Formatters\PhoneNumberFormatterWrapperTests.cs" />
     <Compile Include="GpsLocationTests.cs" />
     <Compile Include="IbanTests.cs" />
     <Compile Include="CrossCutting\NamespaceTests.cs" />

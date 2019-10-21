@@ -1,5 +1,4 @@
 ﻿using Pangea.Domain.ExtensionMethods;
-using Pangea.Domain.Formatters;
 using Pangea.Domain.Properties;
 using System;
 using System.Collections.Generic;
@@ -190,20 +189,7 @@ namespace Pangea.Domain
         {
             return ToString(format, (IFormatProvider)null);
         }
-
-        /// <summary>
-        /// return the string representation of the phone number using the custom formatter
-        /// </summary>
-        /// <param name="format">The format to use. Only L or G (or null) are excepted</param>
-        /// <param name="formatter">The custom formatter to use</param>
-        /// <returns>the string representation of the phone number</returns>
-        public string ToString(string format, IPhoneNumberFormatter formatter)
-        {
-            var newFormat = new PhoneNumberFormatterWrapper(formatter).GetFormat(this, format);
-            return ToString(newFormat, (IFormatProvider)null);
-
-        }
-
+        
         /// <summary>
         /// The string representation of the phone number, given in the format specified. 
         /// </summary>
