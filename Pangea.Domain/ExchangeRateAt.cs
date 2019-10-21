@@ -9,6 +9,7 @@ namespace Pangea.Domain
     /// </summary>
     public sealed class ExchangeRateAt
         : IFormattable
+        , IEquatable<ExchangeRateAt>
     {
         /// <summary>
         /// The date for the exchange rate
@@ -148,6 +149,33 @@ namespace Pangea.Domain
 
             var splitted = format.Split("|".ToCharArray());
             return Tuple.Create(splitted[0], splitted[1]);
+        }
+
+        /// <inheritdoc/>
+        public bool Equals(ExchangeRateAt other)
+        {
+            return
+                other != null &&
+                Date == other.Date &&
+                Rate == other.Rate;
+        }
+
+        /// <inheritdoc/>
+        public override bool Equals(object obj)
+        {
+            return Equals((ExchangeRateAt)obj);
+        }
+
+        /// <inheritdoc/>
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hash = 17;
+                hash = hash * 23 + Date.GetHashCode();
+                hash = hash * 23 + Rate.GetHashCode();
+                return hash;
+            }
         }
     }
 }

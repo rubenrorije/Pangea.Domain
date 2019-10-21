@@ -64,5 +64,22 @@ namespace Pangea.Domain.Tests
             text.Should().Contain(DateTime.Today.ToString("s"));
             text.Should().Contain(1.25m.ToString("N2"));
         }
+
+        [TestMethod]
+        public void Equals_Null_Does_Not_Throw()
+        {
+            var one = new ExchangeRateAt(DateTime.Today, EUR, USD, 1.25m);
+
+            one.Equals(null).Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void Equals_Structurally()
+        {
+            var one = new ExchangeRateAt(DateTime.Today, EUR, USD, 1.25m);
+            var other = new ExchangeRateAt(DateTime.Today, EUR, USD, 1.25m);
+
+            one.Equals(other).Should().BeTrue();
+        }
     }
 }
