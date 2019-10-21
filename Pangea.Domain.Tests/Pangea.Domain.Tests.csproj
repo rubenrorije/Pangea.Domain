@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInformationTests.cs" />
+    <Compile Include="CachedExchangeRateProviderTests.cs" />
     <Compile Include="Checksums\LuhnChecksumCalculatorTests.cs" />
     <Compile Include="Checksums\ModChecksumCalculatorTests.cs" />
     <Compile Include="CurrenciesTests.cs" />
@@ -117,6 +118,7 @@
     <Compile Include="FileSizeTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include=".editorconfig" />
     <None Include="app.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
