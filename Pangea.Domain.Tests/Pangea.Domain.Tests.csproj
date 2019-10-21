@@ -101,6 +101,7 @@
     <Compile Include="PercentageTests.cs" />
     <Compile Include="SmartFolderTests.cs" />
     <Compile Include="Util\AssemblyUnderTest.cs" />
+    <Compile Include="Util\RegisterCountryCodes.cs" />
     <Compile Include="Util\RegisterCurrencies.cs" />
     <Compile Include="SimpleCountryCodeProviderTests.cs" />
     <Compile Include="Util\CountryCodeGenerator.cs" />

@@ -10,18 +10,18 @@ namespace Pangea.Domain.Tests.Util
     /// Use the dispose pattern to allow an easy way to set a Currencies 
     /// provider and remove it when the test is finished
     /// </summary>
-    internal class RegisterCurrencies : IDisposable
+    internal class RegisterCountryCodes : IDisposable
     {
-        private readonly CurrencyCollection _instance;
-        public RegisterCurrencies(CurrencyCollection instance)
+        private readonly ICountryCodeProvider _instance;
+        public RegisterCountryCodes(ICountryCodeProvider instance)
         {
             _instance = instance;
-            Currencies.SetProvider(() => _instance);
+            CountryCodes.SetProvider(() => _instance);
         }
 
         public void Dispose()
         {
-            Currencies.SetProvider(() => null);
+            CountryCodes.SetProvider(() => null);
         }
     }
 }
