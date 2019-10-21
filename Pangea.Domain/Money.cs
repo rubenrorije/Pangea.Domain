@@ -71,12 +71,6 @@ namespace Pangea.Domain
         }
 
         /// <inheritdoc/>
-        public static bool operator ==(Money left, Money right) => left.Equals(right);
-
-        /// <inheritdoc/>
-        public static bool operator !=(Money left, Money right) => !(left == right);
-
-        /// <inheritdoc/>
         public override string ToString()
         {
             return ToString(null, null);
@@ -173,6 +167,12 @@ namespace Pangea.Domain
             return Amount.ToString(safeFormat, nfi);
         }
 
+        /// <inheritdoc/>
+        public static bool operator ==(Money left, Money right) => left.Equals(right);
+
+        /// <inheritdoc/>
+        public static bool operator !=(Money left, Money right) => !(left == right);
+
         /// <summary>
         /// Negate the amount of money
         /// </summary>
@@ -200,6 +200,16 @@ namespace Pangea.Domain
         public static Money operator *(Money lhs, int times) => lhs.Multiply(times);
 
         /// <summary>
+        /// Divide the money into equal parts
+        /// </summary>
+        public static Money operator /(Money lhs, decimal times) => lhs.Divide(times);
+
+        /// <summary>
+        /// Multiply the money
+        /// </summary>
+        public static Money operator *(Money lhs, decimal times) => lhs.Multiply(times);
+
+        /// <summary>
         /// Multiply the money
         /// </summary>
         public static Money operator *(Money lhs, ExchangeRate rate) => lhs.Multiply(rate);
@@ -209,16 +219,26 @@ namespace Pangea.Domain
         /// </summary>
         public static Money operator *(Money lhs, Percentage percentage) => lhs.Multiply(percentage);
 
-        /// <summary>
+        /// /// <summary>
         /// Divide the money into equal parts
         /// </summary>
         public Money Divide(int times) => new Money(Currency, Amount / times);
+        
+        ///<summary>
+        /// Divide the money into equal parts
+        /// </summary>
+        public Money Divide(decimal times) => new Money(Currency, Amount / times);
 
         /// <summary>
         /// Multiply the money
         /// </summary>
         public Money Multiply(int times) => new Money(Currency, Amount * times);
 
+        /// <summary>
+        /// Multiply the money
+        /// </summary>
+        public Money Multiply(decimal times) => new Money(Currency, Amount * times);
+        
         /// <summary>
         /// Multiply the money with the percentage
         /// </summary>
