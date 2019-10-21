@@ -182,6 +182,8 @@ namespace Pangea.Domain
         /// <item>g: International format using a + sign, excluding the original spaces (+31123456789)</item>
         /// <item>O: International format using 0's, including the original spaces (0031 123 456 789)</item>
         /// <item>o: International format using 0's, excluding the original spaces (0031123456789)</item>
+        /// <item>L: Local format, including the original spaces (0 123 456 789) when the country calling code could not be found, the global format will be returned</item>
+        /// <item>l: Local format, excluding the original spaces (0123456789) when the country calling code could not be found, the global format will be returned</item>
         /// </list>
         /// </param>
         /// <returns>The phone number in the given format</returns>
