@@ -10,7 +10,7 @@ namespace Pangea.Domain
     /// <summary>
     /// Class to print a phone number
     /// </summary>
-    public class PhoneNumberFormatter
+    internal class PhoneNumberFormatter
     {
         private readonly PhoneNumber _phoneNumber;
         private readonly string _format;
