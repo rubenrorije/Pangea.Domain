@@ -10,14 +10,9 @@ namespace Pangea.Domain
     /// <summary>
     /// Holds a number of exchange rates to do easy conversions between currencies
     /// </summary>
-    public class ExchangeRateCollection : ICollection<ExchangeRate>
+    public class ExchangeRateCollection : ICollection<ExchangeRate>, IExchangeRateProvider
     {
         private readonly List<ExchangeRate> _exchangeRates;
-
-        /// <summary>
-        /// The type of conversion that is used in this instance
-        /// </summary>
-        public ExchangeRateConversionType ConversionType { get; }
 
         /// <summary>
         /// The number of elements in this collection
@@ -31,21 +26,13 @@ namespace Pangea.Domain
 
 
         /// <summary>
-        /// Create an Exchange rate collection and uses the same rate both ways
+        /// Create an Exchange rate collection.
         /// </summary>
-        public ExchangeRateCollection() : this(ExchangeRateConversionType.SameRateBothWays)
+        public ExchangeRateCollection()
         {
-        }
-
-        /// <summary>
-        /// Create an Exchange rate collection
-        /// </summary>
-        /// <param name="conversionType">Specifies the type of conversion that is used</param>
-        public ExchangeRateCollection(ExchangeRateConversionType conversionType)
-        {
-            ConversionType = conversionType;
             _exchangeRates = new List<ExchangeRate>();
         }
+
         /// <summary>
         /// Adds an exchange rate to the end of this collection. 
         /// 
@@ -69,20 +56,24 @@ namespace Pangea.Domain
         {
             get
             {
-                if (from == null) throw new ArgumentNullException(nameof(from));
-                if (to == null) throw new ArgumentNullException(nameof(to));
-
-                var result = _exchangeRates.FirstOrDefault(rate => rate.From == from && rate.To == to);
-                if (result != null) return result;
-
-                if (ConversionType == ExchangeRateConversionType.SameRateBothWays)
-                {
-                    result = _exchangeRates.FirstOrDefault(rate => rate.To == from && rate.From == to);
-                    if (result != null) return result;
-                }
-
-                throw new KeyNotFoundException(Resources.ExchangeRateCollection_CannotFindExchangeRateForCurrencies);
+                return
+                    TryGet(from, to) ??
+                    throw new KeyNotFoundException(Resources.ExchangeRates_CannotFindExchangeRateForCurrencies);
             }
+        }
+
+        /// <summary>
+        /// Try to get the exchange rate SOURCE->TARGET
+        /// </summary>
+        /// <param name="sourceCurrency">The currency to convert from</param>
+        /// <param name="targetCurrency">The currency to convert to</param>
+        /// <returns>Either the exchange rate, or an exception</returns>
+        public ExchangeRate TryGet(Currency sourceCurrency, Currency targetCurrency)
+        {
+            if (sourceCurrency == null) throw new ArgumentNullException(nameof(sourceCurrency));
+            if (targetCurrency == null) throw new ArgumentNullException(nameof(targetCurrency));
+
+            return _exchangeRates.FirstOrDefault(rate => rate.From == sourceCurrency && rate.To == targetCurrency);
         }
 
         /// <summary>
@@ -97,18 +88,7 @@ namespace Pangea.Domain
             if (from == null) throw new ArgumentNullException(nameof(from));
             if (to == null) throw new ArgumentNullException(nameof(to));
 
-            if (_exchangeRates.Any(rate => rate.From == from && rate.To == to))
-            {
-                return true;
-            }
-            else if (ConversionType == ExchangeRateConversionType.SameRateBothWays)
-            {
-                return _exchangeRates.Any(rate => rate.To == from && rate.From == to);
-            }
-            else
-            {
-                return false;
-            }
+            return _exchangeRates.Any(rate => rate.From == from && rate.To == to);
         }
 
 
@@ -117,18 +97,6 @@ namespace Pangea.Domain
         /// </summary>
         public IEnumerator<ExchangeRate> GetEnumerator() => _exchangeRates.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
-        /// <summary>
-        /// Convert the given money into the other currency, using one of the
-        /// exchange rates in this collection.
-        /// </summary>
-        /// <param name="money">The amount to convert</param>
-        /// <param name="to">The target currency</param>
-        public Money Convert(Money money, Currency to)
-        {
-            var rate = this[money.Currency, to];
-            return money * rate;
-        }
 
         /// <inheritdoc/>
         public void Clear() => _exchangeRates.Clear();

@@ -13,20 +13,6 @@ namespace Pangea.Domain.Tests
     public class ExchangeRateCollectionTests
     {
         [TestMethod]
-        public void No_Conversion_Specified_Assumes_Same_Rate()
-        {
-            var sut = new ExchangeRateCollection();
-            sut.ConversionType.Should().Be(ExchangeRateConversionType.SameRateBothWays);
-        }
-
-        [TestMethod]
-        public void The_ConversionType_Specified_Must_Be_Stored()
-        {
-            var sut = new ExchangeRateCollection(ExchangeRateConversionType.InverseRateIsDifferent);
-            sut.ConversionType.Should().Be(ExchangeRateConversionType.InverseRateIsDifferent);
-        }
-
-        [TestMethod]
         public void Convenient_Construction_With_Initializer()
         {
             var sut = new ExchangeRateCollection
@@ -65,7 +51,7 @@ namespace Pangea.Domain.Tests
         [TestMethod]
         public void Indexed_Returns_Rate()
         {
-            var sut = new ExchangeRateCollection(ExchangeRateConversionType.SameRateBothWays)
+            var sut = new ExchangeRateCollection()
             {
                 new ExchangeRate(EUR, USD, 5m),
             };
@@ -76,7 +62,7 @@ namespace Pangea.Domain.Tests
         [TestMethod]
         public void Indexed_Returns_No_Rate_When_Reversed_And_Different_Rates()
         {
-            var sut = new ExchangeRateCollection(ExchangeRateConversionType.InverseRateIsDifferent)
+            var sut = new ExchangeRateCollection()
             {
                 new ExchangeRate(EUR, USD, 5m),
             };
@@ -85,22 +71,9 @@ namespace Pangea.Domain.Tests
         }
 
         [TestMethod]
-        public void Indexed_Returns_Rate_Reversed_When_Both_Ways()
+        public void Indexed_Throws_Exception_When_No_Rate_Found()
         {
-            var sut = new ExchangeRateCollection(ExchangeRateConversionType.SameRateBothWays)
-            {
-                new ExchangeRate(EUR, USD, 5m),
-            };
-
-            var result = sut[USD, EUR];
-            result.From.Should().Be(EUR);
-            result.To.Should().Be(USD);
-        }
-
-        [TestMethod]
-        public void Indexed_Throws_Exception_When_Both_Ways_No_Rate_Found()
-        {
-            var sut = new ExchangeRateCollection(ExchangeRateConversionType.SameRateBothWays)
+            var sut = new ExchangeRateCollection()
             {
                 new ExchangeRate(EUR, USD, 5m),
             };
@@ -110,20 +83,20 @@ namespace Pangea.Domain.Tests
         }
 
         [TestMethod]
-        public void Contains_For_Currencies_When_Using_Same_Rates_Both_Ways()
+        public void Contains_For_Currencies_Honors_The_Direction_Of_Exchange_Rates()
         {
-            var sut = new ExchangeRateCollection(ExchangeRateConversionType.SameRateBothWays)
+            var sut = new ExchangeRateCollection()
             {
                 new ExchangeRate(EUR, USD, 5m),
             };
             sut.Contains(EUR, USD).Should().BeTrue();
             sut.Contains(EUR, AUD).Should().BeFalse();
-            sut.Contains(USD, EUR).Should().BeTrue();
+            sut.Contains(USD, EUR).Should().BeFalse();
         }
         [TestMethod]
         public void Contains_For_Currencies_When_Using_Different_Rates_Both_Ways()
         {
-            var sut = new ExchangeRateCollection(ExchangeRateConversionType.InverseRateIsDifferent)
+            var sut = new ExchangeRateCollection()
             {
                 new ExchangeRate(EUR, USD, 5m),
             };
@@ -131,22 +104,12 @@ namespace Pangea.Domain.Tests
             sut.Contains(USD, EUR).Should().BeFalse();
         }
 
-        [TestMethod]
-        public void Cannot_Add_The_Inverted_Rate_When_Using_The_Same_Rate_Both_Ways()
-        {
-            Action action = () => new ExchangeRateCollection(ExchangeRateConversionType.SameRateBothWays)
-            {
-                new ExchangeRate(EUR, USD, 5m),
-                new ExchangeRate(USD, EUR, 5m)
-            };
-            action.Should().Throw<ArgumentException>();
-        }
 
         [TestMethod]
         public void Convert_Money_Into_Different_Currency_When_Rate_Exists()
         {
             var euros = new Money(EUR, 6);
-            var sut = new ExchangeRateCollection(ExchangeRateConversionType.SameRateBothWays)
+            var sut = new ExchangeRateCollection()
             {
                 new ExchangeRate(EUR, USD, 5m),
             };
@@ -158,17 +121,16 @@ namespace Pangea.Domain.Tests
         }
 
         [TestMethod]
-        public void Convert_Money_Into_Different_Currency_When_Rate_Exists_Backward()
+        public void Convert_Money_Into_Different_Currency_When_Rate_Exists_Backward_Does_Not_Work()
         {
             var euros = new Money(EUR, 6);
-            var sut = new ExchangeRateCollection(ExchangeRateConversionType.SameRateBothWays)
+            var sut = new ExchangeRateCollection()
             {
                 new ExchangeRate(USD, EUR, 5m),
             };
 
-            var result = sut.Convert(euros, USD);
-            result.Amount.Should().Be(1.2m);
-            result.Currency.Should().Be(USD);
+            var result = sut.TryConvert(euros, USD);
+            result.Should().BeNull();
         }
 
 

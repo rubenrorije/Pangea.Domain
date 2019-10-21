@@ -178,20 +178,20 @@ namespace Pangea.Domain.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot find exchange rate for the given currencies.
-        /// </summary>
-        internal static string ExchangeRateCollection_CannotFindExchangeRateForCurrencies {
-            get {
-                return ResourceManager.GetString("ExchangeRateCollection_CannotFindExchangeRateForCurrencies", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Exchange rate is already added to the collection.
         /// </summary>
         internal static string ExchangeRateCollection_RateIsAlreadyAdded {
             get {
                 return ResourceManager.GetString("ExchangeRateCollection_RateIsAlreadyAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot find exchange rate for the given currencies.
+        /// </summary>
+        internal static string ExchangeRates_CannotFindExchangeRateForCurrencies {
+            get {
+                return ResourceManager.GetString("ExchangeRates_CannotFindExchangeRateForCurrencies", resourceCulture);
             }
         }
         
