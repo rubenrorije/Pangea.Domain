@@ -12,6 +12,7 @@ namespace Pangea.Domain
     /// </summary>
     public class DateRangeCollection
         : IEnumerable<DateRange>
+        , ICollection<DateRange>
     {
         private List<DateRange> _ranges;
 
@@ -28,6 +29,9 @@ namespace Pangea.Domain
         /// The number of date ranges in this collection
         /// </summary>
         public int Count => _ranges.Count;
+
+        /// <inheritdoc/>
+        public bool IsReadOnly => false;
 
         /// <inheritdoc/>
         public void Add(DateRange item) => _ranges.Add(item);
@@ -130,6 +134,24 @@ namespace Pangea.Domain
 
             return new DateRange(ordered[0].Start, ordered.Last().End);
 
+        }
+
+        /// <inheritdoc/>
+        public bool Contains(DateRange item)
+        {
+            return _ranges.Contains(item);
+        }
+
+        /// <inheritdoc/>
+        public void CopyTo(DateRange[] array, int arrayIndex)
+        {
+            _ranges.CopyTo(array, arrayIndex);
+        }
+
+        /// <inheritdoc/>
+        public bool Remove(DateRange item)
+        {
+            return _ranges.Remove(item);
         }
     }
 }
