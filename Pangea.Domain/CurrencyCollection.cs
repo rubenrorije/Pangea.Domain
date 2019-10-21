@@ -60,7 +60,7 @@ namespace Pangea.Domain
         /// <summary>
         /// Add a number of currencies at once.
         /// </summary>
-        /// <param name="currencies">Teh currencies to add</param>
+        /// <param name="currencies">The currencies to add</param>
         public void AddRange(params Currency[] currencies)
         {
             AddRange(currencies.AsEnumerable());
