@@ -42,13 +42,13 @@ namespace Pangea.Domain.Tests
         [TestMethod]
         public void Get_The_Issuer_Identification_Of_An_Empty_CreditCard_Must_Be_Null()
         {
-            new CreditCard().GetIssuerIdentificationNumber(CreditCard.IssuerIdentifierFormat.LongIdentifier).Should().Be(null);
+            new CreditCard().GetIssuerIdentificationNumber(CreditCard.CreditCardIssuerFormat.LongIdentifier).Should().Be(null);
         }
 
         [TestMethod]
         public void Get_The_Individual_Account_Number_Of_An_Empty_CreditCard_Must_Be_Null()
         {
-            new CreditCard().GetIssuerIdentificationNumber(CreditCard.IssuerIdentifierFormat.LongIdentifier).Should().Be(null);
+            new CreditCard().GetIssuerIdentificationNumber(CreditCard.CreditCardIssuerFormat.LongIdentifier).Should().Be(null);
         }
 
         [TestMethod]
@@ -115,8 +115,8 @@ namespace Pangea.Domain.Tests
         {
             var sut = new CreditCard("4111 1111 1111 1111");
 
-            sut.GetIssuerIdentificationNumber(CreditCard.IssuerIdentifierFormat.LongIdentifier).Should().Be("41111111");
-            sut.GetIssuerIdentificationNumber(CreditCard.IssuerIdentifierFormat.ShortIdentifier).Should().Be("411111");
+            sut.GetIssuerIdentificationNumber(CreditCard.CreditCardIssuerFormat.LongIdentifier).Should().Be("41111111");
+            sut.GetIssuerIdentificationNumber(CreditCard.CreditCardIssuerFormat.ShortIdentifier).Should().Be("411111");
         }
 
         [TestMethod]
@@ -133,8 +133,8 @@ namespace Pangea.Domain.Tests
         {
             var sut = new CreditCard("4111 1111 1111 1111");
 
-            sut.GetIndividualAccountNumber(CreditCard.IssuerIdentifierFormat.LongIdentifier).Should().Be("1111111");
-            sut.GetIndividualAccountNumber(CreditCard.IssuerIdentifierFormat.ShortIdentifier).Should().Be("111111111");
+            sut.GetIndividualAccountNumber(CreditCard.CreditCardIssuerFormat.LongIdentifier).Should().Be("1111111");
+            sut.GetIndividualAccountNumber(CreditCard.CreditCardIssuerFormat.ShortIdentifier).Should().Be("111111111");
         }
 
         [TestMethod]

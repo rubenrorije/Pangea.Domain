@@ -16,7 +16,7 @@ namespace Pangea.Domain
     /// A validated object representing a credit card.
     /// </summary>
     [Serializable]
-    public struct CreditCard
+    public partial struct CreditCard
         : IEquatable<CreditCard>
         , IConvertible
         , IXmlSerializable
@@ -81,28 +81,12 @@ namespace Pangea.Domain
         public static bool operator !=(CreditCard lhs, CreditCard rhs)=> !(lhs == rhs);
 
         /// <summary>
-        /// Represent how the issuer is formatted. Since 2017 the issuer can be 8 (Long) characters,
-        /// before only 6 (Short) characters were used to identify the issuer
-        /// </summary>
-        public enum IssuerIdentifierFormat
-        {
-            /// <summary>
-            /// The issuer identifier is 8 characters long
-            /// </summary>
-            LongIdentifier = 8,
-            /// <summary>
-            /// The issuer identifier is 6 characters long
-            /// </summary>
-            ShortIdentifier = 6
-        }
-
-        /// <summary>
         /// Get the issuer based on the given format.
         /// </summary>
         /// <param name="format">Either Long (8) or Short (6)</param>
         /// <returns>The part of the credit card denoting the issuer</returns>
         /// <exception cref="ArgumentOutOfRangeException">Invalid enum value argument (0)</exception>
-        public string GetIssuerIdentificationNumber(IssuerIdentifierFormat format)
+        public string GetIssuerIdentificationNumber(CreditCardIssuerFormat format)
         {
             if (format == 0) throw new ArgumentOutOfRangeException(nameof(format));
             if (string.IsNullOrEmpty(_value)) return _value;
@@ -115,7 +99,7 @@ namespace Pangea.Domain
         /// <param name="format">How many characters are used for the Issuer, either 8 (Long) or 6 (Short)</param>
         /// <returns>The part of the credit card denoting the individual account number</returns>
         /// <exception cref="ArgumentOutOfRangeException">Invalid enum value argument (0)</exception>
-        public string GetIndividualAccountNumber(IssuerIdentifierFormat format)
+        public string GetIndividualAccountNumber(CreditCardIssuerFormat format)
         {
             if (format == 0) throw new ArgumentOutOfRangeException(nameof(format));
             if (string.IsNullOrEmpty(_value)) return _value;
@@ -149,7 +133,7 @@ namespace Pangea.Domain
                 result = new CreditCard();
                 return true;
             }
-            if (!trimmed.All(Char.IsDigit))
+            if (!trimmed.All(char.IsDigit))
             {
                 result = new CreditCard();
                 return false;
