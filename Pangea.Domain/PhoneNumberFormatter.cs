@@ -41,9 +41,13 @@ namespace Pangea.Domain
                 case "G":
                     return PrintGlobal();
                 default:
-                    break;
+                    return PrintCustom();
             }
 
+        }
+
+        private string PrintCustom()
+        {
             var builder = new StringBuilder(_phoneNumber.Text.Length);
 
             var numberIndex = 0;
@@ -54,7 +58,7 @@ namespace Pangea.Domain
                     case 'C':
                         builder.Append(_phoneNumber.CountryCode);
                         break;
-                    case 'N':
+                    case 'D':
                         if (numberIndex >= _phoneNumber.Trimmed.Length) break;
                         builder.Append(_phoneNumber.Trimmed[numberIndex]);
                         numberIndex++;
@@ -64,7 +68,7 @@ namespace Pangea.Domain
                         break;
                 }
             }
-            if (numberIndex < _phoneNumber.Trimmed.Length)
+            if (numberIndex > 0 && numberIndex < _phoneNumber.Trimmed.Length)
             {
                 builder.Append(_phoneNumber.Trimmed.Substring(numberIndex));
             }

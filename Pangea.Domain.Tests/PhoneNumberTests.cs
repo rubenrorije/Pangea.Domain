@@ -162,10 +162,10 @@ namespace Pangea.Domain.Tests
 
 
         [TestMethod]
-        public void ToString_With_A_Format_That_Is_Unuseful_Appends_All_Numbers_To_The_End()
+        public void ToString_With_A_Format_That_Is_Unuseful_Just_Returns_That_Text()
         {
             var sut = new PhoneNumber("+31 12 345 6789");
-            sut.ToString("X").Should().Be("X31123456789");
+            sut.ToString("X").Should().Be("X");
         }
 
         [TestMethod]
@@ -179,6 +179,47 @@ namespace Pangea.Domain.Tests
             sut.ToString("O").Should().Be(null);
             sut.ToString("l").Should().Be(null);
             sut.ToString("L").Should().Be(null);
+        }
+
+        [TestMethod]
+        public void ToString_CustomFormat_C()
+        {
+            var sut = new PhoneNumber(31, "0123456789");
+
+            sut.ToString("C").Should().Be("31");
+        }
+
+
+        [TestMethod]
+        public void ToString_CustomFormat_D()
+        {
+            var sut = new PhoneNumber(31, "0123456789");
+
+            sut.ToString("D").Should().Be("123456789");
+        }
+
+        [TestMethod]
+        public void ToString_CustomFormat_D_With_Spaces()
+        {
+            var sut = new PhoneNumber(31, "0123456789");
+
+            sut.ToString("DD DD DD DD").Should().Be("12 34 56 789");
+        }
+
+        [TestMethod]
+        public void ToString_CustomFormat_D_With_Other_Characters()
+        {
+            var sut = new PhoneNumber(31, "0123456789");
+
+            sut.ToString("DD-DD DD (DDDDDDDDD)").Should().Be("12-34 56 (789)");
+        }
+
+        [TestMethod]
+        public void ToString_CustomFormat_D_Extra_Is_No_Problem()
+        {
+            var sut = new PhoneNumber(31, "0123456789");
+
+            sut.ToString(new string('D', 50)).Should().Be("123456789");
         }
 
         [TestMethod]
@@ -321,32 +362,6 @@ namespace Pangea.Domain.Tests
         public void TryParse_Local_PhoneNumber_With_Invalid_Country_Code_Returns_False()
         {
             PhoneNumber.TryParse(0, "0123456789", out PhoneNumber sut).Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void Format_With_Custom_Format()
-        {
-            var sut = new PhoneNumber(31, "0123456789");
-
-            sut.ToString("+C NNN NN NNN N").Should().Be("+31 123 45 678 9");
-            sut.ToString("+C (0) NNN NN NN NN").Should().Be("+31 (0) 123 45 67 89");
-            sut.ToString("0NNN-NNNNNN").Should().Be("0123-456789");
-        }
-
-        [TestMethod]
-        public void Format_With_Custom_Format_That_Contains_Less_Digits_Than_The_PhoneNumber_Appends_The_Numbers_To_The_End()
-        {
-            var sut = new PhoneNumber(31, "0123456789");
-
-            sut.ToString("0NN ").Should().Be("012 3456789");
-        }
-
-        [TestMethod]
-        public void Format_With_Custom_Format_That_Contains_More_Digits_Than_The_PhoneNumber_Does_Not_Do_Anything_With_The_Superfluous_Digits()
-        {
-            var sut = new PhoneNumber(31, "0123456789");
-
-            sut.ToString(new string('N', 50)).Should().Be("123456789");
         }
     }
 }
