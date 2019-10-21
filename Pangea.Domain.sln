@@ -1,11 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2042
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29324.140
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pangea.Domain", "Pangea.Domain\Pangea.Domain.csproj", "{71907609-96D6-42FA-B523-35D5778D348A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pangea.Domain", "Pangea.Domain\Pangea.Domain.csproj", "{71907609-96D6-42FA-B523-35D5778D348A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pangea.Domain.Tests", "Pangea.Domain.Tests\Pangea.Domain.Tests.csproj", "{00DEC68B-A0D9-4165-876B-33B4FAA4E41B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{45F6DD44-688E-40EB-B6DD-F1FC321CF13B}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
