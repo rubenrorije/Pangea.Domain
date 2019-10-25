@@ -78,5 +78,19 @@ namespace Pangea.Domain.Tests.CrossCutting
                 }
             }
         }
+
+        [TestMethod]
+        public void GetHashcode_Does_Not_Throw_When_Called_From_A_Default_Instance()
+        {
+            using (new AssertionScope())
+            {
+                foreach (var type in Structs)
+                {
+                    var instance = Activator.CreateInstance(type);
+                    Action action = () => instance.GetHashCode();
+                    action.Should().NotThrow<Exception>();
+                }
+            }
+        }
     }
 }

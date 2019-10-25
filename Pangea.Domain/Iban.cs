@@ -13,7 +13,7 @@ namespace Pangea.Domain
     /// International bank account number (https://en.wikipedia.org/wiki/International_Bank_Account_Number)
     /// </summary>
     [Serializable]
-    public struct Iban 
+    public struct Iban
         : IXmlSerializable
         , IConvertible
         , IEquatable<Iban>
@@ -80,7 +80,7 @@ namespace Pangea.Domain
         /// <inheritdoc/>
         public override int GetHashCode()
         {
-            return _text.GetHashCode();
+            return _text?.GetHashCode() ?? 0;
         }
 
         /// <summary>
