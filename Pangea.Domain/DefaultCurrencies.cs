@@ -54,7 +54,7 @@ namespace Pangea.Domain
         /// Use these default currencies, the most traded currencies as the list of currencies to register.
         /// If no 
         /// </summary>
-        public static CurrencyCollection Register()
+        public static IReadOnlyCollection<Currency> Register()
         {
             return 
                 Currencies

@@ -13,7 +13,11 @@ namespace Pangea.Domain.Tests.Util
     internal class RegisterCurrencies : IDisposable
     {
         private readonly CurrencyCollection _instance;
-        public RegisterCurrencies(CurrencyCollection instance)
+        public RegisterCurrencies(params Currency[] currencies) 
+            : this(new CurrencyCollection (currencies))
+        {
+        }
+            public RegisterCurrencies(CurrencyCollection instance)
         {
             _instance = instance;
             Currencies.SetProvider(() => _instance);

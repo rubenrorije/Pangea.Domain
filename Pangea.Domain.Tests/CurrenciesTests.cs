@@ -77,9 +77,12 @@ namespace Pangea.Domain.Tests
         [TestMethod]
         public void When_Provider_Function_Is_Not_Called_The_Default_Is_Used()
         {
-            Action action = () => { var c = Currencies.Find("EUR"); };
+            using (new RegisterCurrencies(EUR))
+            {
+                Action action = () => { var c = Currencies.Find("EUR"); };
 
-            action.Should().NotThrow<InvalidOperationException>();
+                action.Should().NotThrow<Exception>();
+            }
         }
 
 

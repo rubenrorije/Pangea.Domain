@@ -15,7 +15,7 @@ namespace Pangea.Domain
         /// A private field to store a way to retrieve the Currencies instance.
         /// This allows the end user to store the Currencies instance for instance in an IoC-container
         /// </summary>
-        private static Func<CurrencyCollection> _instanceProvider;
+        private static Func<IReadOnlyCollection<Currency>> _instanceProvider;
 
         /// <summary>
         /// Set the way to retrieve the global instance of the registered Currencies.
@@ -23,10 +23,10 @@ namespace Pangea.Domain
         /// IoC-container if applicable. 
         /// </summary>
         /// <param name="functionToRetrieveTheInstance">The way to retrieve the instance</param>
-        public static CurrencyCollection SetProvider(Func<CurrencyCollection> functionToRetrieveTheInstance)
+        public static IReadOnlyCollection<Currency> SetProvider(Func<IReadOnlyCollection<Currency>> functionToRetrieveTheInstance)
         {
             if (functionToRetrieveTheInstance == null) throw new ArgumentNullException(nameof(functionToRetrieveTheInstance));
-            
+
             _instanceProvider = functionToRetrieveTheInstance;
             return _instanceProvider();
         }
@@ -34,7 +34,7 @@ namespace Pangea.Domain
         /// <summary>
         /// The registered instance will be returned using the provider function.
         /// </summary>
-        private static CurrencyCollection Instance
+        private static IReadOnlyCollection<Currency> Instance
         {
             get
             {
@@ -52,7 +52,7 @@ namespace Pangea.Domain
         /// </summary>
         /// <param name="currencies">The currencies to register</param>
         /// <returns>The created Currency Collection</returns>
-        public static CurrencyCollection Initialize(params Currency[] currencies)
+        public static IReadOnlyCollection<Currency> Initialize(params Currency[] currencies)
         {
             var instance = new CurrencyCollection();
             instance.AddRange(currencies);
@@ -63,7 +63,7 @@ namespace Pangea.Domain
         /// <summary>
         /// Set the provider to use the region info's from standard .Net
         /// </summary>
-        public static CurrencyCollection SetRegionInfoProvider()
+        public static IReadOnlyCollection<Currency> SetRegionInfoProvider()
         {
             var currencies =
                 CultureInfo
@@ -89,7 +89,7 @@ namespace Pangea.Domain
         /// <returns>Either the currency that is found, or null when the currency could not be found</returns>
         public static Currency Find(string code)
         {
-            return Instance.Find(code);
+            return Instance.FirstOrDefault(currency => currency.Code == code);
         }
     }
 }

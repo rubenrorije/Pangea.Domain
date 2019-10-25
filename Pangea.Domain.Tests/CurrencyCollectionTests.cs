@@ -104,11 +104,6 @@ namespace Pangea.Domain.Tests
 
             sut.Count.Should().Be(0);
         }
-        [TestMethod]
-        public void Find_Returns_Null_When_Not_Found()
-        {
-            var sut = Currencies.Initialize();
-            sut.Find("AED").Should().BeNull();
-        }
+
     }
 }

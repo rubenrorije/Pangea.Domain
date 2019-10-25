@@ -11,7 +11,9 @@ namespace Pangea.Domain
     /// <summary>
     /// A holder containing all registered currencies in the implementation
     /// </summary>
-    public class CurrencyCollection : IEnumerable<Currency>
+    internal class CurrencyCollection
+        : IEnumerable<Currency>
+        , IReadOnlyCollection<Currency>
     {
 
         private Dictionary<string, Currency> _currencies;
@@ -19,9 +21,17 @@ namespace Pangea.Domain
         /// <summary>
         /// Create a new Currency holder instance
         /// </summary>
-        public CurrencyCollection()
+        public CurrencyCollection() : this(Enumerable.Empty<Currency>())
         {
-            _currencies = new Dictionary<string, Currency>();
+        }
+
+        /// <summary>
+        /// Create a new Currency holder instance initialized with the given currencies
+        /// </summary>
+        /// <param name="currencies">A list of currencties to use</param>
+        public CurrencyCollection(IEnumerable<Currency> currencies)
+        {
+            _currencies = currencies.ToDictionary(cur => cur.Code, cur => cur);
         }
 
         /// <summary>
@@ -75,24 +85,6 @@ namespace Pangea.Domain
             if (currency == null) throw new ArgumentNullException(nameof(currency));
             _currencies.Remove(currency.Code);
         }
-
-        /// <summary>
-        /// Try to find the Currency within the registered currencies by the given code.
-        /// </summary>
-        /// <param name="code">the ISO 4217 code</param>
-        /// <returns>Either the currency that is found, or null when the currency could not be found</returns>
-        public Currency Find(string code)
-        {
-            Currency result;
-            if (_currencies.TryGetValue(code, out result)) return result;
-            return null;
-        }
-
-        /// <summary>
-        /// Get the currency based on the given code, a <see cref="KeyNotFoundException"/> when not found.
-        /// </summary>
-        public Currency this[string code] => _currencies[code];
-        
 
         /// <summary>
         /// Return a list of currencies.
