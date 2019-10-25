@@ -92,5 +92,19 @@ namespace Pangea.Domain.Tests.CrossCutting
                 }
             }
         }
+        [TestMethod]
+        public void Equals_For_Default_Instances_Returns_True()
+        {
+            using (new AssertionScope())
+            {
+                foreach (var type in Structs)
+                {
+                    var lhs = Activator.CreateInstance(type);
+                    var rhs = Activator.CreateInstance(type);
+
+                    lhs.Equals(rhs).Should().BeTrue();
+                }
+            }
+        }
     }
 }
