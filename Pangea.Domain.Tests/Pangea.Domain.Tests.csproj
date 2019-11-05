@@ -65,6 +65,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AngleTests.cs" />
     <Compile Include="AssemblyInformationTests.cs" />
     <Compile Include="CachedExchangeRateProviderTests.cs" />
     <Compile Include="Checksums\LuhnChecksumCalculatorTests.cs" />
