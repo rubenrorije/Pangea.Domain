@@ -89,5 +89,27 @@ namespace Pangea.Domain.Tests
             (-new Angle(90)).Should().Be(new Angle(270));
             (-new Angle(180)).Should().Be(new Angle(180));
         }
+
+        [TestMethod]
+        public void Add_Angle_Will_Modulo_360()
+        {
+            var lhs = new Angle(270);
+            var rhs = new Angle(270);
+
+            var result = lhs + rhs;
+
+            result.Should().Be(new Angle(180));
+        }
+
+        [TestMethod]
+        public void Subtract_Angle_Will_Simplify()
+        {
+            var lhs = new Angle(180);
+            var rhs = new Angle(270);
+
+            var result = lhs - rhs;
+
+            result.Should().Be(new Angle(-90));
+        }
     }
 }

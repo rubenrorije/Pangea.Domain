@@ -125,12 +125,14 @@ namespace Pangea.Domain
         /// <inheritdoc/>
         public static bool operator <=(Angle left, Angle right) => left.Degrees <= right.Degrees;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="angle"></param>
-        /// <returns></returns>
+        /// <inheritdoc/>
         public static Angle operator -(Angle angle) => angle.Negate();
+
+        /// <inheritdoc/>
+        public static Angle operator +(Angle lhs, Angle rhs) => lhs.Add(rhs);
+
+        /// <inheritdoc/>
+        public static Angle operator -(Angle lhs, Angle rhs) => lhs.Subtract(rhs);
 
         /// <summary>
         /// Return the negated (360 - Angle) angle
@@ -140,6 +142,22 @@ namespace Pangea.Domain
             return new Angle(-Degrees);
         }
 
+        /// <summary>
+        /// Adds the angles together and returns the simplified result
+        /// </summary>
+        /// <param name="other">the Angle to add</param>
+        public Angle Add(Angle other)
+        {
+            return new Angle(Degrees + other.Degrees);
+        }
+        /// <summary>
+        /// Subtract the angle and returns the simplified result
+        /// </summary>
+        /// <param name="other">the Angle to subtract</param>
+        public Angle Subtract(Angle other)
+        {
+            return new Angle(Degrees - other.Degrees);
+        }
 
         /// <summary>
         /// Extract the raw degrees value from the angle
