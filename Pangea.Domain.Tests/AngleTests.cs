@@ -111,5 +111,13 @@ namespace Pangea.Domain.Tests
 
             result.Should().Be(new Angle(-90));
         }
+
+        [TestMethod]
+        public void ToRadians_Will_Be_Correct_Result()
+        {
+            new Angle(0).ToRadians().Should().Be(0);
+            new Angle(180).ToRadians().Should().Be(Math.PI);
+            new Angle(30).ToRadians().Should().BeApproximately(0.5236, 0.0001);
+        }
     }
 }
