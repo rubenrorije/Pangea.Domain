@@ -54,5 +54,19 @@ namespace Pangea.Domain.Tests
 
             lhs.Should().Be(rhs);
         }
+
+        [TestMethod]
+        public void Default_Representation_Of_Angle_Includes_Degree_Symbol()
+        {
+            var sut = new Angle(90);
+            sut.ToString().Should().Be("90°");
+        }
+
+        [TestMethod]
+        public void Numeric_Format_String_Does_Not_Include_Degree_Symbol()
+        {
+            var sut = new Angle(90);
+            sut.ToString("N0").Should().Be("90");
+        }
     }
 }
