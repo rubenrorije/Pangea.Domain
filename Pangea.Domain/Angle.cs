@@ -58,10 +58,20 @@ namespace Pangea.Domain
             return ToString(null, null);
         }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Represent the Angle in the correct format. Standard numeric format strings are used to format the degrees
+        /// </summary>
         public string ToString(string format)
         {
             return ToString(format, null);
+        }
+
+        /// <summary>
+        /// Represent the Angle in the correct format. Standard numeric format strings are used to format the degrees
+        /// </summary>
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            return Degrees.ToString(format, formatProvider);
         }
 
         /// <inheritdoc />
@@ -92,12 +102,6 @@ namespace Pangea.Domain
             if (writer == null) throw new ArgumentNullException(nameof(writer));
 
             writer.WriteAttributeString("value", Degrees.ToString(null, CultureInfo.InvariantCulture));
-        }
-
-        /// <inheritdoc/>
-        public string ToString(string format, IFormatProvider formatProvider)
-        {
-            return Degrees.ToString(format, formatProvider);
         }
 
 
