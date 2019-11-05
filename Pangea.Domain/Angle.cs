@@ -29,7 +29,9 @@ namespace Pangea.Domain
         /// <param name="degrees">The degrees (0-360)</param>
         public Angle(int degrees)
         {
-            Degrees = degrees;
+            var safeDegrees = degrees % 360;
+            if (safeDegrees < 0) safeDegrees += 360;
+            Degrees = safeDegrees;
         }
 
         /// <inheritdoc/>
