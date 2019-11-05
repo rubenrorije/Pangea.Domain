@@ -82,5 +82,12 @@ namespace Pangea.Domain.Tests
             (new Angle(90) < new Angle(180)).Should().BeTrue();
             (new Angle(90) <= new Angle(180)).Should().BeTrue();
         }
+
+        [TestMethod]
+        public void Negated_Angle_Returns_Correct_Result()
+        {
+            (-new Angle(90)).Should().Be(new Angle(270));
+            (-new Angle(180)).Should().Be(new Angle(180));
+        }
     }
 }

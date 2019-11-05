@@ -126,6 +126,22 @@ namespace Pangea.Domain
         public static bool operator <=(Angle left, Angle right) => left.Degrees <= right.Degrees;
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="angle"></param>
+        /// <returns></returns>
+        public static Angle operator -(Angle angle) => angle.Negate();
+
+        /// <summary>
+        /// Return the negated (360 - Angle) angle
+        /// </summary>
+        public Angle Negate()
+        {
+            return new Angle(-Degrees);
+        }
+
+
+        /// <summary>
         /// Extract the raw degrees value from the angle
         /// </summary>
         /// <param name="angle">The angle</param>
