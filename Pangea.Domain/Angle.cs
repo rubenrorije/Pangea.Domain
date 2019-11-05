@@ -23,13 +23,13 @@ namespace Pangea.Domain
         /// <summary>
         /// The degrees of the Angle
         /// </summary>
-        public decimal Degrees { get; }
+        public double Degrees { get; }
 
         /// <summary>
         /// Create a new Angle based on the number of degrees (0-360)
         /// </summary>
         /// <param name="degrees">The degrees (0-360)</param>
-        public Angle(decimal degrees)
+        public Angle(double degrees)
         {
             var safeDegrees = degrees % 360;
             if (safeDegrees < 0) safeDegrees += 360;
@@ -163,12 +163,12 @@ namespace Pangea.Domain
         /// Extract the raw degrees value from the angle
         /// </summary>
         /// <param name="angle">The angle</param>
-        public static explicit operator decimal(Angle angle) => angle.ToDecimal();
+        public static explicit operator double(Angle angle) => angle.ToDouble();
 
         /// <summary>
         /// Extract the raw degrees value from the angle
         /// </summary>
-        public decimal ToDecimal() => Degrees;
+        public double ToDouble() => Degrees;
 
         TypeCode IConvertible.GetTypeCode() => TypeCode.Object;
         bool IConvertible.ToBoolean(IFormatProvider provider) => Convert.ToBoolean(Degrees, provider);
@@ -202,6 +202,15 @@ namespace Pangea.Domain
         public int CompareTo(object other)
         {
             return CompareTo((Angle)other);
+        }
+
+        /// <summary>
+        /// Returns the radians of an angle
+        /// </summary>
+        /// <returns>The radians (Degrees * Pi / 180)</returns>
+        public double ToRadians()
+        {
+            return Degrees * Math.PI / 180.0;
         }
     }
 }
