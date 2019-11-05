@@ -21,13 +21,13 @@ namespace Pangea.Domain
         /// <summary>
         /// The degrees of the Angle
         /// </summary>
-        public int Degrees { get; }
+        public decimal Degrees { get; }
 
         /// <summary>
         /// Create a new Angle based on the number of degrees (0-360)
         /// </summary>
         /// <param name="degrees">The degrees (0-360)</param>
-        public Angle(int degrees)
+        public Angle(decimal degrees)
         {
             var safeDegrees = degrees % 360;
             if (safeDegrees < 0) safeDegrees += 360;
@@ -71,7 +71,8 @@ namespace Pangea.Domain
         /// </summary>
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            return Degrees.ToString(format, formatProvider);
+            if (string.IsNullOrEmpty(format) || format == "G") return $"{Degrees}°";
+            else return Degrees.ToString(format, formatProvider);
         }
 
         /// <inheritdoc />
@@ -115,13 +116,12 @@ namespace Pangea.Domain
         /// Extract the raw degrees value from the angle
         /// </summary>
         /// <param name="angle">The angle</param>
-        public static explicit operator int(Angle angle) => angle.ToInt32();
-
+        public static explicit operator decimal(Angle angle) => angle.ToDecimal();
 
         /// <summary>
         /// Extract the raw degrees value from the angle
         /// </summary>
-        public int ToInt32() => Degrees;
+        public decimal ToDecimal() => Degrees;
 
         TypeCode IConvertible.GetTypeCode() => TypeCode.Object;
         bool IConvertible.ToBoolean(IFormatProvider provider) => Convert.ToBoolean(Degrees, provider);
