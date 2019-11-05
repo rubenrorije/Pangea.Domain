@@ -68,5 +68,19 @@ namespace Pangea.Domain.Tests
             var sut = new Angle(90);
             sut.ToString("N0").Should().Be("90");
         }
+
+        [TestMethod]
+        public void Compare_Angles()
+        {
+            (new Angle(180) > new Angle(90)).Should().BeTrue();
+            (new Angle(180) >= new Angle(90)).Should().BeTrue();
+            (new Angle(180) < new Angle(90)).Should().BeFalse();
+            (new Angle(180) <= new Angle(90)).Should().BeFalse();
+
+            (new Angle(90) > new Angle(180)).Should().BeFalse();
+            (new Angle(90) >= new Angle(180)).Should().BeFalse();
+            (new Angle(90) < new Angle(180)).Should().BeTrue();
+            (new Angle(90) <= new Angle(180)).Should().BeTrue();
+        }
     }
 }

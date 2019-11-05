@@ -17,6 +17,8 @@ namespace Pangea.Domain
         , IFormattable
         , IXmlSerializable
         , IConvertible
+        , IComparable
+        , IComparable<Angle>
     {
         /// <summary>
         /// The degrees of the Angle
@@ -112,6 +114,17 @@ namespace Pangea.Domain
         /// <inheritdoc/>
         public static bool operator !=(Angle left, Angle right) => !(left == right);
 
+        /// <inheritdoc/>
+        public static bool operator >(Angle left, Angle right) => left.Degrees > right.Degrees;
+
+        /// <inheritdoc/>
+        public static bool operator >=(Angle left, Angle right) => left.Degrees >= right.Degrees;
+        /// <inheritdoc/>
+        public static bool operator <(Angle left, Angle right) => left.Degrees < right.Degrees;
+
+        /// <inheritdoc/>
+        public static bool operator <=(Angle left, Angle right) => left.Degrees <= right.Degrees;
+
         /// <summary>
         /// Extract the raw degrees value from the angle
         /// </summary>
@@ -141,5 +154,20 @@ namespace Pangea.Domain
         uint IConvertible.ToUInt32(IFormatProvider provider) => Convert.ToUInt32(Degrees, provider);
         ulong IConvertible.ToUInt64(IFormatProvider provider) => Convert.ToUInt64(Degrees, provider);
 
+        /// <summary>
+        /// Compare the degrees to another angle
+        /// </summary>
+        /// <param name="other">the angle to compare to</param>
+        /// <returns>the comparison of the two angles</returns>
+        public int CompareTo(Angle other)
+        {
+            return Degrees.CompareTo(other.Degrees);
+        }
+
+        /// <inheritdoc/>
+        public int CompareTo(object other)
+        {
+            return CompareTo((Angle)other);
+        }
     }
 }
