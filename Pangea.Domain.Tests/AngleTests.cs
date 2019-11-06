@@ -119,5 +119,55 @@ namespace Pangea.Domain.Tests
             new Angle(180).ToRadians().Should().Be(Math.PI);
             new Angle(30).ToRadians().Should().BeApproximately(0.5236, 0.0001);
         }
+
+        [TestMethod]
+        [DataRow("N", 0)]
+        [DataRow("NNE", 22.5)]
+        [DataRow("NE", 45)]
+        [DataRow("ENE", 67.5)]
+        [DataRow("E", 90)]
+        [DataRow("ESE", 112.5)]
+        [DataRow("SE", 135)]
+        [DataRow("SSE", 157.5)]
+        [DataRow("S", 180)]
+        [DataRow("SSW", 202.5)]
+        [DataRow("SW", 225)]
+        [DataRow("WSW", 247.5)]
+        [DataRow("W", 270)]
+        [DataRow("WNW", 292.5)]
+        [DataRow("NW", 315)]
+        [DataRow("NNW", 337.5)]
+        public void ToCardinalDirection_Returns_Right_Direction_For_Existing_Directions(string direction, double angle)
+        {
+            var sut = new Angle(angle);
+            sut.ToCardinalDirection().Should().Be(direction);
+        }
+
+        [TestMethod]
+        [DataRow("N", 0)]
+        [DataRow("N", 11)]
+        [DataRow("NNE", 11.25)]
+        [DataRow("NNE", 11.26)]
+        [DataRow("N", -11)]
+        [DataRow("N", -11.24)]
+        [DataRow("N", -11.25)]
+        public void ToCardinalDirection_Returns_The_Closest_Direction(string direction, double angle)
+        {
+            var sut = new Angle(angle);
+            sut.ToCardinalDirection().Should().Be(direction);
+        }
+
+        [TestMethod]
+        [DataRow("N", 0)]
+        [DataRow("E", 46)]
+        [DataRow("E", 91)]
+        [DataRow("S", 183)]
+        [DataRow("W", 280)]
+        [DataRow("N", 345)]
+        public void ToCardinalDirection_Only_Using_Cardinal_Directions(string direction, int angle)
+        {
+            var sut = new Angle(angle);
+            sut.ToCardinalDirection(Direction.Cardinal).Should().Be(direction);
+        }
     }
 }
