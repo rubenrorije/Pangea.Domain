@@ -50,7 +50,7 @@ namespace Pangea.Domain.Tests
         }
 
         [TestMethod]
-        public void ToString_Default_Negative_2()
+        public void ToString_Default_Negative_In_Dutch_Culture()
         {
             var sut = new Money(EUR, -5);
             sut.ToString(CultureInfo.GetCultureInfo(1043)).Should().Be("€ -5,00");
@@ -92,7 +92,7 @@ namespace Pangea.Domain.Tests
         }
 
         [TestMethod]
-        public void ToString_In_Different_Culture()
+        public void ToString_In_Dutch_Culture()
         {
             var sut = new Money(EUR, 5);
             sut.ToString(CultureInfo.GetCultureInfo(1043)).Should().Be("€ 5,00");
