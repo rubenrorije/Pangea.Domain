@@ -182,17 +182,56 @@ namespace Pangea.Domain.Tests
             var sut = new Angle(180);
             (sut / -2).Should().Be(new Angle(-90));
         }
+
         [TestMethod]
         public void Multiply_Angle_Returns_The_Correct_Multiplied_Angle()
         {
             var sut = new Angle(180);
             (sut * 2).Should().Be(new Angle(360));
         }
+
         [TestMethod]
         public void Multiply_Angle_By_Negative_Number_Returns_The_Correct_Multiplied_Angle()
         {
             var sut = new Angle(180);
             (sut * -2).Should().Be(new Angle(-360));
+        }
+
+        [TestMethod]
+        [DataRow("N", 0)]
+        [DataRow("NNE", 22.5)]
+        [DataRow("NE", 45)]
+        [DataRow("ENE", 67.5)]
+        [DataRow("E", 90)]
+        [DataRow("ESE", 112.5)]
+        [DataRow("SE", 135)]
+        [DataRow("SSE", 157.5)]
+        [DataRow("S", 180)]
+        [DataRow("SSW", 202.5)]
+        [DataRow("SW", 225)]
+        [DataRow("WSW", 247.5)]
+        [DataRow("W", 270)]
+        [DataRow("WNW", 292.5)]
+        [DataRow("NW", 315)]
+        [DataRow("NNW", 337.5)]
+        public void Create_Angle_From_Direction(string direction, double degrees)
+        {
+            var sut = Angle.FromDirection(direction);
+            sut.Should().Be(new Angle(degrees));
+        }
+
+        [TestMethod]
+        public void Null_Direction_Will_Throw_Exception()
+        {
+            Action action = () => Angle.FromDirection(null);
+            action.Should().Throw<ArgumentNullException>();
+        }
+
+        [TestMethod]
+        public void Unknown_Direction_Will_Throw_Exception()
+        {
+            Action action = () => Angle.FromDirection("X");
+            action.Should().Throw<ArgumentOutOfRangeException>();
         }
     }
 }

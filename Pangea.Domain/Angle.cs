@@ -199,6 +199,25 @@ namespace Pangea.Domain
         bool IConvertible.ToBoolean(IFormatProvider provider) => Convert.ToBoolean(Degrees, provider);
         byte IConvertible.ToByte(IFormatProvider provider) => Convert.ToByte(Degrees, provider);
         char IConvertible.ToChar(IFormatProvider provider) => Convert.ToChar(Degrees, provider);
+
+        /// <summary>
+        /// Create an angle based on the given wind rose direction, cardinal, intercardinal or secondary intercardinal.
+        /// E.g. NNW=337.5 SE=135
+        /// </summary>
+        /// <param name="direction">The windrose direction</param>
+        /// <returns>The angle based on the given direction</returns>
+        /// <exception cref="ArgumentOutOfRangeException">When a string is given that does not represent a direction</exception>
+        /// <exception cref="ArgumentNullException">When the direction is null or empty</exception>
+        public static Angle FromDirection(string direction)
+        {
+            if (string.IsNullOrEmpty(direction)) throw new ArgumentNullException(nameof(direction));
+            var allDirections = Direction.SecondaryInterCardinal.GetAll().ToList();
+
+            var index = allDirections.IndexOf(direction.ToUpper(CultureInfo.InvariantCulture));
+            if (index < 0) throw new ArgumentOutOfRangeException(nameof(direction));
+            return new Angle(index * 22.5);
+        }
+
         DateTime IConvertible.ToDateTime(IFormatProvider provider) => Convert.ToDateTime(Degrees, provider);
         decimal IConvertible.ToDecimal(IFormatProvider provider) => Convert.ToDecimal(Degrees, provider);
         double IConvertible.ToDouble(IFormatProvider provider) => Convert.ToDouble(Degrees, provider);
