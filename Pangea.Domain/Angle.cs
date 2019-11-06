@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.Schema;
@@ -212,5 +213,22 @@ namespace Pangea.Domain
         {
             return Degrees * Math.PI / 180.0;
         }
+
+        /// <summary>
+        /// Returns the closest cardinal to the given angle, given the precision.
+        /// </summary>
+        /// <param name="precision">The precision of the direction</param>
+        /// <returns>The string representation of the closest direction.</returns>
+        public string ToCardinalDirection(Direction precision = Direction.SecondaryInterCardinal)
+        {
+            var directions = precision.GetAll();
+            var slice = 360.0 / directions.Count;
+            var boundary = slice / 2.0; 
+            var temp = (Degrees + boundary) % 360; // to make it easier for North
+            var index = (int)Math.Floor(temp / slice);
+            return directions.ElementAt(index);
+        }
+
+
     }
 }
