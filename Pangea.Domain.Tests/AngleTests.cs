@@ -169,5 +169,30 @@ namespace Pangea.Domain.Tests
             var sut = new Angle(angle);
             sut.ToCardinalDirection(Direction.Cardinal).Should().Be(direction);
         }
+
+        [TestMethod]
+        public void Divide_Angle_Returns_The_Correct_Divided_Angle()
+        {
+            var sut = new Angle(180);
+            (sut / 2).Should().Be(new Angle(90));
+        }
+        [TestMethod]
+        public void Divide_Angle_By_Negative_Number_Returns_The_Correct_Divided_Angle()
+        {
+            var sut = new Angle(180);
+            (sut / -2).Should().Be(new Angle(-90));
+        }
+        [TestMethod]
+        public void Multiply_Angle_Returns_The_Correct_Multiplied_Angle()
+        {
+            var sut = new Angle(180);
+            (sut * 2).Should().Be(new Angle(360));
+        }
+        [TestMethod]
+        public void Multiply_Angle_By_Negative_Number_Returns_The_Correct_Multiplied_Angle()
+        {
+            var sut = new Angle(180);
+            (sut * -2).Should().Be(new Angle(-360));
+        }
     }
 }
