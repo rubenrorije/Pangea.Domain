@@ -86,6 +86,7 @@
     <Compile Include="DateRangeCollectionTests.cs" />
     <Compile Include="DateRangeTests.cs" />
     <Compile Include="DefaultCurrenciesTests.cs" />
+    <Compile Include="DirectionExtensionsTests.cs" />
     <Compile Include="EmojiFlagTests.cs" />
     <Compile Include="ExchangeRateAtTests.cs" />
     <Compile Include="ExchangeRateBothWaysWrapperTests.cs" />

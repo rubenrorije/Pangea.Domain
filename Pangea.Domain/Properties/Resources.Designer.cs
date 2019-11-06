@@ -151,6 +151,15 @@ namespace Pangea.Domain.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid direction to convert to arrow.
+        /// </summary>
+        internal static string Direction_InvalidDirectionCannotBeConvertedToArrow {
+            get {
+                return ResourceManager.GetString("Direction_InvalidDirectionCannotBeConvertedToArrow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Should have 2 characters, but has less characters.
         /// </summary>
         internal static string EmojiFlag_LessThan2Characters {
