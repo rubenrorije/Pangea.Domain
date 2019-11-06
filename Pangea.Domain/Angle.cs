@@ -135,6 +135,12 @@ namespace Pangea.Domain
         /// <inheritdoc/>
         public static Angle operator -(Angle lhs, Angle rhs) => lhs.Subtract(rhs);
 
+        /// <inheritdoc/>
+        public static Angle operator /(Angle lhs, double rhs) => lhs.Divide(rhs);
+
+        /// <inheritdoc/>
+        public static Angle operator *(Angle lhs, double rhs) => lhs.Multiply(rhs);
+
         /// <summary>
         /// Return the negated (360 - Angle) angle
         /// </summary>
@@ -158,6 +164,24 @@ namespace Pangea.Domain
         public Angle Subtract(Angle other)
         {
             return new Angle(Degrees - other.Degrees);
+        }
+
+        /// <summary>
+        /// Divide the angle 
+        /// </summary>
+        /// <param name="divisor">The argument to divide the angle by</param>
+        public Angle Divide(double divisor)
+        {
+            return new Angle(Degrees / divisor);
+        }
+
+        /// <summary>
+        /// Multiply the angle by the given amount
+        /// </summary>
+        /// <param name="other">the amount to multiply the angle by</param>
+        public Angle Multiply(double other)
+        {
+            return new Angle(Degrees * other);
         }
 
         /// <summary>
