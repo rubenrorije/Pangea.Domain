@@ -558,6 +558,16 @@ namespace Pangea.Domain.Tests
             sut.Start.Value.DayOfWeek.Should().Be(expected, "the first day of the week must match the one specified in the culture");
         }
 
+        [TestMethod]
+        [DataRow("en-US", DayOfWeek.Sunday)]
+        [DataRow("fr-FR", DayOfWeek.Monday)]
+        [DataRow("fa-IR", DayOfWeek.Saturday)]
+        public void Create_Week_For_Date_With_Different_Cultures(string culturename, DayOfWeek firstDayOfWeek)
+        {
+            var sut = DateRange.Week(new DateTime(2018, 1, 1), CultureInfo.GetCultureInfo(culturename));
+            sut.Start.Value.DayOfWeek.Should().Be(firstDayOfWeek);
+        }
+
         // sunday
         [DataRow("2017-01-01", "2017-01-01", DayOfWeek.Sunday)]
         [DataRow("2017-01-01", "2016-12-26", DayOfWeek.Monday)]
