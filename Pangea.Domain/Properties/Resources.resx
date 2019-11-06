@@ -147,6 +147,9 @@
   <data name="DateRange_SubtractEndDatesDontMatch" xml:space="preserve">
     <value>Cannot subtract the ranges, because the end dates do not match</value>
   </data>
+  <data name="Direction_InvalidDirectionCannotBeConvertedToArrow" xml:space="preserve">
+    <value>Invalid direction to convert to arrow</value>
+  </data>
   <data name="EmojiFlag_LessThan2Characters" xml:space="preserve">
     <value>Should have 2 characters, but has less characters</value>
   </data>
