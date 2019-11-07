@@ -337,5 +337,34 @@ namespace Pangea.Domain.Tests
 
             action.Should().Throw<ArgumentNullException>();
         }
+
+        [TestMethod]
+        public void Round_Money_When_There_Is_Nothing_To_Round_Returns_The_Same()
+        {
+            var sut = new Money(EUR, 5);
+            sut.Round(2).Amount.Should().Be(5);
+        }
+
+        [TestMethod]
+        public void Round_Money_On_Two_Decimals()
+        {
+            var sut = new Money(EUR, 4.955m);
+            sut.Round(2).Amount.Should().Be(4.96m);
+        }
+
+        [TestMethod]
+        public void Round_Money_With_RoundingMode()
+        {
+            var sut = new Money(EUR, -4.5m);
+            sut.Round(0, MidpointRounding.ToEven).Amount.Should().Be(-4);
+            sut.Round(0, MidpointRounding.AwayFromZero).Amount.Should().Be(-5);
+        }
+
+        [TestMethod]
+        public void Round_Money_With_Incorrect_Decimals_Throws_Exception()
+        {
+            Action action = () => new Money(EUR, 5).Round(-1);
+            action.Should().Throw<ArgumentOutOfRangeException>();
+        }
     }
 }

@@ -343,5 +343,20 @@ namespace Pangea.Domain
 
         /// <inheritdoc/>
         public static bool operator >=(Money left, Money right) => left.CompareTo(right) >= 0;
+
+        /// <summary>
+        /// Returns a new money object that is rounded to the given number of decimals.
+        /// </summary>
+        /// <param name="decimals">The number of decimals to round, 0 for integer values, 2 for rounding on cents, etc.</param>
+        /// <param name="rounding">The way the amount must be rounded when the amount is midway between numbers. Default = <see cref="MidpointRounding.ToEven"/></param>
+        /// <returns>A new instance of money rounded to the given number of decimals</returns>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="decimals"/> is negative</exception>
+        public Money Round(int decimals, MidpointRounding rounding = MidpointRounding.ToEven)
+        {
+            if (decimals < 0) throw new ArgumentOutOfRangeException(nameof(decimals));
+            return new Money(Currency, Math.Round(Amount, decimals, rounding));
+        }
+
+
     }
 }
